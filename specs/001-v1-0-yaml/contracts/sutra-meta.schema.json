@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sutra-guide.example.com/schemas/sutra-meta.v1.json",
+  "title": "Sutra Metadata Schema",
+  "description": "Schema for Buddhist sutra metadata files (meta.yml)",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "tradition",
+    "translator",
+    "translatorAttribution",
+    "source",
+    "sourceAttribution",
+    "chapters"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "description": "Schema version (semver format)",
+      "examples": ["1.0", "1.0.0"]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "minLength": 2,
+      "maxLength": 50,
+      "description": "Unique sutra identifier (lowercase, numbers, hyphens only)",
+      "examples": ["heart-sutra", "diamond-sutra", "platform-sutra"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Chinese title of the sutra",
+      "examples": ["般若波羅蜜多心經", "金剛般若波羅蜜經"]
+    },
+    "titleEn": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Optional English title",
+      "examples": ["Heart Sutra", "Diamond Sutra"]
+    },
+    "tradition": {
+      "type": "string",
+      "enum": ["Mahayana", "Theravada", "Vajrayana", "Other"],
+      "description": "Buddhist tradition"
+    },
+    "translator": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Name of the translator (REQUIRED per constitution)",
+      "examples": ["玄奘法師", "鳩摩羅什"]
+    },
+    "translatorAttribution": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full citation for translator (REQUIRED per constitution)",
+      "examples": ["唐三藏法師玄奘奉詔譯"]
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Original text source (REQUIRED per constitution)",
+      "examples": ["大正新修大藏經第8冊 No.251"]
+    },
+    "sourceAttribution": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full bibliographic citation (REQUIRED per constitution)",
+      "examples": ["Taishō Tripitaka, Vol. 8, No. 251"]
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional brief introduction to the sutra"
+    },
+    "chapters": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000,
+      "description": "Total number of chapters in this sutra"
+    }
+  },
+  "additionalProperties": false
+}

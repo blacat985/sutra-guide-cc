@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sutra-guide.example.com/schemas/chapter.v1.json",
+  "title": "Chapter Content Schema",
+  "description": "Schema for Buddhist sutra chapter content files (chapter-N.yml)",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "sutraId",
+    "number",
+    "title",
+    "originalText",
+    "translation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "description": "Schema version (semver format)",
+      "examples": ["1.0", "1.0.0"]
+    },
+    "sutraId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Parent sutra identifier (must match a sutra meta.yml id)",
+      "examples": ["heart-sutra", "diamond-sutra"]
+    },
+    "number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Chapter sequence number (must match filename chapter-N.yml)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Chapter title",
+      "examples": ["第一品", "觀自在菩薩品"]
+    },
+    "originalText": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Classical Chinese text (multi-paragraph, separated by double newlines)"
+    },
+    "translation": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Modern Chinese vernacular translation (multi-paragraph)"
+    },
+    "annotations": {
+      "type": "array",
+      "description": "Optional commentary array",
+      "items": {
+        "type": "object",
+        "required": ["paragraph", "text", "source"],
+        "properties": {
+          "paragraph": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Which paragraph of originalText (1-indexed)"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Annotation content"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Citation (REQUIRED per constitution)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "practiceInsights": {
+      "type": "string",
+      "description": "Optional practice guidance (multi-paragraph)"
+    },
+    "illustrations": {
+      "type": "array",
+      "description": "Optional images array",
+      "items": {
+        "type": "object",
+        "required": ["url", "alt"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^/",
+            "description": "Relative path to image (must start with /)",
+            "examples": ["/images/heart-sutra/image1.jpg"]
+          },
+          "alt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Accessibility description (REQUIRED for WCAG AA)"
+          },
+          "caption": {
+            "type": "string",
+            "description": "Optional visible caption"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "podcastUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "External podcast episode URL (must be http:// or https://)",
+      "examples": ["https://example.com/podcast/heart-sutra-ep1"]
+    },
+    "transcript": {
+      "type": "string",
+      "description": "Podcast episode transcript (multi-paragraph, separated by double newlines)"
+    },
+    "sourceAttribution": {
+      "type": "string",
+      "description": "Chapter-specific source citation (if differs from sutra-level)"
+    }
+  },
+  "additionalProperties": false
+}
