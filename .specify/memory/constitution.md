@@ -74,7 +74,9 @@ All sutra content files MUST be stored in structured YAML format. File structure
 **Non-negotiable rules**:
 - ALL sutra content MUST be stored as YAML files
 - YAML schema MUST be versioned and validated on commit
-- File naming conventions MUST follow pattern: `{tradition}/{collection}/{sutra-id}.yml`
+- File naming conventions MUST follow pattern:
+  - V1.0 scope (1-3 sutras): `{sutra-id}/meta.yml` and `{sutra-id}/chapter-{number}.yml`
+  - Future versions may introduce multi-level organization: `{tradition}/{collection}/{sutra-id}.yml`
 - Content structure MUST include: metadata, source text, translation(s), optional commentary
 - Schema changes MUST be backward-compatible or include migration tooling
 

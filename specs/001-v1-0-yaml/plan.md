@@ -398,10 +398,10 @@ From Phase 1 design docs:
 
 ### Estimated Output
 
-**Total Tasks**: ~30 tasks
-**Parallel Tasks**: ~12 marked [P]
-**Sequential Tasks**: ~18 (due to dependencies)
-**Estimated Duration**: 2-3 days (single developer)
+**Total Tasks**: 61 tasks (32 parallel [P], 29 sequential)
+**Parallel Tasks**: 32 marked [P] based on file-level independence
+**Sequential Tasks**: 29 (due to dependencies)
+**Estimated Duration**: 3-5 days (single developer, following TDD)
 
 ## Phase 3+: Future Implementation
 *These phases are beyond the scope of the /plan command*

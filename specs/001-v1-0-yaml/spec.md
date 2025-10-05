@@ -135,7 +135,7 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
   - Practice insights and guidance
   - Optional illustrations with descriptions
   - Optional podcast episode URL
-  - Source attribution information
+  - Optional source attribution (if differs from sutra-level attribution)
 
 - **Theme Preference**: User's selected visual theme (light or dark mode), stored persistently in browser local storage
 
