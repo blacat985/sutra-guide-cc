@@ -65,4 +65,50 @@ JavaScript ES2022+ / TypeScript 5.x: Follow standard conventions
 3. **For testing**: Use Playwright MCP to automate browser testing
 4. **For debugging**: Use Playwright to inspect live application state
 
+## GitHub Deployment Verification
+
+### Verifying GitHub Pages Deployment
+After pushing to main branch, verify deployment success:
+
+1. **Check GitHub Actions Status**:
+   ```bash
+   gh run list --limit 5
+   gh run view <run-id>  # Get details of specific run
+   ```
+
+2. **Verify Deployment with Browser MCP** (Recommended):
+   ```bash
+   # Navigate to deployed site
+   browser_navigate https://blacat985.github.io/sutra-guide-cc/
+
+   # Capture accessibility snapshot (better than screenshots)
+   browser_snapshot
+
+   # Click through to verify pages
+   browser_click <element-ref>
+
+   # Take screenshot if needed
+   browser_screenshot
+   ```
+
+3. **Verify Deployment with Playwright MCP** (Alternative):
+   ```bash
+   # Similar workflow using Playwright tools
+   # Use browser_navigate, browser_snapshot, browser_click, browser_take_screenshot
+   ```
+
+4. **Common Verification Steps**:
+   - Check home page loads correctly
+   - Verify all navigation links work
+   - Test dynamic routes (e.g., /heart-sutra, /heart-sutra/1)
+   - Confirm YAML content loads from correct paths
+   - Verify no console errors (use browser_console_messages)
+   - Check all chapters display properly
+
+5. **Troubleshooting Failed Deployments**:
+   - Review GitHub Actions logs: `gh run view --log-failed`
+   - Check for 404 errors on assets (verify BASE_URL configuration)
+   - Ensure router basename matches Vite base config
+   - Verify all content files are in public/ directory
+
 <!-- MANUAL ADDITIONS END -->
