@@ -21,7 +21,9 @@ export default function TableOfContents({
     );
   }
 
-  const chapters = Array.from({ length: sutra.chapters }, (_, i) => i + 1);
+  // Generate chapter list starting from 0 (preface) if diamond-sutra, else from 1
+  const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
+  const chapters = Array.from({ length: sutra.chapters + (startChapter === 0 ? 1 : 0) }, (_, i) => i + startChapter);
 
   return (
     <Box
@@ -59,7 +61,7 @@ export default function TableOfContents({
                 fontWeight={currentChapter === num ? 'bold' : 'normal'}
                 color={currentChapter === num ? 'brand.700' : 'gray.700'}
               >
-                第 {num} 章
+                {num === 0 ? '序' : `第 ${num} 章`}
               </Link>
             </Box>
           ))}
