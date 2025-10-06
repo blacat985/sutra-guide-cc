@@ -7,6 +7,18 @@
     <title>Sutra Guide - Buddhist Scripture Study</title>
   </head>
   <body>
+    <script>
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // Restore the path from the query parameter
+      (function() {
+        const query = window.location.search;
+        if (query && query.startsWith('?p=/')) {
+          const path = query.slice(4);
+          window.history.replaceState(null, null, path);
+        }
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
