@@ -13,8 +13,8 @@
       // Restore the path from the query parameter
       (function() {
         const query = window.location.search;
-        if (query && query.startsWith('?p=/')) {
-          const path = query.slice(4);
+        if (query && query.startsWith('/?/')) {
+          const path = query.slice(2).replace(/&/g, '?').replace(/~and~/g, '&');
           window.history.replaceState(null, null, path);
         }
       })();

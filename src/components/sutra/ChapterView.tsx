@@ -44,6 +44,7 @@ const markdownComponents: Components = {
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+  const baseUrl = import.meta.env.BASE_URL;
 
   if (loading) {
     return (
@@ -77,7 +78,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                 {chapter.illustrations.map((illustration, index) => (
                   <Box key={index}>
                     <Image
-                      src={illustration.url}
+                      src={`${baseUrl}${illustration.url.replace(/^\//, '')}`}
                       alt={illustration.alt}
                       borderRadius="md"
                       maxW="full"
