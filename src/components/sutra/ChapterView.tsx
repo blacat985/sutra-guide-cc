@@ -83,7 +83,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   <Heading as="h3" size="md" mb={4} color="brand.600">
                     原文段落 {index + 1}
                   </Heading>
-                  <Text fontSize="lg" lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.700" mb={6}>
+                  <Text fontSize="lg" lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.600" _dark={{ color: "gray.300" }} mb={6}>
                     {item.original}
                   </Text>
 
@@ -92,7 +92,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   <Heading as="h4" size="sm" mb={3} color="brand.800">
                     六祖慧能註解
                   </Heading>
-                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" mb={4}>
+                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }} mb={4}>
                     {item.commentary}
                   </Text>
                   
@@ -125,7 +125,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                     <Text fontSize="sm" mb={2}>
                       {annotation.text}
                     </Text>
-                    <Text fontSize="xs" color="gray.600" fontStyle="italic">
+                    <Text fontSize="xs" color="gray.600" _dark={{ color: "gray.400" }} fontStyle="italic">
                       來源：{annotation.source}
                     </Text>
                   </Box>
@@ -165,7 +165,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                       maxW="full"
                     />
                     {illustration.caption && (
-                      <Text fontSize="sm" color="gray.600" mt={2} textAlign="center">
+                      <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
                         {illustration.caption}
                       </Text>
                     )}
@@ -200,7 +200,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
             <Heading as="h3" size="sm" mb={3} color="brand.600">
               Podcast 文字稿
             </Heading>
-            <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700">
+            <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
               {chapter.transcript}
             </Text>
           </Box>
