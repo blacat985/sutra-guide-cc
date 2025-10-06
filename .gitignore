@@ -2,3 +2,5 @@ node_modules
 dist
 .playwright-mcp
 .serena
+playwright-report
+test-results
