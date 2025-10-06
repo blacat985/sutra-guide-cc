@@ -109,11 +109,11 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               >
                 {chapter.podcastTitle ? (
                   <>
-                    {chapter.podcastTitle} 📻 <ExternalLinkIcon mx="2px" />
+                    📻 Podcast｜{chapter.podcastTitle} <ExternalLinkIcon mx="2px" />
                   </>
                 ) : (
                   <>
-                    收聽 Podcast 📻 <ExternalLinkIcon mx="2px" />
+                    📻 收聽 Podcast <ExternalLinkIcon mx="2px" />
                   </>
                 )}
               </Link>
