@@ -12,7 +12,11 @@ import {
   OrderedList,
   UnorderedList,
   Code,
+  Collapse,
+  Button,
 } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
@@ -25,10 +29,10 @@ interface ChapterViewProps {
 }
 
 const markdownComponents: Components = {
-  h1: ({ children }) => <Heading as="h1" size="xl" mt={6} mb={4}>{children}</Heading>,
-  h2: ({ children }) => <Heading as="h2" size="lg" mt={5} mb={3} color="brand.700">{children}</Heading>,
-  h3: ({ children }) => <Heading as="h3" size="md" mt={4} mb={2} color="brand.600">{children}</Heading>,
-  h4: ({ children }) => <Heading as="h4" size="sm" mt={3} mb={2}>{children}</Heading>,
+  h1: ({ children }) => <Heading as="h1" size="lg" mt={5} mb={3} color="brand.600">{children}</Heading>,
+  h2: ({ children }) => <Heading as="h2" size="md" mt={4} mb={2} color="brand.600">{children}</Heading>,
+  h3: ({ children }) => <Heading as="h3" size="sm" mt={3} mb={2} color="brand.600">{children}</Heading>,
+  h4: ({ children }) => <Heading as="h4" size="xs" mt={2} mb={1}>{children}</Heading>,
   p: ({ children }) => <Text mb={4} lineHeight="tall">{children}</Text>,
   ul: ({ children }) => <UnorderedList mb={4} spacing={2}>{children}</UnorderedList>,
   ol: ({ children }) => <OrderedList mb={4} spacing={2}>{children}</OrderedList>,
@@ -39,6 +43,7 @@ const markdownComponents: Components = {
 
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
+  const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
 
   if (loading) {
     return (
@@ -218,12 +223,21 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
         {/* Podcast Transcript */}
         {chapter.transcript && (
           <Box as="section" role="region" aria-label="Transcript">
-            <Heading as="h3" size="sm" mb={3} color="brand.600">
+            <Button
+              onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
+              variant="ghost"
+              colorScheme="brand"
+              size="sm"
+              rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              mb={3}
+            >
               Podcast 文字稿
-            </Heading>
-            <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
-              {chapter.transcript}
-            </Text>
+            </Button>
+            <Collapse in={isTranscriptOpen} animateOpacity>
+              <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
+                {chapter.transcript}
+              </Text>
+            </Collapse>
           </Box>
         )}
 
