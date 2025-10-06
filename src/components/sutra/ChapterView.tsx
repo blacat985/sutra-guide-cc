@@ -44,6 +44,7 @@ const markdownComponents: Components = {
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+  const [isExplanationOpen, setIsExplanationOpen] = useState(false);
 
   if (loading) {
     return (
@@ -70,7 +71,16 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
         </Heading>
 
         {/* Original Text */}
-        <Box as="section" role="region" aria-label="Original Text">
+        <Box 
+          as="section" 
+          role="region" 
+          aria-label="Original Text"
+          p={6}
+          borderRadius="lg"
+          bg="gray.50"
+          _dark={{ bg: "gray.800" }}
+          shadow="sm"
+        >
           <Heading as="h2" size="md" mb={4} color="brand.600">
             原文
           </Heading>
@@ -97,11 +107,21 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
 
         {/* Detailed Explanation */}
         {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
-          <Box as="section" role="region" aria-label="Detailed Explanation">
-            <Heading as="h2" size="lg" mb={6} color="brand.700" textAlign="center">
-              逐段解釋
-            </Heading>
-            <VStack align="stretch" spacing={10}>
+          <>
+            <Divider />
+            <Box as="section" role="region" aria-label="Detailed Explanation">
+              <Button
+                onClick={() => setIsExplanationOpen(!isExplanationOpen)}
+                variant="ghost"
+                colorScheme="brand"
+                size="sm"
+                rightIcon={isExplanationOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                mb={3}
+              >
+                逐段解釋
+              </Button>
+              <Collapse in={isExplanationOpen} animateOpacity>
+                <VStack align="stretch" spacing={10}>
               {chapter.detailedExplanation.map((item, index) => (
                 <Box key={index} p={5} borderRadius="md" shadow="sm" borderWidth="1px">
                   <Heading as="h3" size="md" mb={4} color="brand.600">
@@ -128,8 +148,10 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   </Text>
                 </Box>
               ))}
-            </VStack>
-          </Box>
+                </VStack>
+              </Collapse>
+            </Box>
+          </>
         )}
 
         {/* Annotations */}
@@ -155,23 +177,6 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   </Box>
                 ))}
               </VStack>
-            </Box>
-          </>
-        )}
-
-        {/* Practice Insights */}
-        {chapter.practiceInsights && (
-          <>
-            <Divider />
-            <Box as="section" role="region" aria-label="Practice Insights">
-              <Heading as="h2" size="md" mb={4} color="brand.600">
-                修行心得
-              </Heading>
-              <Box fontSize="md" lineHeight="tall">
-                <ReactMarkdown components={markdownComponents}>
-                  {chapter.practiceInsights}
-                </ReactMarkdown>
-              </Box>
             </Box>
           </>
         )}
@@ -239,6 +244,32 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               </Text>
             </Collapse>
           </Box>
+        )}
+
+        {/* Practice Insights */}
+        {chapter.practiceInsights && (
+          <>
+            <Divider />
+            <Box 
+              as="section" 
+              role="region" 
+              aria-label="Practice Insights"
+              p={6}
+              borderRadius="lg"
+              bg="brand.50"
+              _dark={{ bg: "gray.700" }}
+              shadow="sm"
+            >
+              <Heading as="h2" size="md" mb={4} color="brand.600">
+                修行心得
+              </Heading>
+              <Box fontSize="md" lineHeight="tall">
+                <ReactMarkdown components={markdownComponents}>
+                  {chapter.practiceInsights}
+                </ReactMarkdown>
+              </Box>
+            </Box>
+          </>
         )}
 
         {/* Source Attribution */}
