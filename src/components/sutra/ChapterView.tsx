@@ -57,6 +57,20 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
 
         <Divider />
 
+        {/* Translation */}
+        {chapter.translation && !chapter.detailedExplanation && (
+          <Box as="section" role="region" aria-label="Translation">
+            <Heading as="h2" size="md" mb={4} color="brand.600">
+              白話翻譯
+            </Heading>
+            <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+              {chapter.translation}
+            </Text>
+          </Box>
+        )}
+
+        {chapter.translation && !chapter.detailedExplanation && <Divider />}
+
         {/* Detailed Explanation */}
         {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
           <Box as="section" role="region" aria-label="Detailed Explanation">
