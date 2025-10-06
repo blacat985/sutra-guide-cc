@@ -98,28 +98,25 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
 
         {/* Podcast Link */}
         {chapter.podcastUrl && (
-          <>
-            <Box as="section">
-              <Link
-                href={chapter.podcastUrl}
-                isExternal
-                color="brand.600"
-                fontSize="lg"
-                fontWeight="bold"
-              >
-                {chapter.podcastTitle ? (
-                  <>
-                    📻 Podcast｜{chapter.podcastTitle} <ExternalLinkIcon mx="2px" />
-                  </>
-                ) : (
-                  <>
-                    📻 收聽 Podcast <ExternalLinkIcon mx="2px" />
-                  </>
-                )}
-              </Link>
-            </Box>
-            <Divider />
-          </>
+          <Box as="section">
+            <Link
+              href={chapter.podcastUrl}
+              isExternal
+              color="brand.600"
+              fontSize="lg"
+              fontWeight="bold"
+            >
+              {chapter.podcastTitle ? (
+                <>
+                  📻 Podcast｜{chapter.podcastTitle} <ExternalLinkIcon mx="2px" />
+                </>
+              ) : (
+                <>
+                  📻 收聽 Podcast <ExternalLinkIcon mx="2px" />
+                </>
+              )}
+            </Link>
+          </Box>
         )}
 
         {/* Podcast Transcript */}
@@ -154,9 +151,9 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
         )}
 
         {/* Original Text */}
-        <Box 
-          as="section" 
-          role="region" 
+        <Box
+          as="section"
+          role="region"
           aria-label="Original Text"
           p={6}
           borderRadius="lg"
@@ -172,21 +169,20 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
           </Text>
         </Box>
 
-        <Divider />
-
         {/* Translation */}
         {chapter.translation && !chapter.detailedExplanation && (
-          <Box as="section" role="region" aria-label="Translation">
-            <Heading as="h2" size="md" mb={4} color="brand.600">
-              白話翻譯
-            </Heading>
-            <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
-              {chapter.translation}
-            </Text>
-          </Box>
+          <>
+            <Divider />
+            <Box as="section" role="region" aria-label="Translation">
+              <Heading as="h2" size="md" mb={4} color="brand.600">
+                白話翻譯
+              </Heading>
+              <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+                {chapter.translation}
+              </Text>
+            </Box>
+          </>
         )}
-
-        {chapter.translation && !chapter.detailedExplanation && <Divider />}
 
         {/* Detailed Explanation */}
         {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
