@@ -35,7 +35,7 @@ export default function SutraCard({ sutra }: SutraCardProps) {
         )}
         <Button
           as={RouterLink}
-          to={`/${sutra.id}`}
+          to={sutra.id === 'diamond-sutra' ? `/${sutra.id}/0` : `/${sutra.id}`}
           colorScheme="brand"
           size="sm"
           width="full"
