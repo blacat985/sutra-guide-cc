@@ -44,7 +44,6 @@ const markdownComponents: Components = {
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
-  const [isExplanationOpen, setIsExplanationOpen] = useState(false);
 
   if (loading) {
     return (
@@ -110,18 +109,10 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
           <>
             <Divider />
             <Box as="section" role="region" aria-label="Detailed Explanation">
-              <Button
-                onClick={() => setIsExplanationOpen(!isExplanationOpen)}
-                variant="ghost"
-                colorScheme="brand"
-                size="sm"
-                rightIcon={isExplanationOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                mb={3}
-              >
+              <Heading as="h2" size="md" mb={6} color="brand.600">
                 逐段解釋
-              </Button>
-              <Collapse in={isExplanationOpen} animateOpacity>
-                <VStack align="stretch" spacing={10}>
+              </Heading>
+              <VStack align="stretch" spacing={10}>
               {chapter.detailedExplanation.map((item, index) => (
                 <Box key={index} p={5} borderRadius="md" shadow="sm" borderWidth="1px">
                   <Heading as="h3" size="md" mb={4} color="brand.600">
@@ -148,8 +139,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   </Text>
                 </Box>
               ))}
-                </VStack>
-              </Collapse>
+              </VStack>
             </Box>
           </>
         )}
@@ -239,9 +229,16 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               Podcast 文字稿
             </Button>
             <Collapse in={isTranscriptOpen} animateOpacity>
-              <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
-                {chapter.transcript}
-              </Text>
+              <Box
+                p={4}
+                borderRadius="md"
+                bg="gray.50"
+                _dark={{ bg: "gray.800" }}
+              >
+                <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
+                  {chapter.transcript}
+                </Text>
+              </Box>
             </Collapse>
           </Box>
         )}
