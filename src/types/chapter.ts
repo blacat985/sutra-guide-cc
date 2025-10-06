@@ -20,6 +20,7 @@ export interface Chapter {
   annotations?: Annotation[];
   practiceInsights?: string;
   illustrations?: Illustration[];
+  podcastTitle?: string;
   podcastUrl?: string;
   transcript?: string;
   sourceAttribution?: string;

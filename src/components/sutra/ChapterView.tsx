@@ -69,6 +69,89 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
           {chapter.title}
         </Heading>
 
+        {/* Illustrations */}
+        {chapter.illustrations && chapter.illustrations.length > 0 && (
+          <>
+            <Box as="section" role="region" aria-label="Illustrations">
+              <VStack align="stretch" spacing={4}>
+                {chapter.illustrations.map((illustration, index) => (
+                  <Box key={index}>
+                    <Image
+                      src={illustration.url}
+                      alt={illustration.alt}
+                      borderRadius="md"
+                      maxW="full"
+                    />
+                    {illustration.caption && (
+                      <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
+                        {illustration.caption}
+                      </Text>
+                    )}
+                  </Box>
+                ))}
+              </VStack>
+            </Box>
+            <Divider />
+          </>
+        )}
+
+        {/* Podcast Link */}
+        {chapter.podcastUrl && (
+          <>
+            <Box as="section">
+              <Link
+                href={chapter.podcastUrl}
+                isExternal
+                color="brand.600"
+                fontSize="lg"
+                fontWeight="bold"
+              >
+                {chapter.podcastTitle ? (
+                  <>
+                    {chapter.podcastTitle} 📻 <ExternalLinkIcon mx="2px" />
+                  </>
+                ) : (
+                  <>
+                    收聽 Podcast 📻 <ExternalLinkIcon mx="2px" />
+                  </>
+                )}
+              </Link>
+            </Box>
+            <Divider />
+          </>
+        )}
+
+        {/* Podcast Transcript */}
+        {chapter.transcript && (
+          <>
+            <Box as="section" role="region" aria-label="Transcript">
+              <Button
+                onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
+                variant="ghost"
+                colorScheme="brand"
+                size="sm"
+                rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                mb={3}
+              >
+                Podcast 文字稿
+              </Button>
+              <Collapse in={isTranscriptOpen} animateOpacity>
+                <Box
+                  p={4}
+                  borderRadius="md"
+                  bg="gray.50"
+                  _dark={{ bg: "gray.800" }}
+                >
+                  <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
+                    {chapter.transcript}
+                  </Text>
+                </Box>
+              </Collapse>
+            </Box>
+            <Divider />
+          </>
+        )}
+
         {/* Original Text */}
         <Box 
           as="section" 
@@ -145,103 +228,6 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
         )}
 
         {/* Annotations */}
-        {chapter.annotations && chapter.annotations.length > 0 && (
-          <>
-            <Divider />
-            <Box as="section" role="region" aria-label="Annotations">
-              <Heading as="h2" size="md" mb={4} color="brand.600">
-                註解
-              </Heading>
-              <VStack align="stretch" spacing={4}>
-                {chapter.annotations.map((annotation, index) => (
-                  <Box key={index} pl={4} borderLeft="3px solid" borderColor="brand.200">
-                    <Text fontSize="sm" fontWeight="bold" color="brand.700" mb={1}>
-                      第 {annotation.paragraph} 段
-                    </Text>
-                    <Text fontSize="sm" mb={2}>
-                      {annotation.text}
-                    </Text>
-                    <Text fontSize="xs" color="gray.600" _dark={{ color: "gray.400" }} fontStyle="italic">
-                      來源：{annotation.source}
-                    </Text>
-                  </Box>
-                ))}
-              </VStack>
-            </Box>
-          </>
-        )}
-
-        {/* Illustrations */}
-        {chapter.illustrations && chapter.illustrations.length > 0 && (
-          <>
-            <Divider />
-            <Box as="section" role="region" aria-label="Illustrations">
-              <VStack align="stretch" spacing={4}>
-                {chapter.illustrations.map((illustration, index) => (
-                  <Box key={index}>
-                    <Image
-                      src={illustration.url}
-                      alt={illustration.alt}
-                      borderRadius="md"
-                      maxW="full"
-                    />
-                    {illustration.caption && (
-                      <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
-                        {illustration.caption}
-                      </Text>
-                    )}
-                  </Box>
-                ))}
-              </VStack>
-            </Box>
-          </>
-        )}
-
-        {/* Podcast Link */}
-        {chapter.podcastUrl && (
-          <>
-            <Divider />
-            <Box as="section">
-              <Link
-                href={chapter.podcastUrl}
-                isExternal
-                color="brand.600"
-                fontSize="md"
-                fontWeight="bold"
-              >
-                收聽 Podcast 📻 <ExternalLinkIcon mx="2px" />
-              </Link>
-            </Box>
-          </>
-        )}
-
-        {/* Podcast Transcript */}
-        {chapter.transcript && (
-          <Box as="section" role="region" aria-label="Transcript">
-            <Button
-              onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
-              variant="ghost"
-              colorScheme="brand"
-              size="sm"
-              rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              mb={3}
-            >
-              Podcast 文字稿
-            </Button>
-            <Collapse in={isTranscriptOpen} animateOpacity>
-              <Box
-                p={4}
-                borderRadius="md"
-                bg="gray.50"
-                _dark={{ bg: "gray.800" }}
-              >
-                <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
-                  {chapter.transcript}
-                </Text>
-              </Box>
-            </Collapse>
-          </Box>
-        )}
 
         {/* Practice Insights */}
         {chapter.practiceInsights && (

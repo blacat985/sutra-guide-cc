@@ -126,6 +126,10 @@
         "additionalProperties": false
       }
     },
+    "podcastTitle": {
+      "type": "string",
+      "description": "Optional podcast episode title"
+    },
     "podcastUrl": {
       "type": "string",
       "format": "uri",
