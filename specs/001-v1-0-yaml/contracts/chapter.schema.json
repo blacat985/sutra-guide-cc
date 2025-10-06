@@ -7,10 +7,8 @@
   "required": [
     "schemaVersion",
     "sutraId",
-    "number",
     "title",
-    "originalText",
-    "translation"
+    "originalText"
   ],
   "properties": {
     "schemaVersion": {
@@ -27,7 +25,7 @@
     },
     "number": {
       "type": "integer",
-      "minimum": 1,
+      "minimum": 0,
       "description": "Chapter sequence number (must match filename chapter-N.yml)"
     },
     "title": {
@@ -44,8 +42,33 @@
     },
     "translation": {
       "type": "string",
-      "minLength": 1,
       "description": "Modern Chinese vernacular translation (multi-paragraph)"
+    },
+    "detailedExplanation": {
+      "type": "array",
+      "description": "Paragraph-by-paragraph explanation",
+      "items": {
+        "type": "object",
+        "required": ["original", "commentary", "commentaryTranslation"],
+        "properties": {
+          "original": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Original sutra text segment"
+          },
+          "commentary": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Commentary on the segment"
+          },
+          "commentaryTranslation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Vernacular translation of the commentary"
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "annotations": {
       "type": "array",

@@ -23,4 +23,11 @@ export interface Chapter {
   podcastUrl?: string;
   transcript?: string;
   sourceAttribution?: string;
+  detailedExplanation?: DetailedExplanation[];
+}
+
+export interface DetailedExplanation {
+  original: string;
+  commentary: string;
+  commentaryTranslation: string;
 }

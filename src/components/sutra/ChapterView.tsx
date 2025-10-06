@@ -57,15 +57,42 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
 
         <Divider />
 
-        {/* Translation */}
-        <Box as="section" role="region" aria-label="Translation">
-          <Heading as="h2" size="md" mb={4} color="brand.600">
-            白話翻譯
-          </Heading>
-          <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
-            {chapter.translation}
-          </Text>
-        </Box>
+        {/* Detailed Explanation */}
+        {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
+          <Box as="section" role="region" aria-label="Detailed Explanation">
+            <Heading as="h2" size="lg" mb={6} color="brand.700" textAlign="center">
+              逐段解釋
+            </Heading>
+            <VStack align="stretch" spacing={10}>
+              {chapter.detailedExplanation.map((item, index) => (
+                <Box key={index} p={5} borderRadius="md" shadow="sm" borderWidth="1px">
+                  <Heading as="h3" size="md" mb={4} color="brand.600">
+                    原文段落 {index + 1}
+                  </Heading>
+                  <Text fontSize="lg" lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.700" mb={6}>
+                    {item.original}
+                  </Text>
+
+                  <Divider mb={6} />
+
+                  <Heading as="h4" size="sm" mb={3} color="brand.800">
+                    六祖慧能註解
+                  </Heading>
+                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" mb={4}>
+                    {item.commentary}
+                  </Text>
+                  
+                  <Heading as="h4" size="sm" mb={3} color="brand.800">
+                    註解白話翻譯
+                  </Heading>
+                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+                    {item.commentaryTranslation}
+                  </Text>
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+        )}
 
         {/* Annotations */}
         {chapter.annotations && chapter.annotations.length > 0 && (

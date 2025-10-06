@@ -78,8 +78,8 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
 
 #### Content Architecture
 - **FR-001**: System MUST support 1-3 independent sutras in V1.0, each sutra identified by a unique ID (e.g., "heart-sutra")
-- **FR-002**: System MUST store each chapter of each sutra as a separate YAML file using single-level naming convention: `{sutra-id}/chapter-{number}.yml`
-- **FR-003**: System MUST parse and display content from YAML files including: original text, annotations, vernacular translation, practice insights, and illustrations
+- **FR-002**: System MUST store each chapter of each sutra as a separate YAML file using single-level naming convention: `{sutra-id}/chapter-{number}.yml` where {number} can be 0 for preface/序
+- **FR-003**: System MUST parse and display content from YAML files including: original text, annotations, vernacular translation, practice insights, illustrations, and detailed explanations (paragraph-by-paragraph commentary with translations)
 - **FR-004**: System MUST display source attribution for each sutra and translation as required by the constitution (Principle I: Content Sanctity and Accuracy)
 - **FR-005**: System MUST validate YAML content structure against a defined schema before displaying content
 
@@ -128,10 +128,14 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
   - List of chapters
 
 - **Chapter**: A single chapter/section of a sutra containing:
-  - Chapter number and title
+  - Chapter number (can be 0 for preface) and title
   - Original text (classical Chinese)
-  - Vernacular translation (modern Chinese)
-  - Annotations and commentary with sources
+  - Optional vernacular translation (modern Chinese) - when using detailed explanation format
+  - Optional detailed explanation array containing paragraph-by-paragraph:
+    - Original text segment
+    - Master's commentary (e.g., 六祖慧能註解)
+    - Vernacular translation of the commentary
+  - Annotations and commentary with sources (alternative format)
   - Practice insights and guidance
   - Optional illustrations with descriptions
   - Optional podcast episode URL

@@ -40,7 +40,7 @@ export function useChapterData(
       }
     }
 
-    if (sutraId && chapterNum > 0) {
+    if (sutraId && chapterNum >= 0) {
       fetchChapter();
     }
   }, [sutraId, chapterNum]);
