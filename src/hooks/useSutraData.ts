@@ -20,7 +20,7 @@ export function useSutraData(sutraId: string): UseSutraDataResult {
         setLoading(true);
         setError(null);
 
-        const data = await loadYamlFromFile(`/content/${sutraId}/meta.yml`);
+        const data = await loadYamlFromFile(`${import.meta.env.BASE_URL}content/${sutraId}/meta.yml`);
 
         if (!validateSutraMeta(data)) {
           throw new Error('Invalid sutra metadata schema');
@@ -60,7 +60,7 @@ export function useAllSutras(): UseSutraDataResult & { sutras: Sutra[] } {
         const sutraIds = ['heart-sutra']; // Expand as needed
 
         const sutraPromises = sutraIds.map(async (id) => {
-          const data = await loadYamlFromFile(`/content/${id}/meta.yml`);
+          const data = await loadYamlFromFile(`${import.meta.env.BASE_URL}content/${id}/meta.yml`);
           if (validateSutraMeta(data)) {
             return data;
           }

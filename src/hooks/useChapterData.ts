@@ -24,7 +24,7 @@ export function useChapterData(
         setError(null);
 
         const data = await loadYamlFromFile(
-          `/content/${sutraId}/chapter-${chapterNum}.yml`
+          `${import.meta.env.BASE_URL}content/${sutraId}/chapter-${chapterNum}.yml`
         );
 
         if (!validateChapter(data)) {
