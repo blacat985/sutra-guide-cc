@@ -1,0 +1,26 @@
+export interface Annotation {
+  paragraph: number;
+  text: string;
+  source: string;
+}
+
+export interface Illustration {
+  url: string;
+  alt: string;
+  caption?: string;
+}
+
+export interface Chapter {
+  schemaVersion?: string;
+  sutraId: string;
+  number: number;
+  title: string;
+  originalText: string;
+  translation: string;
+  annotations?: Annotation[];
+  practiceInsights?: string;
+  illustrations?: Illustration[];
+  podcastUrl?: string;
+  transcript?: string;
+  sourceAttribution?: string;
+}

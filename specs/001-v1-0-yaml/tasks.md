@@ -45,47 +45,47 @@
 
 ## Phase 3.1: Setup
 
-- [ ] **T001** Initialize Vite + React + TypeScript project
+- [X] **T001** Initialize Vite + React + TypeScript project
   - File: Repository root (package.json, vite.config.ts, tsconfig.json, index.html)
   - Action: Run `npm create vite@latest . -- --template react-ts`
   - Verify: `npm run dev` starts dev server on port 5173
 
-- [ ] **T002** Install React 18 and core dependencies
+- [X] **T002** Install React 18 and core dependencies
   - File: package.json
   - Action: Install `react@18`, `react-dom@18`, `react-router-dom@6`
   - Verify: Dependencies listed in package.json
 
-- [ ] **T003** Install Chakra UI and theme dependencies
+- [X] **T003** Install Chakra UI and theme dependencies
   - File: package.json
   - Action: Install `@chakra-ui/react@2`, `@emotion/react`, `@emotion/styled`, `framer-motion`
   - Verify: Chakra UI dependencies in package.json
 
-- [ ] **T004** Install YAML parsing and validation libraries
+- [X] **T004** Install YAML parsing and validation libraries
   - File: package.json
   - Action: Install `js-yaml`, `@types/js-yaml`, `ajv`, `ajv-formats`
   - Verify: js-yaml and ajv in dependencies
 
-- [ ] **T005** Install testing libraries
+- [X] **T005** Install testing libraries
   - File: package.json
   - Action: Install `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `@vitest/ui`, `jsdom`, `@axe-core/react`, `jest-axe`, `@playwright/test`
   - Verify: Testing dependencies in devDependencies
 
-- [ ] **T006** [P] Configure Vitest for unit/integration tests
+- [X] **T006** [P] Configure Vitest for unit/integration tests
   - File: vitest.config.ts
   - Action: Create config with jsdom environment, React Testing Library setup, jest-axe matchers
   - Verify: Can run `npm test`
 
-- [ ] **T007** [P] Configure Playwright for E2E tests
+- [X] **T007** [P] Configure Playwright for E2E tests
   - File: playwright.config.ts
   - Action: Create config with chromium/firefox/webkit browsers, baseURL localhost:5173
   - Verify: `npx playwright test` runs (even if no tests yet)
 
-- [ ] **T008** [P] Configure ESLint and Prettier
+- [X] **T008** [P] Configure ESLint and Prettier
   - File: .eslintrc.json, .prettierrc
   - Action: Set up TypeScript + React rules, formatting standards
   - Verify: `npm run lint` runs without errors
 
-- [ ] **T009** Create project directory structure
+- [X] **T009** Create project directory structure
   - Files: Create all directories per plan.md structure
     - src/components/{layout,sutra,common}/
     - src/hooks/

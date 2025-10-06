@@ -1,0 +1,51 @@
+import { createBrowserRouter } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Center, Spinner } from '@chakra-ui/react';
+
+// Lazy load pages for code splitting
+const HomePage = lazy(() => import('./pages/HomePage'));
+const SutraPage = lazy(() => import('./pages/SutraPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+
+const LoadingFallback = () => (
+  <Center minH="400px">
+    <Spinner size="xl" color="brand.500" />
+  </Center>
+);
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <HomePage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/:sutraId',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <SutraPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/:sutraId/:chapterNum',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <SutraPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <NotFoundPage />
+      </Suspense>
+    ),
+  },
+]);
+
+export default router;
