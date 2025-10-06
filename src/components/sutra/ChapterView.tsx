@@ -8,7 +8,13 @@ import {
   Divider,
   Spinner,
   Center,
+  ListItem,
+  OrderedList,
+  UnorderedList,
+  Code,
 } from '@chakra-ui/react';
+import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useChapterData } from '../../hooks/useChapterData';
 import ErrorMessage from '../common/ErrorMessage';
@@ -17,6 +23,19 @@ interface ChapterViewProps {
   sutraId: string;
   chapterNum: number;
 }
+
+const markdownComponents: Components = {
+  h1: ({ children }) => <Heading as="h1" size="xl" mt={6} mb={4}>{children}</Heading>,
+  h2: ({ children }) => <Heading as="h2" size="lg" mt={5} mb={3} color="brand.700">{children}</Heading>,
+  h3: ({ children }) => <Heading as="h3" size="md" mt={4} mb={2} color="brand.600">{children}</Heading>,
+  h4: ({ children }) => <Heading as="h4" size="sm" mt={3} mb={2}>{children}</Heading>,
+  p: ({ children }) => <Text mb={4} lineHeight="tall">{children}</Text>,
+  ul: ({ children }) => <UnorderedList mb={4} spacing={2}>{children}</UnorderedList>,
+  ol: ({ children }) => <OrderedList mb={4} spacing={2}>{children}</OrderedList>,
+  li: ({ children }) => <ListItem>{children}</ListItem>,
+  code: ({ children }) => <Code>{children}</Code>,
+  strong: ({ children }) => <Text as="strong" fontWeight="bold">{children}</Text>,
+};
 
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
@@ -143,9 +162,11 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               <Heading as="h2" size="md" mb={4} color="brand.600">
                 修行心得
               </Heading>
-              <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
-                {chapter.practiceInsights}
-              </Text>
+              <Box fontSize="md" lineHeight="tall">
+                <ReactMarkdown components={markdownComponents}>
+                  {chapter.practiceInsights}
+                </ReactMarkdown>
+              </Box>
             </Box>
           </>
         )}
