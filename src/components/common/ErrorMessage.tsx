@@ -1,5 +1,5 @@
 import { Box, VStack, Heading, Text, HStack, IconButton } from '@chakra-ui/react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronLeftIcon, ChevronRightIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { keyframes } from '@emotion/react';
 
 interface ErrorMessageProps {
@@ -10,6 +10,7 @@ interface ErrorMessageProps {
   hasNextChapter?: boolean;
   onPrevChapter?: () => void;
   onNextChapter?: () => void;
+  onMenuClick?: () => void;
 }
 
 const pulseRing = keyframes`
@@ -34,7 +35,8 @@ export default function ErrorMessage({
   hasPrevChapter,
   hasNextChapter,
   onPrevChapter,
-  onNextChapter
+  onNextChapter,
+  onMenuClick
 }: ErrorMessageProps) {
   return (
     <Box
@@ -72,15 +74,27 @@ export default function ErrorMessage({
         {/* Chapter Navigation */}
         {chapterNum !== undefined && (
           <HStack justify="space-between" w="full">
-            <IconButton
-              aria-label="上一章"
-              icon={<ChevronLeftIcon />}
-              onClick={onPrevChapter}
-              isDisabled={!hasPrevChapter}
-              variant="outline"
-              colorScheme="brand"
-              size="md"
-            />
+            <HStack spacing={2}>
+              {/* Menu button - mobile only */}
+              {onMenuClick && (
+                <IconButton
+                  aria-label="開啟章節選單"
+                  icon={<HamburgerIcon />}
+                  onClick={onMenuClick}
+                  variant="ghost"
+                  display={{ base: 'flex', md: 'none' }}
+                />
+              )}
+              <IconButton
+                aria-label="上一章"
+                icon={<ChevronLeftIcon />}
+                onClick={onPrevChapter}
+                isDisabled={!hasPrevChapter}
+                variant="outline"
+                colorScheme="brand"
+                size="md"
+              />
+            </HStack>
             <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
               {chapterNum === 0 ? '序' : `第 ${chapterNum} 章`}
             </Text>

@@ -98,6 +98,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
       hasNextChapter={hasNextChapter}
       onPrevChapter={goToPrevChapter}
       onNextChapter={goToNextChapter}
+      onMenuClick={onMenuClick}
     />;
   }
 
@@ -109,6 +110,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
       hasNextChapter={hasNextChapter}
       onPrevChapter={goToPrevChapter}
       onNextChapter={goToNextChapter}
+      onMenuClick={onMenuClick}
     />;
   }
 

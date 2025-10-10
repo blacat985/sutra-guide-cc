@@ -20,7 +20,13 @@ export default function SutraPage() {
     <>
 
       {/* Mobile Drawer */}
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer 
+        isOpen={isOpen} 
+        placement="left" 
+        onClose={onClose}
+        closeOnOverlayClick={true}
+        closeOnEsc={true}
+      >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
