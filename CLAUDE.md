@@ -67,6 +67,26 @@ JavaScript ES2022+ / TypeScript 5.x: Follow standard conventions
 
 ## GitHub Deployment Verification
 
+### Local Verification Before Push (IMPORTANT)
+**ALWAYS run local verification before pushing to avoid GitHub Actions failures:**
+
+```bash
+./verify.sh
+```
+
+This script will:
+1. Run `npm run build` - TypeScript type checking + production build
+2. Run `npm run lint` - Code style checking
+3. Display build artifact sizes
+
+**Why this matters:**
+- Local dev (`npm run dev`) uses lenient error handling - shows warnings only
+- GitHub Actions runs production build (`npm run build`) with strict TypeScript compilation
+- Errors that don't break local dev will fail GitHub Actions deployment
+- Common issues: duplicate JSX attributes, unused variables/interfaces, type errors
+
+**Full documentation:** See [LOCAL_VERIFICATION.md](LOCAL_VERIFICATION.md)
+
 ### Verifying GitHub Pages Deployment
 After pushing to main branch, verify deployment success:
 
