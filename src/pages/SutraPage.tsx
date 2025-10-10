@@ -1,6 +1,6 @@
-import { Grid, GridItem, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, IconButton, Box } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { Grid, GridItem, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, DrawerHeader } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { useSwipeable } from 'react-swipeable';
 import TableOfContents from '../components/sutra/TableOfContents';
 import ChapterView from '../components/sutra/ChapterView';
 
@@ -11,6 +11,17 @@ export default function SutraPage() {
   }>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  // Swipe gesture handlers for mobile
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => {
+      if (!isOpen) {
+        onOpen();
+      }
+    },
+    trackMouse: false,
+    trackTouch: true,
+  });
+
   const currentChapter = chapterNum ? parseInt(chapterNum, 10) : 1;
 
   if (!sutraId) {
@@ -19,36 +30,26 @@ export default function SutraPage() {
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <Box display={{ base: 'block', md: 'none' }} position="fixed" top={20} left={4} zIndex={10}>
-        <IconButton
-          aria-label="開啟章節選單"
-          icon={<HamburgerIcon />}
-          onClick={onOpen}
-          colorScheme="brand"
-          size="lg"
-          boxShadow="md"
-        />
-      </Box>
 
       {/* Mobile Drawer */}
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
+          <DrawerHeader borderBottomWidth="1px">章節選單</DrawerHeader>
           <DrawerBody p={0}>
-            <TableOfContents sutraId={sutraId} currentChapter={currentChapter} />
+            <TableOfContents sutraId={sutraId} currentChapter={currentChapter} onNavigate={onClose} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
 
       {/* Desktop & Mobile Layout */}
-      <Grid templateColumns={{ base: '1fr', md: '250px 1fr' }} gap={0}>
+      <Grid templateColumns={{ base: '1fr', md: '250px 1fr' }} gap={0} {...swipeHandlers}>
         <GridItem display={{ base: 'none', md: 'block' }}>
           <TableOfContents sutraId={sutraId} currentChapter={currentChapter} />
         </GridItem>
         <GridItem>
-          <ChapterView sutraId={sutraId} chapterNum={currentChapter} />
+          <ChapterView sutraId={sutraId} chapterNum={currentChapter} onMenuClick={onOpen} />
         </GridItem>
       </Grid>
     </>

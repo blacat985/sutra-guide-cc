@@ -17,7 +17,7 @@ import {
   HStack,
   IconButton,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -30,6 +30,7 @@ import ErrorMessage from '../common/ErrorMessage';
 interface ChapterViewProps {
   sutraId: string;
   chapterNum: number;
+  onMenuClick?: () => void;
 }
 
 const markdownComponents: Components = {
@@ -45,7 +46,7 @@ const markdownComponents: Components = {
   strong: ({ children }) => <Text as="strong" fontWeight="bold">{children}</Text>,
 };
 
-export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
+export default function ChapterView({ sutraId, chapterNum, onMenuClick }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
   const { sutra } = useSutraData(sutraId);
   const navigate = useNavigate();
@@ -122,15 +123,27 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
       <VStack align="stretch" spacing={8}>
         {/* Chapter Navigation */}
         <HStack justify="space-between" w="full">
-          <IconButton
-            aria-label="上一章"
-            icon={<ChevronLeftIcon />}
-            onClick={goToPrevChapter}
-            isDisabled={!hasPrevChapter}
-            variant="outline"
-            colorScheme="brand"
-            size="md"
-          />
+          <HStack spacing={2}>
+            {/* Menu button - mobile only */}
+            {onMenuClick && (
+              <IconButton
+                aria-label="開啟章節選單"
+                icon={<HamburgerIcon />}
+                onClick={onMenuClick}
+                variant="ghost"
+                display={{ base: 'flex', md: 'none' }}
+              />
+            )}
+            <IconButton
+              aria-label="上一章"
+              icon={<ChevronLeftIcon />}
+              onClick={goToPrevChapter}
+              isDisabled={!hasPrevChapter}
+              variant="outline"
+              colorScheme="brand"
+              size="md"
+            />
+          </HStack>
           <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
             {chapter.title}
           </Text>

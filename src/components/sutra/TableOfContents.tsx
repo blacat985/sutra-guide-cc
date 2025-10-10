@@ -6,11 +6,13 @@ import { useChapterTitles } from '../../hooks/useChapterTitles';
 interface TableOfContentsProps {
   sutraId: string;
   currentChapter: number;
+  onNavigate?: () => void;
 }
 
 export default function TableOfContents({
   sutraId,
   currentChapter,
+  onNavigate,
 }: TableOfContentsProps) {
   const { sutra, loading } = useSutraData(sutraId);
   const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
@@ -58,6 +60,7 @@ export default function TableOfContents({
               <Link
                 as={RouterLink}
                 to={`/${sutraId}/${num}`}
+                onClick={onNavigate}
                 display="block"
                 p={2}
                 borderRadius="md"
