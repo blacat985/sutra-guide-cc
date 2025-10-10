@@ -25,9 +25,6 @@ export default function SutraCard({ sutra }: SutraCardProps) {
             {sutra.titleEn}
           </Text>
         )}
-        <Text fontSize="sm" fontWeight="bold" color="brand.600">
-          {sutra.tradition}
-        </Text>
         {sutra.description && (
           <Text fontSize="sm" noOfLines={3}>
             {sutra.description}
