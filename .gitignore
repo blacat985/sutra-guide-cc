@@ -5,3 +5,8 @@ dist
 playwright-report
 test-results
 .env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
