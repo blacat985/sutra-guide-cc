@@ -247,7 +247,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                     p={4}
                     borderRadius="md"
                     bg="orange.50"
-                    _dark={{ bg: "orange.900" }}
+                    _dark={{ bg: "gray.700" }}
                   >
                     <Box fontSize="md" lineHeight="tall">
                       <ReactMarkdown components={markdownComponents}>
