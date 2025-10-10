@@ -51,7 +51,15 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const navigate = useNavigate();
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const [isTeachingOpen, setIsTeachingOpen] = useState(false);
+  const [openExplanations, setOpenExplanations] = useState<Record<number, boolean>>({});
   const baseUrl = import.meta.env.BASE_URL;
+
+  const toggleExplanation = (index: number) => {
+    setOpenExplanations(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
 
   // Calculate chapter range
   const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
@@ -302,21 +310,38 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                     {item.original}
                   </Text>
 
-                  <Divider mb={6} />
+                  <Divider mb={4} />
 
-                  <Heading as="h4" size="sm" mb={3} color="brand.800">
-                    六祖慧能註解
-                  </Heading>
-                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }} mb={4}>
-                    {item.commentary}
-                  </Text>
-                  
-                  <Heading as="h4" size="sm" mb={3} color="brand.800">
+                  <Heading as="h4" size="sm" mb={3} color="brand.800" _dark={{ color: "brand.200" }}>
                     註解白話翻譯
                   </Heading>
-                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+                  <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" mb={4}>
                     {item.commentaryTranslation}
                   </Text>
+
+                  <Button
+                    onClick={() => toggleExplanation(index)}
+                    variant="ghost"
+                    colorScheme="brand"
+                    size="sm"
+                    rightIcon={openExplanations[index] ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                    mb={3}
+                  >
+                    六祖慧能註解原文
+                  </Button>
+                  
+                  <Collapse in={openExplanations[index]} animateOpacity>
+                    <Box
+                      p={4}
+                      borderRadius="md"
+                      bg="gray.50"
+                      _dark={{ bg: "gray.700" }}
+                    >
+                      <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }}>
+                        {item.commentary}
+                      </Text>
+                    </Box>
+                  </Collapse>
                 </Box>
               ))}
               </VStack>
