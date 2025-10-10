@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-v1-0-yaml`
 **Created**: 2025-10-05
-**Status**: Draft
+**Status**: Updated (reflects implemented features as of 2025-10-11)
 **Input**: User description: "為佛經導讀網站建立 V1.0 的完整規格。此版本需包含的核心功能有：一、一個支援多部經典獨立呈現的核心內容架構，其中每部經典的每一章節都應作為一份獨立的 YAML 檔案進行管理，系統能讀取檔案並清晰展示經文、註釋、白話翻譯、修行啟發及插圖；二、一個能根據當前所選經典顯示章節並方便跳轉的導覽目錄；三、在各章節提供前往對應 Podcast 頁面的外部連結；四、一個提供淺色與深色模式切換的使用者體驗優化。"
 
 ---
@@ -11,8 +11,8 @@
 
 ### Session 2025-10-05
 - Q: How should the system organize and identify sutras? → A: Single-level structure with unique IDs (e.g., "heart-sutra", "diamond-sutra")
-- Q: What should users see when first visiting the website? → A: Sutra list page displaying all available sutras
-- Q: How many sutras will V1.0 support? → A: 1-3 sutras (small scale for initial validation)
+- Q: What should users see when first visiting the website? → A: Direct access to Diamond Sutra (V1.0 focuses on single sutra)
+- Q: How many sutras will V1.0 support? → A: Primarily Diamond Sutra with 33 chapters (0-32), focusing on quality over quantity
 - Q: How should the system handle corrupted YAML files? → A: Display error message, hide the chapter, allow browsing other chapters
 - Q: How complete should the content error reporting mechanism be? → A: Simple mailto link or external form link (minimal implementation)
 
@@ -29,10 +29,10 @@
 
 ### Primary User Story
 
-A Buddhist practitioner visits the Sutra Guide website to study a specific sutra (e.g., Heart Sutra, Diamond Sutra). They want to:
-1. Browse a list of available sutras (1-3 sutras in V1.0)
-2. Select a sutra from the list
-3. Navigate through chapters of the chosen sutra
+A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutra (金剛經). They want to:
+1. Access the Diamond Sutra directly from the homepage
+2. Navigate through chapters using the table of contents (desktop) or hamburger menu (mobile)
+3. Read chapters of the chosen sutra
 4. Read the original text alongside vernacular translation, annotations, and practice insights
 5. View related illustrations for better understanding
 6. Listen to corresponding podcast episodes for audio learning
@@ -40,17 +40,19 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
 
 ### Acceptance Scenarios
 
-1. **Given** a user arrives at the website homepage, **When** the page loads, **Then** they see a list of 1-3 available sutras with titles and basic information
+1. **Given** a user arrives at the website homepage, **When** the page loads, **Then** they see the Diamond Sutra entry point with title and basic information
 
-2. **Given** a user has selected a specific sutra from the list, **When** they view the table of contents, **Then** they can see all chapters of that sutra with clear chapter titles and can click to navigate to any chapter
+2. **Given** a user has entered the Diamond Sutra, **When** they view the table of contents (sidebar on desktop or drawer on mobile), **Then** they can see all 33 chapters (0-32) with traditional chapter names and can click to navigate to any chapter
 
 3. **Given** a user is viewing a chapter, **When** the chapter page loads, **Then** they can see:
+   - Chapter title displayed in navigation area (using traditional name)
    - Original sutra text (classical Chinese)
-   - Annotations and commentary
-   - Vernacular translation (modern Chinese)
-   - Practice insights and guidance
+   - Paragraph-by-paragraph detailed explanation with master's commentary and vernacular translation
+   - Annotations and commentary (collapsible, with translations visible by default)
+   - Practice insights and guidance (rendered in Markdown format)
    - Related illustrations (if available)
-   - Link to corresponding podcast episode (if available)
+   - Link to corresponding podcast episode with clear title (if available)
+   - Previous/Next chapter navigation buttons
 
 4. **Given** a user is reading in bright sunlight, **When** they toggle the theme switch, **Then** the website switches between light mode and dark mode, and the preference is preserved across sessions
 
@@ -58,41 +60,52 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
 
 6. **Given** a user clicks on a podcast link in a chapter, **When** the link is activated, **Then** they are taken to the external podcast platform page in a new tab/window
 
-7. **Given** a chapter has a corrupted YAML file, **When** a user tries to view that chapter, **Then** an error message is displayed, the chapter content is hidden, but navigation to other chapters remains functional
+7. **Given** a chapter has a corrupted or incomplete YAML file, **When** a user tries to view that chapter, **Then** an under-construction page is displayed showing the chapter title (if available), navigation buttons remain functional, allowing access to other chapters
+
+8. **Given** a user is browsing on a mobile device, **When** they click the hamburger menu icon, **Then** the chapter table of contents slides out from the left as a drawer
+
+9. **Given** a user has selected a chapter from the mobile drawer menu, **When** navigation completes, **Then** the mobile menu automatically closes
+
+10. **Given** a user is reading a chapter with detailed commentary, **When** the page loads, **Then** commentary original text is collapsed by default while translations are visible for better reading flow
+
+11. **Given** a user is viewing an under-construction chapter, **When** the page loads, **Then** they can still see the chapter title and use previous/next navigation buttons
 
 8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a mailto link or external form link to submit their report
 
 ### Edge Cases
 
-- What happens when a chapter YAML file is missing or corrupted? → Display error message, hide chapter, allow browsing other chapters
+- What happens when a chapter YAML file is missing or corrupted? → Display under-construction page, preserve basic data (like title) if possible, allow browsing other chapters
 - What happens when a chapter has no podcast link available? → Clearly indicate podcast is not available
 - What happens when a chapter has no illustrations? → Display text content only
 - How does the system handle very long chapters (performance)? → Must still meet 500ms chapter navigation target
 - What happens when a user accesses a non-existent sutra or chapter? → Display graceful error message
-- How does the system handle different screen sizes (mobile, tablet, desktop)? → Responsive design (implicit requirement)
+- How does the system handle different screen sizes (mobile, tablet, desktop)? → Responsive design with hamburger menu on mobile (<768px), sidebar on desktop (≥768px)
 - What happens if the user's browser doesn't support theme preference storage? → Default to light mode, allow session-only switching
+- How does the mobile menu behave at different screen sizes? → Drawer menu shows below 768px, persistent sidebar shows at 768px and above
+- Does the system support swipe gesture navigation? → No, to avoid conflicts with browser native forward/back gestures
+- How are commentary sections displayed? → Original text collapsed by default, translations visible by default for better reading flow
 
 ## Requirements
 
 ### Functional Requirements
 
 #### Content Architecture
-- **FR-001**: System MUST support 1-3 independent sutras in V1.0, each sutra identified by a unique ID (e.g., "heart-sutra")
+- **FR-001**: System MUST support multiple independent sutras (each identified by unique ID like "diamond-sutra"), with Diamond Sutra (金剛經) as the primary content in V1.0, containing 33 chapters (numbered 0-32, where 0 is the preface)
 - **FR-002**: System MUST store each chapter of each sutra as a separate YAML file using single-level naming convention: `{sutra-id}/chapter-{number}.yml` where {number} can be 0 for preface/序
-- **FR-003**: System MUST parse and display content from YAML files including: original text, annotations, vernacular translation, practice insights, illustrations, and detailed explanations (paragraph-by-paragraph commentary with translations)
+- **FR-003**: System MUST parse and display content from YAML files including: original text, annotations, vernacular translation, practice insights, illustrations, detailed explanations (paragraph-by-paragraph commentary with translations via `detailedExplanation` array), and podcast titles (via `podcastTitle` field)
 - **FR-004**: System MUST display source attribution for each sutra and translation as required by the constitution (Principle I: Content Sanctity and Accuracy)
 - **FR-005**: System MUST validate YAML content structure against a defined schema before displaying content
 
 #### Navigation & Table of Contents
-- **FR-006**: Homepage MUST display a list of all available sutras (1-3 sutras) with titles and basic metadata
+- **FR-006**: Homepage MUST display the Diamond Sutra entry point with title and basic metadata
 - **FR-007**: System MUST display a table of contents showing all chapters for the currently selected sutra
 - **FR-008**: Users MUST be able to click on any chapter in the table of contents to navigate directly to that chapter
-- **FR-009**: System MUST indicate the current active chapter in the table of contents
+- **FR-009**: System MUST display the current chapter title in the navigation area (prioritizing traditional chapter names like "大乘正宗分第三") and indicate the current active chapter in the table of contents
 - **FR-010**: System MUST allow users to return to the sutra list from any chapter view
 - **FR-011**: Navigation between chapters MUST be smooth and not require full page reloads
 
 #### Podcast Integration
-- **FR-012**: System MUST display a podcast link for each chapter when a podcast episode is available
+- **FR-012**: System MUST display a podcast link for each chapter when available, using the `podcastTitle` field as the display title (if provided) to give clear context about the episode content
 - **FR-013**: Podcast links MUST open in a new browser tab/window to avoid disrupting the user's reading session
 - **FR-014**: System MUST clearly indicate when a podcast episode is not available for a chapter
 - **FR-015**: Podcast links MUST include clear labels indicating they lead to external content
@@ -113,32 +126,58 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
 
 #### Error Handling
 - **FR-026**: System MUST display a clear, graceful error message when a requested sutra or chapter is not found
-- **FR-027**: When a chapter YAML file is corrupted or malformed, system MUST display an error message for that chapter, hide the corrupted content, and allow continued browsing of other chapters
+- **FR-027**: When a chapter YAML file is corrupted or validation fails, system MUST display an under-construction page, preserve basic data (like chapter title) if available, and allow continued browsing of other chapters with functional navigation buttons
 - **FR-028**: System MUST NOT crash when encountering missing or malformed YAML files
 - **FR-029**: System MUST provide a mailto link or external form link allowing users to report content errors or missing information
+
+#### Mobile Navigation
+- **FR-030**: System MUST provide a collapsible table of contents menu on mobile devices (screen width < 768px)
+- **FR-031**: Mobile menu MUST be accessible via a hamburger icon button positioned alongside chapter navigation controls
+- **FR-032**: Mobile menu MUST automatically close after user navigates to a chapter
+- **FR-033**: Mobile menu MUST be closable by clicking the overlay, clicking the close button, or pressing ESC key
+- **FR-034**: Chapter navigation buttons (previous/next) MUST be integrated with the hamburger menu button on mobile devices
+
+#### Chapter Navigation Enhancement
+- **FR-035**: System MUST provide previous/next chapter navigation buttons on all chapter pages, including under-construction pages
+- **FR-036**: Chapter navigation MUST remain functional even when chapter content is unavailable or under construction
+- **FR-037**: System MUST display traditional Diamond Sutra chapter names (e.g., "大乘正宗分第三") instead of generic numbering in navigation areas when available
+
+#### Content Format Enhancement
+- **FR-038**: System MUST support paragraph-by-paragraph detailed explanation format via `detailedExplanation` array containing original text, master's commentary, and vernacular translation for each paragraph
+- **FR-039**: System MUST support `podcastTitle` field to display clearer podcast episode titles separate from generic chapter titles
+- **FR-040**: System MUST render practice insights (`practiceInsights`) and commentary translations in Markdown format to support rich text formatting
+- **FR-041**: System MUST collapse commentary original text by default while keeping translations visible to improve reading flow and reduce cognitive load
+
+#### Visual Consistency
+- **FR-042**: All chapter content sections (original text, commentary, practice insights, etc.) MUST use unified 1px border styling for visual consistency
+- **FR-043**: Dark mode MUST ensure all text blocks, especially commentary sections, have sufficient contrast ratios to meet readability standards
 
 ### Key Entities
 
 - **Sutra**: A complete Buddhist scripture collection containing:
-  - Unique identifier (e.g., "heart-sutra", "diamond-sutra", "platform-sutra")
-  - Title
+  - Unique identifier (e.g., "diamond-sutra")
+  - Title (Chinese and English)
   - Tradition/lineage
   - Translator attribution
-  - Source documentation
-  - List of chapters
+  - Source documentation (e.g., CBETA reference)
+  - Total number of chapters (e.g., 32 for Diamond Sutra, with chapter 0 as preface)
+  - Description
 
 - **Chapter**: A single chapter/section of a sutra containing:
+  - Schema version
+  - Sutra ID reference
   - Chapter number (can be 0 for preface) and title
   - Original text (classical Chinese)
-  - Optional vernacular translation (modern Chinese) - when using detailed explanation format
-  - Optional detailed explanation array containing paragraph-by-paragraph:
+  - Optional vernacular translation (modern Chinese) - when using simple format
+  - Optional detailed explanation array (`detailedExplanation`) containing paragraph-by-paragraph:
     - Original text segment
     - Master's commentary (e.g., 六祖慧能註解)
     - Vernacular translation of the commentary
   - Annotations and commentary with sources (alternative format)
-  - Practice insights and guidance
+  - Practice insights and guidance (supports Markdown formatting)
   - Optional illustrations with descriptions
   - Optional podcast episode URL
+  - Optional podcast title (`podcastTitle`) for clearer display
   - Optional source attribution (if differs from sutra-level attribution)
 
 - **Theme Preference**: User's selected visual theme (light or dark mode), stored persistently in browser local storage
@@ -159,7 +198,7 @@ A Buddhist practitioner visits the Sutra Guide website to study a specific sutra
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
-- [x] Scope is clearly bounded (1-3 sutras, single-level organization)
+- [x] Scope is clearly bounded (Diamond Sutra with 33 chapters, mobile-responsive navigation)
 - [x] Dependencies and assumptions identified
 
 ### Constitutional Alignment

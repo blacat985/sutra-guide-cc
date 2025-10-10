@@ -279,9 +279,14 @@ Before starting manual tests:
 
 ### Expected Results:
 - [ ] **Mobile (375px)**:
-  - [ ] TOC collapses into hamburger menu or tabs
+  - [ ] TOC accessible via hamburger menu icon (positioned next to prev/next chapter buttons)
+  - [ ] Clicking hamburger icon opens drawer menu from left side
+  - [ ] Drawer menu displays full chapter list with traditional names
+  - [ ] Clicking a chapter in drawer navigates to that chapter and auto-closes drawer
+  - [ ] Drawer can be closed by clicking overlay, close button, or pressing ESC
   - [ ] Chapter content is readable (no horizontal scroll)
   - [ ] Touch targets are ≥ 44x44px
+  - [ ] Previous/Next navigation buttons remain functional
 - [ ] **Tablet (768px)**:
   - [ ] TOC may be in sidebar or collapsible
   - [ ] Layout adapts gracefully
@@ -289,6 +294,48 @@ Before starting manual tests:
   - [ ] TOC is visible sidebar
   - [ ] Content max-width constrains readability (not full screen width)
   - [ ] No excessive whitespace
+
+---
+
+## Test Scenario 11: Under-Construction Pages with Navigation (FR-027, FR-035-FR-037)
+
+**User Story**: "Given a chapter is under construction, When user views it, Then navigation remains functional and chapter title is displayed"
+
+### Steps:
+1. Navigate to an under-construction chapter (e.g., chapter 7+)
+2. Observe the under-construction message display
+3. Test previous/next chapter navigation buttons
+4. On mobile, test hamburger menu button
+
+### Expected Results:
+- [ ] Under-construction message displayed with appropriate styling
+- [ ] Chapter title displayed in navigation area (if available in YAML)
+- [ ] Previous chapter button functional (if applicable)
+- [ ] Next chapter button functional (if applicable)
+- [ ] Hamburger menu button visible and functional on mobile
+- [ ] Can navigate to other chapters from under-construction page
+- [ ] No crash or blank page when YAML validation fails
+
+---
+
+## Test Scenario 12: Detailed Explanation Format (FR-038, FR-040-FR-041)
+
+**User Story**: "Given a chapter uses detailedExplanation format, When user views it, Then paragraph-by-paragraph content is displayed correctly"
+
+### Steps:
+1. Navigate to Diamond Sutra Chapter 0 (preface)
+2. Observe content structure with original text and translations
+3. Check for collapsible commentary sections
+4. Verify Markdown rendering in translations
+
+### Expected Results:
+- [ ] Original text segments displayed clearly
+- [ ] Master's commentary (六祖慧能註解) displayed
+- [ ] Vernacular translations rendered with Markdown formatting
+- [ ] Commentary sections collapsible (original text collapsed by default)
+- [ ] Translations visible by default for better reading flow
+- [ ] All content sections have unified 1px borders (FR-042)
+- [ ] Dark mode has sufficient contrast in all sections (FR-043)
 
 ---
 

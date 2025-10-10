@@ -65,22 +65,29 @@ Represents a single chapter/section of a sutra.
 **Fields**:
 | Field | Type | Required | Description | Constitutional Requirement |
 |-------|------|----------|-------------|----------------------------|
+| `schemaVersion` | string | Yes | Schema version (semver format, e.g., "1.0") | Data versioning |
 | `sutraId` | string | Yes | Parent sutra identifier (matches Sutra.id) | Data integrity |
-| `number` | number | Yes | Chapter sequence number (1-indexed) | FR-007: TOC ordering |
-| `title` | string | Yes | Chapter title (e.g., "第一品", "觀自在菩薩品") | FR-008: TOC display |
-| `originalText` | string | Yes | Classical Chinese text (multi-paragraph, `\n\n` separated) | FR-003: Display original text |
-| `translation` | string | Yes | Modern Chinese vernacular translation (multi-paragraph) | FR-003: Display translation |
+| `number` | number | Yes | Chapter sequence number (0-indexed, where 0 can be preface/序) | FR-007: TOC ordering |
+| `title` | string | Yes | Chapter title (e.g., "第一品", "觀自在菩薩品", "金剛般若波羅蜜經序") | FR-008: TOC display |
+| `originalText` | string | Yes | Classical Chinese text (multi-paragraph, `
+
+` separated) | FR-003: Display original text |
+| `translation` | string | No | Modern Chinese vernacular translation (multi-paragraph) - used in simple format | FR-003: Display translation |
+| `detailedExplanation` | DetailedExplanation[] | No | Paragraph-by-paragraph explanation array (alternative to simple translation) | FR-038: Detailed commentary format |
 | `annotations` | Annotation[] | No | Optional commentary array | FR-003: Display annotations |
-| `practiceInsights` | string | No | Optional practice guidance (multi-paragraph) | FR-003: Display insights |
+| `practiceInsights` | string | No | Optional practice guidance (multi-paragraph, supports Markdown) | FR-003, FR-040: Display insights |
 | `illustrations` | Illustration[] | No | Optional images array | FR-003: Display illustrations |
+| `podcastTitle` | string | No | Podcast episode display title (clearer than chapter title) | FR-039: Clear podcast context |
 | `podcastUrl` | string | No | External podcast episode URL | FR-012: Display podcast link |
 | `transcript` | string | No | Podcast episode transcript (multi-paragraph, `\n\n` separated) | FR-012: Display transcript with podcast |
 | `sourceAttribution` | string | No | Chapter-specific source citation (if differs from sutra-level) | Principle I: Per-chapter attribution |
 
 **Validation Rules**:
 - `sutraId` must reference an existing Sutra.id
-- `number` must match filename pattern (e.g., `chapter-1.yml` → `number: 1`)
-- `originalText` and `translation` are MANDATORY (core content)
+- `number` must match filename pattern (e.g., `chapter-0.yml` → `number: 0`, `chapter-1.yml` → `number: 1`)
+- `schemaVersion` must follow semver format (e.g., "1.0")
+- `originalText` is MANDATORY (core content)
+- Either `translation` OR `detailedExplanation` should be provided (at least one)
 - `podcastUrl` must be valid URL if provided (starts with `http://` or `https://`)
 - Paragraphs in text fields separated by double newline (`\n\n`)
 
@@ -130,6 +137,36 @@ transcript: |
 
   當我們能夠照見這五蘊皆空時，就能度脫一切的苦厄。這裡的「空」不是什麼都沒有，而是指這些現象沒有固定不變的本質，都是因緣和合而生。
 sourceAttribution: 同經典來源
+```
+
+---
+
+### DetailedExplanation
+
+Represents a paragraph-by-paragraph detailed explanation with original text, master's commentary, and vernacular translation.
+
+**Storage**: Embedded within Chapter YAML as array (not separate file)
+
+**Fields**:
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `original` | string | Yes | Original text segment for this paragraph |
+| `commentary` | string | No | Master's commentary (e.g., 六祖慧能註解) |
+| `translation` | string | Yes | Vernacular translation of the commentary or original text |
+
+**Validation Rules**:
+- At least `original` and `translation` must be provided
+- Used as an alternative to simple `translation` field for more structured content
+- Supports Markdown formatting in `translation` field
+
+**Example**:
+```yaml
+- original: |
+    夫金剛經者，無相為宗，無住為體，玅有為用。
+  commentary: |
+    此段闡明金剛經之三大要義
+  translation: |
+    《金剛經》這部經典，以「無相」為根本宗旨，以「無住」為本體，以「妙有」為作用。
 ```
 
 ---
