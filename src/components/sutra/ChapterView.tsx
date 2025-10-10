@@ -90,11 +90,25 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   }
 
   if (error) {
-    return <ErrorMessage message={error.message} />;
+    return <ErrorMessage 
+      message={error.message}
+      chapterNum={chapterNum}
+      hasPrevChapter={hasPrevChapter}
+      hasNextChapter={hasNextChapter}
+      onPrevChapter={goToPrevChapter}
+      onNextChapter={goToNextChapter}
+    />;
   }
 
   if (!chapter) {
-    return <ErrorMessage message="Chapter not found" />;
+    return <ErrorMessage 
+      message="Chapter not found"
+      chapterNum={chapterNum}
+      hasPrevChapter={hasPrevChapter}
+      hasNextChapter={hasNextChapter}
+      onPrevChapter={goToPrevChapter}
+      onNextChapter={goToNextChapter}
+    />;
   }
 
   // Extract teaching content from transcript

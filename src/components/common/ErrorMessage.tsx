@@ -1,9 +1,15 @@
-import { Box, VStack, Heading, Text } from '@chakra-ui/react';
+import { Box, VStack, Heading, Text, HStack, IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { keyframes } from '@emotion/react';
 
 interface ErrorMessageProps {
   message: string;
   onRetry?: () => void;
+  chapterNum?: number;
+  hasPrevChapter?: boolean;
+  hasNextChapter?: boolean;
+  onPrevChapter?: () => void;
+  onNextChapter?: () => void;
 }
 
 const pulseRing = keyframes`
@@ -21,7 +27,15 @@ const pulseRing = keyframes`
   }
 `;
 
-export default function ErrorMessage({ message: _message, onRetry: _onRetry }: ErrorMessageProps) {
+export default function ErrorMessage({ 
+  message: _message, 
+  onRetry: _onRetry,
+  chapterNum,
+  hasPrevChapter,
+  hasNextChapter,
+  onPrevChapter,
+  onNextChapter
+}: ErrorMessageProps) {
   return (
     <Box
       minH="400px"
@@ -54,7 +68,34 @@ export default function ErrorMessage({ message: _message, onRetry: _onRetry }: E
         _dark={{ bg: "brand.800" }}
       />
 
-      <VStack spacing={6} zIndex={1} px={8}>
+      <VStack spacing={6} zIndex={1} px={8} w="full" maxW="600px">
+        {/* Chapter Navigation */}
+        {chapterNum !== undefined && (
+          <HStack justify="space-between" w="full">
+            <IconButton
+              aria-label="上一章"
+              icon={<ChevronLeftIcon />}
+              onClick={onPrevChapter}
+              isDisabled={!hasPrevChapter}
+              variant="outline"
+              colorScheme="brand"
+              size="md"
+            />
+            <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
+              {chapterNum === 0 ? '序' : `第 ${chapterNum} 章`}
+            </Text>
+            <IconButton
+              aria-label="下一章"
+              icon={<ChevronRightIcon />}
+              onClick={onNextChapter}
+              isDisabled={!hasNextChapter}
+              variant="outline"
+              colorScheme="brand"
+              size="md"
+            />
+          </HStack>
+        )}
+
         <Box fontSize="5xl">
           📿
         </Box>
