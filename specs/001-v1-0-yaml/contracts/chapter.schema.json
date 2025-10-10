@@ -49,12 +49,17 @@
       "description": "Paragraph-by-paragraph explanation",
       "items": {
         "type": "object",
-        "required": ["original", "commentary", "commentaryTranslation"],
+        "required": ["original"],
         "properties": {
           "original": {
             "type": "string",
             "minLength": 1,
             "description": "Original sutra text segment"
+          },
+          "translation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Vernacular translation of the original text segment"
           },
           "commentary": {
             "type": "string",

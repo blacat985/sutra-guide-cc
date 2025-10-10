@@ -29,6 +29,7 @@ export interface Chapter {
 
 export interface DetailedExplanation {
   original: string;
-  commentary: string;
-  commentaryTranslation: string;
+  translation?: string;
+  commentary?: string;
+  commentaryTranslation?: string;
 }
