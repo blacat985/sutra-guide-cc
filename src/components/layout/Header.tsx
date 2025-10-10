@@ -8,7 +8,7 @@ export default function Header() {
       <Flex justify="space-between" align="center">
         <Heading as="h1" size="lg">
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            經典智慧
+          虛廣禪苑
           </Link>
         </Heading>
         <ThemeToggle />

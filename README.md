@@ -1,6 +1,6 @@
 # Sutra Guide Website V1.0
 
-經典智慧 - A Buddhist sutra study website built with React, TypeScript, and Chakra UI.
+虛廣禪苑 - A Buddhist sutra study website built with React, TypeScript, and Chakra UI.
 
 ## Features
 
