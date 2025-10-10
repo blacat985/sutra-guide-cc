@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadYamlFromFile } from '../services/yamlParser';
 
-interface ChapterTitle {
-  number: number;
-  title: string;
-}
-
 interface UseChapterTitlesResult {
   titles: Map<number, string>;
   loading: boolean;

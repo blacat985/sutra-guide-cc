@@ -248,7 +248,6 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               p={4}
               borderRadius="md"
               bg="orange.50"
-              _dark={{ bg: "gray.700" }}
               borderWidth="1px"
               borderColor="gray.300"
               _dark={{ borderColor: "gray.500", bg: "gray.700" }}
@@ -388,7 +387,6 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               p={6}
               borderRadius="md"
               bg="brand.50"
-              _dark={{ bg: "gray.700" }}
               shadow="sm"
               borderWidth="1px"
               borderColor="gray.300"
