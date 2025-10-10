@@ -1,6 +1,5 @@
 import { Grid, GridItem, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, DrawerHeader } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
 import TableOfContents from '../components/sutra/TableOfContents';
 import ChapterView from '../components/sutra/ChapterView';
 
@@ -10,17 +9,6 @@ export default function SutraPage() {
     chapterNum?: string;
   }>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // Swipe gesture handlers for mobile
-  const swipeHandlers = useSwipeable({
-    onSwipedRight: () => {
-      if (!isOpen) {
-        onOpen();
-      }
-    },
-    trackMouse: false,
-    trackTouch: true,
-  });
 
   const currentChapter = chapterNum ? parseInt(chapterNum, 10) : 1;
 
@@ -44,7 +32,7 @@ export default function SutraPage() {
       </Drawer>
 
       {/* Desktop & Mobile Layout */}
-      <Grid templateColumns={{ base: '1fr', md: '250px 1fr' }} gap={0} {...swipeHandlers}>
+      <Grid templateColumns={{ base: '1fr', md: '250px 1fr' }} gap={0}>
         <GridItem display={{ base: 'none', md: 'block' }}>
           <TableOfContents sutraId={sutraId} currentChapter={currentChapter} />
         </GridItem>
