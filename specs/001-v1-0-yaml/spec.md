@@ -76,6 +76,8 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 
 14. **Given** a user changes font size, **When** the change is applied, **Then** all text content (original text, translations, annotations, practice insights) updates immediately to the new size
 
+15. **Given** a user has set a large or extra-large font size, **When** viewing the chapter navigation sidebar, **Then** the chapter list maintains a fixed medium font size (16px) to prevent text wrapping and maintain layout stability
+
 8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a mailto link or external form link to submit their report
 
 ### Edge Cases
@@ -90,10 +92,12 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - How does the mobile menu behave at different screen sizes? → Drawer menu shows below 768px, persistent sidebar shows at 768px and above
 - Does the system support swipe gesture navigation? → No, to avoid conflicts with browser native forward/back gestures
 - How are commentary sections displayed? → Original text collapsed by default, translations visible by default for better reading flow
-- What font sizes are available? → Small (14px), Medium (16px, default), Large (18px), Extra-Large (20px)
+- What font sizes are available? → Small (14px), Medium (18px, default), Large (22px), Extra-Large (26px)
 - What happens if browser doesn't support localStorage for font size? → Default to medium size, allow session-only changes
 - How does font size affect mobile vs desktop layout? → Font size scales proportionally across all screen sizes while maintaining responsive layout
 - Can users set different font sizes for different content types? → No, font size applies globally to all text content for consistency
+- Why use larger font size range (14-26px) instead of original (14-20px)? → Increased range provides more noticeable differences between levels for better accessibility, especially for elderly users or those with vision impairments
+- Why keep chapter navigation at fixed 16px? → Prevents text wrapping and maintains consistent sidebar layout when users select larger font sizes for main content
 
 ## Requirements
 
@@ -130,7 +134,7 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-045**: Users MUST be able to adjust font size via a visible control (e.g., dropdown menu or buttons)
 - **FR-046**: System MUST persist the user's font size preference across browser sessions using localStorage
 - **FR-047**: Font size changes MUST apply to all text content (sutra text, translations, annotations, practice insights)
-- **FR-048**: Default font size MUST be medium (16px base) for optimal readability
+- **FR-048**: Default font size MUST be medium (18px base) for optimal readability
 
 #### Performance & Accessibility
 - **FR-021**: Initial page load MUST complete within 2 seconds on a standard 3G connection (Principle II: Pure and Undisturbed Experience)
