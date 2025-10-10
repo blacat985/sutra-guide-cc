@@ -14,13 +14,17 @@ import {
   Code,
   Collapse,
   Button,
+  HStack,
+  IconButton,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useChapterData } from '../../hooks/useChapterData';
+import { useSutraData } from '../../hooks/useSutraData';
 import ErrorMessage from '../common/ErrorMessage';
 
 interface ChapterViewProps {
@@ -43,9 +47,31 @@ const markdownComponents: Components = {
 
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
+  const { sutra } = useSutraData(sutraId);
+  const navigate = useNavigate();
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const [isTeachingOpen, setIsTeachingOpen] = useState(false);
   const baseUrl = import.meta.env.BASE_URL;
+
+  // Calculate chapter range
+  const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
+  const totalChapters = sutra?.chapters ?? 0;
+  const lastChapter = startChapter === 0 ? totalChapters : totalChapters;
+  
+  const hasPrevChapter = chapterNum > startChapter;
+  const hasNextChapter = chapterNum < lastChapter;
+
+  const goToPrevChapter = () => {
+    if (hasPrevChapter) {
+      navigate(`/${sutraId}/${chapterNum - 1}`);
+    }
+  };
+
+  const goToNextChapter = () => {
+    if (hasNextChapter) {
+      navigate(`/${sutraId}/${chapterNum + 1}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -72,6 +98,31 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   return (
     <Box as="main" role="main" p={8} maxW="800px" mx="auto">
       <VStack align="stretch" spacing={8}>
+        {/* Chapter Navigation */}
+        <HStack justify="space-between" w="full">
+          <IconButton
+            aria-label="上一章"
+            icon={<ChevronLeftIcon />}
+            onClick={goToPrevChapter}
+            isDisabled={!hasPrevChapter}
+            variant="outline"
+            colorScheme="brand"
+            size="md"
+          />
+          <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
+            {chapterNum === 0 ? '序' : `第 ${chapterNum} 章`}
+          </Text>
+          <IconButton
+            aria-label="下一章"
+            icon={<ChevronRightIcon />}
+            onClick={goToNextChapter}
+            isDisabled={!hasNextChapter}
+            variant="outline"
+            colorScheme="brand"
+            size="md"
+          />
+        </HStack>
+
         {/* Chapter Title */}
         <Heading as="h1" size="xl" textAlign="center">
           {chapter.title}
@@ -301,6 +352,31 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
             </Text>
           </>
         )}
+
+        {/* Bottom Chapter Navigation */}
+        <Divider />
+        <HStack justify="space-between" w="full">
+          <Button
+            leftIcon={<ChevronLeftIcon />}
+            onClick={goToPrevChapter}
+            isDisabled={!hasPrevChapter}
+            variant="outline"
+            colorScheme="brand"
+            size="md"
+          >
+            上一章
+          </Button>
+          <Button
+            rightIcon={<ChevronRightIcon />}
+            onClick={goToNextChapter}
+            isDisabled={!hasNextChapter}
+            variant="outline"
+            colorScheme="brand"
+            size="md"
+          >
+            下一章
+          </Button>
+        </HStack>
       </VStack>
     </Box>
   );

@@ -60,6 +60,11 @@ export default function TableOfContents({
                 aria-current={currentChapter === num ? 'page' : undefined}
                 fontWeight={currentChapter === num ? 'bold' : 'normal'}
                 color={currentChapter === num ? 'brand.700' : 'gray.700'}
+                _dark={{
+                  bg: currentChapter === num ? 'brand.800' : 'transparent',
+                  color: currentChapter === num ? 'brand.200' : 'gray.300',
+                  _hover: { bg: 'gray.700' }
+                }}
               >
                 {num === 0 ? '序' : `第 ${num} 章`}
               </Link>
