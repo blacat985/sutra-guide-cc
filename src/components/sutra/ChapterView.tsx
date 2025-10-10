@@ -215,14 +215,15 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               </Button>
               <Collapse in={isTranscriptOpen} animateOpacity>
                 <Box
-                  p={4}
-                  borderRadius="md"
-                  bg="gray.50"
-                  _dark={{ bg: "gray.800" }}
-                >
-                  <Box fontSize="sm" lineHeight="tall">
-                    <ReactMarkdown components={markdownComponents}>
-                      {chapter.transcript}
+            p={6}
+            borderRadius="lg"
+            borderWidth="1px"
+            borderColor="gray.300"
+            _dark={{ borderColor: "gray.500" }}
+          >
+            <Box fontSize="sm" lineHeight="tall">
+              <ReactMarkdown components={markdownComponents}>
+                {chapter.transcript}
                     </ReactMarkdown>
                   </Box>
                 </Box>
@@ -243,12 +244,15 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   弘源法師開示
                 </Button>
                 <Collapse in={isTeachingOpen} animateOpacity>
-                  <Box
-                    p={4}
-                    borderRadius="md"
-                    bg="orange.50"
-                    _dark={{ bg: "gray.700" }}
-                  >
+            <Box
+              p={4}
+              borderRadius="md"
+              bg="orange.50"
+              _dark={{ bg: "gray.700" }}
+              borderWidth="1px"
+              borderColor="gray.300"
+              _dark={{ borderColor: "gray.500", bg: "gray.700" }}
+            >
                     <Box fontSize="md" lineHeight="tall">
                       <ReactMarkdown components={markdownComponents}>
                         {extractTeaching(chapter.transcript)}
@@ -270,17 +274,19 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
           aria-label="Original Text"
           p={6}
           borderRadius="lg"
-          bg="gray.50"
-          _dark={{ bg: "gray.800" }}
-          shadow="sm"
+          borderWidth="1px"
+          borderColor="gray.300"
+          _dark={{ borderColor: "gray.500" }}
         >
-          <Heading as="h2" size="md" mb={4} color="brand.600">
+          <Heading as="h2" size="md" mb={4} color="brand.600" _dark={{ color: "brand.200" }}>
             原文
           </Heading>
           <Text 
             fontSize="lg" 
             lineHeight="2" 
             whiteSpace="pre-line"
+            color="gray.800"
+            _dark={{ color: "whiteAlpha.900" }}
             sx={{
               '& > *:not(:last-child)': {
                 marginBottom: '1em'
@@ -380,10 +386,13 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
               role="region" 
               aria-label="Practice Insights"
               p={6}
-              borderRadius="lg"
+              borderRadius="md"
               bg="brand.50"
               _dark={{ bg: "gray.700" }}
               shadow="sm"
+              borderWidth="1px"
+              borderColor="gray.300"
+              _dark={{ borderColor: "gray.500", bg: "gray.700" }}
             >
               <Heading as="h2" size="md" mb={4} color="brand.600">
                 修行心得
