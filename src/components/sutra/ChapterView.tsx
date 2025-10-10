@@ -33,7 +33,7 @@ const markdownComponents: Components = {
   h2: ({ children }) => <Heading as="h2" size="md" mt={4} mb={2} color="brand.600">{children}</Heading>,
   h3: ({ children }) => <Heading as="h3" size="sm" mt={3} mb={2} color="brand.600">{children}</Heading>,
   h4: ({ children }) => <Heading as="h4" size="xs" mt={2} mb={1}>{children}</Heading>,
-  p: ({ children }) => <Text mb={4} lineHeight="tall">{children}</Text>,
+  p: ({ children }) => <Text mb={4} fontSize="md" lineHeight="tall">{children}</Text>,
   ul: ({ children }) => <UnorderedList mb={4} spacing={2}>{children}</UnorderedList>,
   ol: ({ children }) => <OrderedList mb={4} spacing={2}>{children}</OrderedList>,
   li: ({ children }) => <ListItem>{children}</ListItem>,
@@ -44,6 +44,7 @@ const markdownComponents: Components = {
 export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+  const [isTeachingOpen, setIsTeachingOpen] = useState(false);
   const baseUrl = import.meta.env.BASE_URL;
 
   if (loading) {
@@ -61,6 +62,12 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
   if (!chapter) {
     return <ErrorMessage message="Chapter not found" />;
   }
+
+  // Extract teaching content from transcript
+  const extractTeaching = (transcript: string): string => {
+    const match = transcript.match(/### 弘源法師開示[\s\S]*?(?=\n### |\n##|$)/);
+    return match ? match[0] : '';
+  };
 
   return (
     <Box as="main" role="main" p={8} maxW="800px" mx="auto">
@@ -140,12 +147,45 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   bg="gray.50"
                   _dark={{ bg: "gray.800" }}
                 >
-                  <Text fontSize="sm" lineHeight="tall" whiteSpace="pre-line" color="gray.700" _dark={{ color: "gray.300" }}>
-                    {chapter.transcript}
-                  </Text>
+                  <Box fontSize="sm" lineHeight="tall">
+                    <ReactMarkdown components={markdownComponents}>
+                      {chapter.transcript}
+                    </ReactMarkdown>
+                  </Box>
                 </Box>
               </Collapse>
             </Box>
+
+            {/* Extract 弘源法師開示 if exists */}
+            {chapter.transcript.includes('弘源法師') && (
+              <Box as="section" role="region" aria-label="Teaching">
+                <Button
+                  onClick={() => setIsTeachingOpen(!isTeachingOpen)}
+                  variant="ghost"
+                  colorScheme="brand"
+                  size="sm"
+                  rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  mb={3}
+                >
+                  弘源法師開示
+                </Button>
+                <Collapse in={isTeachingOpen} animateOpacity>
+                  <Box
+                    p={4}
+                    borderRadius="md"
+                    bg="orange.50"
+                    _dark={{ bg: "orange.900" }}
+                  >
+                    <Box fontSize="md" lineHeight="tall">
+                      <ReactMarkdown components={markdownComponents}>
+                        {extractTeaching(chapter.transcript)}
+                      </ReactMarkdown>
+                    </Box>
+                  </Box>
+                </Collapse>
+              </Box>
+            )}
+
             <Divider />
           </>
         )}
