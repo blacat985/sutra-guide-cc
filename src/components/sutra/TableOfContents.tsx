@@ -72,7 +72,7 @@ export default function TableOfContents({
                   _hover: { bg: 'gray.700' }
                 }}
               >
-                {num === 0 ? '序' : (titles.get(num) || `第 ${num} 章`)}
+                {titles.get(num) || `第 ${num} 章`}
               </Link>
             </Box>
           ))}

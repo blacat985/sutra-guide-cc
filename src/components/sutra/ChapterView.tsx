@@ -132,7 +132,7 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
             size="md"
           />
           <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
-            {chapterNum === 0 ? '序' : chapter.title}
+            {chapter.title}
           </Text>
           <IconButton
             aria-label="下一章"
