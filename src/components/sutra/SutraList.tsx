@@ -20,7 +20,7 @@ export default function SutraList() {
 
   return (
     <Box as="main" role="main" aria-label="Sutra List" py={8}>
-      <Heading as="h1" mb={8} textAlign="center">
+      <Heading as="h1" fontSize="2em" mb={8} textAlign="center">
         佛經典籍
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>

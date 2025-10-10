@@ -43,9 +43,10 @@ export default function TableOfContents({
       minH="calc(100vh - 200px)"
       position="sticky"
       top={0}
+      fontSize="16px"
     >
       <VStack align="stretch" spacing={4}>
-        <Heading as="h2" size="md" mb={2}>
+        <Heading as="h2" fontSize="1.3em" mb={2}>
           {sutra.title}
         </Heading>
         <VStack as="ul" align="stretch" spacing={2} listStyleType="none">

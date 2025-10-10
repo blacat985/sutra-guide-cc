@@ -8,7 +8,7 @@ export default function ThemeToggle() {
   return (
     <IconButton
       aria-label="Toggle theme"
-      icon={mode === 'light' ? <MoonIcon /> : <SunIcon />}
+      icon={mode === 'light' ? <MoonIcon fontSize="1.2em" /> : <SunIcon fontSize="1.2em" />}
       onClick={toggleTheme}
       variant="ghost"
       color="white"

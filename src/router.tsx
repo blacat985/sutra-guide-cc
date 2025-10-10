@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react';
 import { Center, Spinner } from '@chakra-ui/react';
 import Layout from './components/layout/Layout';

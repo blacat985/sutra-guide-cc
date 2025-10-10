@@ -226,7 +226,7 @@ caption: 觀世音菩薩入甚深禪定
 
 ### ThemePreference
 
-Represents user's theme selection (not stored in YAML).
+Represents user's UI preferences (not stored in YAML).
 
 **Storage**: Browser localStorage
 
@@ -234,12 +234,23 @@ Represents user's theme selection (not stored in YAML).
 | Field | Type | Values | Description |
 |-------|------|--------|-------------|
 | `mode` | string | 'light' \| 'dark' | Current theme mode |
+| `fontSize` | string | 'small' \| 'medium' \| 'large' \| 'x-large' | Current font size preference (FR-044~048) |
 
-**localStorage Key**: `chakra-ui-color-mode` (Chakra UI default)
+**localStorage Keys**:
+- Theme: `chakra-ui-color-mode` (Chakra UI default)
+- Font Size: `fontSize` (custom key)
+
+**Font Size Mapping**:
+- `small`: 14px base font size
+- `medium`: 16px base font size (default)
+- `large`: 18px base font size
+- `x-large`: 20px base font size
 
 **Validation Rules**:
-- Falls back to 'light' if localStorage unavailable (FR-019)
+- Theme falls back to 'light' if localStorage unavailable (FR-019)
+- Font size falls back to 'medium' if localStorage unavailable (FR-046)
 - No server-side storage (stateless application)
+- Font size applies globally to all text content (FR-047)
 
 ---
 

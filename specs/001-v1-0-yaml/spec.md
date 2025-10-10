@@ -70,6 +70,12 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 
 11. **Given** a user is viewing an under-construction chapter, **When** the page loads, **Then** they can still see the chapter title and use previous/next navigation buttons
 
+12. **Given** a user finds the default text size difficult to read, **When** they access the font size control, **Then** they can select from small, medium, large, or extra-large options
+
+13. **Given** a user has adjusted the font size to large, **When** they refresh the page or return later, **Then** the large font size preference is preserved
+
+14. **Given** a user changes font size, **When** the change is applied, **Then** all text content (original text, translations, annotations, practice insights) updates immediately to the new size
+
 8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a mailto link or external form link to submit their report
 
 ### Edge Cases
@@ -84,6 +90,10 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - How does the mobile menu behave at different screen sizes? → Drawer menu shows below 768px, persistent sidebar shows at 768px and above
 - Does the system support swipe gesture navigation? → No, to avoid conflicts with browser native forward/back gestures
 - How are commentary sections displayed? → Original text collapsed by default, translations visible by default for better reading flow
+- What font sizes are available? → Small (14px), Medium (16px, default), Large (18px), Extra-Large (20px)
+- What happens if browser doesn't support localStorage for font size? → Default to medium size, allow session-only changes
+- How does font size affect mobile vs desktop layout? → Font size scales proportionally across all screen sizes while maintaining responsive layout
+- Can users set different font sizes for different content types? → No, font size applies globally to all text content for consistency
 
 ## Requirements
 
@@ -116,11 +126,16 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-018**: Users MUST be able to toggle between light and dark modes via a visible control
 - **FR-019**: System MUST persist the user's theme preference across browser sessions (with graceful fallback to light mode if browser storage unavailable)
 - **FR-020**: System MUST apply appropriate contrast ratios in both themes to meet WCAG 2.1 Level AA standards (Principle V: Accessibility First)
+- **FR-044**: System MUST provide font size adjustment controls with at least 3 size options (small, medium, large)
+- **FR-045**: Users MUST be able to adjust font size via a visible control (e.g., dropdown menu or buttons)
+- **FR-046**: System MUST persist the user's font size preference across browser sessions using localStorage
+- **FR-047**: Font size changes MUST apply to all text content (sutra text, translations, annotations, practice insights)
+- **FR-048**: Default font size MUST be medium (16px base) for optimal readability
 
 #### Performance & Accessibility
 - **FR-021**: Initial page load MUST complete within 2 seconds on a standard 3G connection (Principle II: Pure and Undisturbed Experience)
 - **FR-022**: Chapter navigation MUST complete within 500 milliseconds
-- **FR-023**: All interactive elements (navigation, theme toggle, links) MUST be keyboard-accessible
+- **FR-023**: All interactive elements (navigation, theme toggle, font size control, links) MUST be keyboard-accessible
 - **FR-024**: System MUST provide appropriate ARIA labels and alt text for all non-text content
 - **FR-025**: System MUST NOT include any advertising, pop-ups, or auto-playing media (Principle II: Pure and Undisturbed Experience)
 

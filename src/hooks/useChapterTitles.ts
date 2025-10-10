@@ -29,9 +29,10 @@ export function useChapterTitles(
           const chapterNum = i + startChapter;
           return loadYamlFromFile(
             `${import.meta.env.BASE_URL}content/${sutraId}/chapter-${chapterNum}.yml`
-          ).then((data: any) => {
-            if (data && data.title) {
-              titleMap.set(chapterNum, data.title);
+          ).then((data: unknown) => {
+            const chapterData = data as { title?: string };
+            if (chapterData && chapterData.title) {
+              titleMap.set(chapterNum, chapterData.title);
             }
           }).catch(() => {
             // Silently skip missing chapters

@@ -30,8 +30,8 @@ const pulseRing = keyframes`
 `;
 
 export default function ErrorMessage({
-  message: _message,
-  onRetry: _onRetry,
+  message: _message, // eslint-disable-line @typescript-eslint/no-unused-vars
+  onRetry: _onRetry, // eslint-disable-line @typescript-eslint/no-unused-vars
   chapterNum,
   chapterTitle,
   hasPrevChapter,
@@ -64,10 +64,10 @@ export default function ErrorMessage({
                 isDisabled={!hasPrevChapter}
                 variant="outline"
                 colorScheme="brand"
-                size="md"
+                fontSize="inherit"
               />
             </HStack>
-            <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
+            <Text fontSize="0.9em" color="gray.600" _dark={{ color: "gray.400" }}>
               {chapterTitle || (chapterNum === 0 ? '序' : `第 ${chapterNum} 章`)}
             </Text>
             <IconButton
@@ -77,7 +77,7 @@ export default function ErrorMessage({
               isDisabled={!hasNextChapter}
               variant="outline"
               colorScheme="brand"
-              size="md"
+              fontSize="inherit"
             />
           </HStack>
         )}
@@ -120,7 +120,7 @@ export default function ErrorMessage({
 
             <Heading
               as="h2"
-              size="lg"
+              fontSize="1.5em"
               color="brand.700"
               _dark={{ color: "brand.200" }}
               fontWeight="semibold"
@@ -130,7 +130,7 @@ export default function ErrorMessage({
             </Heading>
 
             <Text
-              fontSize="md"
+              fontSize="1em"
               color="gray.600"
               _dark={{ color: "gray.400" }}
               textAlign="center"

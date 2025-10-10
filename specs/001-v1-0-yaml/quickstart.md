@@ -339,6 +339,43 @@ Before starting manual tests:
 
 ---
 
+## Test Scenario 13: Font Size Adjustment & Persistence (FR-044~FR-048)
+
+**User Story**: "Given a user finds default text difficult to read, When they adjust font size, Then all content scales and preference persists"
+
+### Steps:
+1. Locate font size control (in header, near theme toggle)
+2. Verify current font size (medium default)
+3. Click font size control to open menu
+4. Select "Large" option
+5. Observe all text content update
+6. Refresh page (F5)
+7. Open new tab to same chapter
+8. Clear localStorage and refresh
+
+### Expected Results:
+- [ ] Font size control is visible and accessible
+- [ ] Control shows 4 options: Small (小), Medium (中), Large (大), Extra-Large (特大)
+- [ ] Clicking "Large" immediately applies to:
+  - [ ] Original sutra text
+  - [ ] Vernacular translations
+  - [ ] Annotations and commentary
+  - [ ] Practice insights
+  - [ ] Chapter titles and navigation text
+- [ ] **After refresh**: Font size remains Large
+- [ ] **In new tab**: Open same chapter → font size is Large
+- [ ] **Clear localStorage**: Font falls back to Medium gracefully
+- [ ] No layout breaks at any font size
+- [ ] Text remains readable on mobile at all sizes
+
+### Accessibility:
+- [ ] Font size control is keyboard accessible (Tab + Enter/Space)
+- [ ] Screen reader announces current selection
+- [ ] ARIA labels present on control
+- [ ] Minimum touch target 44x44px (mobile)
+
+---
+
 ## Performance Validation (FR-021-FR-022)
 
 ### Lighthouse Audit

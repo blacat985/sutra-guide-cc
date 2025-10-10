@@ -34,11 +34,11 @@ interface ChapterViewProps {
 }
 
 const markdownComponents: Components = {
-  h1: ({ children }) => <Heading as="h1" size="lg" mt={5} mb={3} color="brand.600">{children}</Heading>,
-  h2: ({ children }) => <Heading as="h2" size="md" mt={4} mb={2} color="brand.600">{children}</Heading>,
-  h3: ({ children }) => <Heading as="h3" size="sm" mt={3} mb={2} color="brand.600">{children}</Heading>,
-  h4: ({ children }) => <Heading as="h4" size="xs" mt={2} mb={1}>{children}</Heading>,
-  p: ({ children }) => <Text mb={4} fontSize="md" lineHeight="tall">{children}</Text>,
+  h1: ({ children }) => <Heading as="h1" fontSize="1.5em" mt={5} mb={3} color="brand.600">{children}</Heading>,
+  h2: ({ children }) => <Heading as="h2" fontSize="1.3em" mt={4} mb={2} color="brand.600">{children}</Heading>,
+  h3: ({ children }) => <Heading as="h3" fontSize="1.15em" mt={3} mb={2} color="brand.600">{children}</Heading>,
+  h4: ({ children }) => <Heading as="h4" fontSize="1em" fontWeight="semibold" mt={2} mb={1}>{children}</Heading>,
+  p: ({ children }) => <Text mb={4} lineHeight="tall">{children}</Text>,
   ul: ({ children }) => <UnorderedList mb={4} spacing={2}>{children}</UnorderedList>,
   ol: ({ children }) => <OrderedList mb={4} spacing={2}>{children}</OrderedList>,
   li: ({ children }) => <ListItem>{children}</ListItem>,
@@ -144,10 +144,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               isDisabled={!hasPrevChapter}
               variant="outline"
               colorScheme="brand"
-              size="md"
+              fontSize="inherit"
             />
           </HStack>
-          <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
+          <Text color="gray.600" _dark={{ color: "gray.400" }}>
             {chapter.title}
           </Text>
           <IconButton
@@ -157,12 +157,12 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             isDisabled={!hasNextChapter}
             variant="outline"
             colorScheme="brand"
-            size="md"
+            fontSize="inherit"
           />
         </HStack>
 
         {/* Chapter Title */}
-        <Heading as="h1" size="xl" textAlign="center">
+        <Heading as="h1" fontSize="2em" textAlign="center">
           {chapter.title}
         </Heading>
 
@@ -180,7 +180,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                       maxW="full"
                     />
                     {illustration.caption && (
-                      <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
+                      <Text color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
                         {illustration.caption}
                       </Text>
                     )}
@@ -199,7 +199,6 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               href={chapter.podcastUrl}
               isExternal
               color="brand.600"
-              fontSize="lg"
               fontWeight="bold"
             >
               {chapter.podcastTitle ? (
@@ -223,7 +222,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                 onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
                 variant="ghost"
                 colorScheme="brand"
-                size="sm"
+                fontSize="inherit"
                 rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 mb={3}
               >
@@ -237,7 +236,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             borderColor="gray.300"
             _dark={{ borderColor: "gray.500" }}
           >
-            <Box fontSize="sm" lineHeight="tall">
+            <Box lineHeight="tall">
               <ReactMarkdown components={markdownComponents}>
                 {chapter.transcript}
                     </ReactMarkdown>
@@ -253,7 +252,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                   onClick={() => setIsTeachingOpen(!isTeachingOpen)}
                   variant="ghost"
                   colorScheme="brand"
-                  size="sm"
+                  fontSize="inherit"
                   rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                   mb={3}
                 >
@@ -268,7 +267,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               borderColor="gray.300"
               _dark={{ borderColor: "gray.500", bg: "gray.700" }}
             >
-                    <Box fontSize="md" lineHeight="tall">
+                    <Box lineHeight="tall">
                       <ReactMarkdown components={markdownComponents}>
                         {extractTeaching(chapter.transcript)}
                       </ReactMarkdown>
@@ -293,11 +292,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
           borderColor="gray.300"
           _dark={{ borderColor: "gray.500" }}
         >
-          <Heading as="h2" size="md" mb={4} color="brand.600" _dark={{ color: "brand.200" }}>
+          <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600" _dark={{ color: "brand.200" }}>
             原文
           </Heading>
           <Text 
-            fontSize="lg" 
             lineHeight="2" 
             whiteSpace="pre-line"
             color="gray.800"
@@ -317,10 +315,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
           <>
             <Divider />
             <Box as="section" role="region" aria-label="Translation">
-              <Heading as="h2" size="md" mb={4} color="brand.600">
+              <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600">
                 白話翻譯
               </Heading>
-              <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+              <Text lineHeight="tall" whiteSpace="pre-line">
                 {chapter.translation}
               </Text>
             </Box>
@@ -332,22 +330,22 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
           <>
             <Divider />
             <Box as="section" role="region" aria-label="Detailed Explanation">
-              <Heading as="h2" size="md" mb={6} color="brand.600">
+              <Heading as="h2" fontSize="1.5em" mb={6} color="brand.600">
                 逐段解釋
               </Heading>
               <VStack align="stretch" spacing={10}>
               {chapter.detailedExplanation.map((item, index) => (
                 <Box key={index} p={5} borderRadius="md" shadow="sm" borderWidth="1px">
-                  <Heading as="h3" size="md" mb={4} color="brand.600">
+                  <Heading as="h3" fontSize="1.3em" mb={4} color="brand.600">
                     原文段落 {index + 1}
                   </Heading>
-                  <Text fontSize="lg" lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.600" _dark={{ color: "gray.300" }} mb={6}>
+                  <Text lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.600" _dark={{ color: "gray.300" }} mb={6}>
                     {item.original}
                   </Text>
 
                   <Divider mb={4} />
 
-                  <Heading as="h4" size="sm" mb={3} color="brand.800" _dark={{ color: "brand.200" }}>
+                  <Heading as="h4" fontSize="1.1em" mb={3} color="brand.800" _dark={{ color: "brand.200" }}>
                     {item.commentaryTranslation ? '註解白話翻譯' : '白話翻譯'}
                   </Heading>
                   <Box mb={4}>
@@ -362,7 +360,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                         onClick={() => toggleExplanation(index)}
                         variant="ghost"
                         colorScheme="brand"
-                        size="sm"
+                        fontSize="inherit"
                         rightIcon={openExplanations[index] ? <ChevronUpIcon /> : <ChevronDownIcon />}
                         mb={3}
                       >
@@ -376,7 +374,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                           bg="gray.50"
                           _dark={{ bg: "gray.700" }}
                         >
-                          <Text fontSize="md" lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }}>
+                          <Text lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }}>
                             {item.commentary}
                           </Text>
                         </Box>
@@ -408,10 +406,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               borderColor="gray.300"
               _dark={{ borderColor: "gray.500", bg: "gray.700" }}
             >
-              <Heading as="h2" size="md" mb={4} color="brand.600">
+              <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600">
                 修行心得
               </Heading>
-              <Box fontSize="md" lineHeight="tall">
+              <Box lineHeight="tall">
                 <ReactMarkdown components={markdownComponents}>
                   {chapter.practiceInsights}
                 </ReactMarkdown>
@@ -424,7 +422,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
         {chapter.sourceAttribution && (
           <>
             <Divider />
-            <Text fontSize="xs" color="gray.500" textAlign="center">
+            <Text color="gray.500" textAlign="center">
               來源：{chapter.sourceAttribution}
             </Text>
           </>
@@ -439,7 +437,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             isDisabled={!hasPrevChapter}
             variant="outline"
             colorScheme="brand"
-            size="md"
+            fontSize="inherit"
           >
             上一章
           </Button>
@@ -449,7 +447,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             isDisabled={!hasNextChapter}
             variant="outline"
             colorScheme="brand"
-            size="md"
+            fontSize="inherit"
           >
             下一章
           </Button>

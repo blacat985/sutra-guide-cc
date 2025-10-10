@@ -17,16 +17,16 @@ export default function SutraCard({ sutra }: SutraCardProps) {
       transition="all 0.2s"
     >
       <VStack align="start" spacing={3}>
-        <Heading as="h2" size="md">
+        <Heading as="h2" fontSize="1.3em">
           {sutra.title}
         </Heading>
         {sutra.titleEn && (
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="0.85em" color="gray.600">
             {sutra.titleEn}
           </Text>
         )}
         {sutra.description && (
-          <Text fontSize="sm" noOfLines={3}>
+          <Text fontSize="0.9em" noOfLines={3}>
             {sutra.description}
           </Text>
         )}
@@ -34,7 +34,7 @@ export default function SutraCard({ sutra }: SutraCardProps) {
           as={RouterLink}
           to={sutra.id === 'diamond-sutra' ? `/${sutra.id}/0` : `/${sutra.id}`}
           colorScheme="brand"
-          size="sm"
+          fontSize="inherit"
           width="full"
         >
           閱讀經文

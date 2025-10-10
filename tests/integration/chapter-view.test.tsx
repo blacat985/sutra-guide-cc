@@ -8,7 +8,7 @@ import SutraPage from '../../src/pages/SutraPage';
 expect.extend(toHaveNoViolations);
 
 describe('Chapter Content Display Integration Test (FR-003)', () => {
-  const renderChapterView = (sutraId = 'heart-sutra', chapterNum = '1') => {
+  const renderChapterView = () => {
     return render(
       <ChakraProvider>
         <BrowserRouter>
