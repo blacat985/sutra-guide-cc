@@ -255,7 +255,16 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
           <Heading as="h2" size="md" mb={4} color="brand.600">
             原文
           </Heading>
-          <Text fontSize="lg" lineHeight="tall" whiteSpace="pre-line">
+          <Text 
+            fontSize="lg" 
+            lineHeight="2" 
+            whiteSpace="pre-line"
+            sx={{
+              '& > *:not(:last-child)': {
+                marginBottom: '1em'
+              }
+            }}
+          >
             {chapter.originalText}
           </Text>
         </Box>
