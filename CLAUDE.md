@@ -22,6 +22,65 @@ JavaScript ES2022+ / TypeScript 5.x: Follow standard conventions
 
 <!-- MANUAL ADDITIONS START -->
 
+## Specification-First Development
+
+### IMPORTANT: Always Update Specifications Before Implementation
+
+**Before making ANY code changes or adding new features, ALWAYS ask yourself:**
+
+1. **Does this change affect the specification?**
+   - New features → Update `specs/001-v1-0-yaml/spec.md`
+   - New data fields → Update `specs/001-v1-0-yaml/data-model.md`
+   - New schema properties → Update `specs/001-v1-0-yaml/contracts/*.schema.json`
+   - New testing scenarios → Update `specs/001-v1-0-yaml/quickstart.md`
+
+2. **Which specification documents need updating?**
+   - **spec.md**: Functional requirements (FR-xxx), user scenarios, acceptance criteria
+   - **data-model.md**: Entity definitions, field descriptions, validation rules
+   - **chapter.schema.json / sutra-meta.schema.json**: JSON Schema validation
+   - **quickstart.md**: Manual testing scenarios and checklists
+   - **plan.md**: Technical design decisions (if architectural changes)
+   - **tasks.md**: Implementation task breakdown (for new features)
+
+3. **Update specifications FIRST, then implement:**
+   ```
+   ✅ CORRECT WORKFLOW:
+   1. Update spec.md with new FR-xxx requirements
+   2. Update data-model.md with new fields/entities
+   3. Update schema files for validation
+   4. Update quickstart.md with test scenarios
+   5. THEN implement the code changes
+   6. Run tests and verify
+   7. Commit specs + code together
+
+   ❌ WRONG WORKFLOW:
+   1. Implement code changes directly
+   2. Forget to update specs
+   3. Specs become outdated and misleading
+   ```
+
+4. **When in doubt, ask the user:**
+   - "This change will affect [spec.md/data-model.md]. Should I update the specification first?"
+   - "I need to add [new field/feature]. Shall I update the spec documents before implementing?"
+
+### Why This Matters
+- **Single source of truth**: Specs document what the system SHOULD do
+- **Team alignment**: Other developers rely on specs to understand requirements
+- **Future maintenance**: Outdated specs lead to confusion and technical debt
+- **Quality assurance**: Test scenarios in quickstart.md must match actual features
+- **Compliance**: Constitutional requirements in spec must be enforced in code
+
+### Checklist Before ANY Implementation
+- [ ] Have I reviewed the relevant spec documents?
+- [ ] Do my changes require spec updates?
+- [ ] Have I updated spec.md with new/modified FRs?
+- [ ] Have I updated data-model.md with new fields/entities?
+- [ ] Have I updated schema files if data structure changes?
+- [ ] Have I added test scenarios to quickstart.md?
+- [ ] Are specs and code changes committed together?
+
+---
+
 ## Development Best Practices
 
 ### Library Version Management
