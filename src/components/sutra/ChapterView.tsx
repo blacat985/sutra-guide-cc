@@ -94,6 +94,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
     return <ErrorMessage 
       message={error.message}
       chapterNum={chapterNum}
+      chapterTitle={chapter?.title}
       hasPrevChapter={hasPrevChapter}
       hasNextChapter={hasNextChapter}
       onPrevChapter={goToPrevChapter}

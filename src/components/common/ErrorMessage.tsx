@@ -6,6 +6,7 @@ interface ErrorMessageProps {
   message: string;
   onRetry?: () => void;
   chapterNum?: number;
+  chapterTitle?: string;
   hasPrevChapter?: boolean;
   hasNextChapter?: boolean;
   onPrevChapter?: () => void;
@@ -32,6 +33,7 @@ export default function ErrorMessage({
   message: _message, 
   onRetry: _onRetry,
   chapterNum,
+  chapterTitle,
   hasPrevChapter,
   hasNextChapter,
   onPrevChapter,
@@ -96,7 +98,7 @@ export default function ErrorMessage({
               />
             </HStack>
             <Text fontSize="sm" color="gray.600" _dark={{ color: "gray.400" }}>
-              {chapterNum === 0 ? '序' : `第 ${chapterNum} 章`}
+              {chapterTitle || (chapterNum === 0 ? '序' : `第 ${chapterNum} 章`)}
             </Text>
             <IconButton
               aria-label="下一章"

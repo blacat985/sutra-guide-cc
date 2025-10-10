@@ -28,13 +28,15 @@ export function useChapterData(
         );
 
         if (!validateChapter(data)) {
+          // Even if validation fails, keep the data for basic info like title
+          setChapter(data as Chapter);
           throw new Error('Invalid chapter schema');
         }
 
         setChapter(data);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Unknown error'));
-        setChapter(null);
+        // Don't clear chapter here - we may have partial data
       } finally {
         setLoading(false);
       }
