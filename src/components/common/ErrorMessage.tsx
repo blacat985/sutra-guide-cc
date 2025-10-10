@@ -1,4 +1,4 @@
-import { Box, VStack, Heading, Text, Spinner } from '@chakra-ui/react';
+import { Box, VStack, Heading, Text } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 
 interface ErrorMessageProps {
@@ -21,7 +21,7 @@ const pulseRing = keyframes`
   }
 `;
 
-export default function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
+export default function ErrorMessage({ message: _message, onRetry: _onRetry }: ErrorMessageProps) {
   return (
     <Box
       minH="400px"
