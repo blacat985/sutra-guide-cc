@@ -1,6 +1,7 @@
 import { Box, VStack, Link, Heading, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSutraData } from '../../hooks/useSutraData';
+import { useChapterTitles } from '../../hooks/useChapterTitles';
 
 interface TableOfContentsProps {
   sutraId: string;
@@ -12,8 +13,14 @@ export default function TableOfContents({
   currentChapter,
 }: TableOfContentsProps) {
   const { sutra, loading } = useSutraData(sutraId);
+  const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
+  const { titles, loading: titlesLoading } = useChapterTitles(
+    sutraId,
+    sutra?.chapters || 0,
+    startChapter
+  );
 
-  if (loading || !sutra) {
+  if (loading || titlesLoading || !sutra) {
     return (
       <Box as="nav" aria-label="Table of Contents" p={4}>
         <Text>Loading...</Text>
@@ -21,8 +28,7 @@ export default function TableOfContents({
     );
   }
 
-  // Generate chapter list starting from 0 (preface) if diamond-sutra, else from 1
-  const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
+  // Generate chapter list
   const chapters = Array.from({ length: sutra.chapters + (startChapter === 0 ? 1 : 0) }, (_, i) => i + startChapter);
 
   return (
@@ -66,7 +72,7 @@ export default function TableOfContents({
                   _hover: { bg: 'gray.700' }
                 }}
               >
-                {num === 0 ? '序' : `第 ${num} 章`}
+                {num === 0 ? '序' : (titles.get(num) || `第 ${num} 章`)}
               </Link>
             </Box>
           ))}
