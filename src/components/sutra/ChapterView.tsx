@@ -329,24 +329,11 @@ export default function ChapterView({ sutraId, chapterNum }: ChapterViewProps) {
                   <Heading as="h4" size="sm" mb={3} color="brand.800" _dark={{ color: "brand.200" }}>
                     註解白話翻譯
                   </Heading>
-                  <Text 
-                    fontSize="md" 
-                    lineHeight="tall" 
-                    whiteSpace="pre-line" 
-                    mb={4}
-                    sx={{
-                      '& p': {
-                        marginBottom: '1em'
-                      }
-                    }}
-                    css={{
-                      '& > :not(:last-child)': {
-                        marginBottom: '1em'
-                      }
-                    }}
-                  >
-                    {item.commentaryTranslation}
-                  </Text>
+                  <Box mb={4}>
+                    <ReactMarkdown components={markdownComponents}>
+                      {item.commentaryTranslation}
+                    </ReactMarkdown>
+                  </Box>
 
                   <Button
                     onClick={() => toggleExplanation(index)}
