@@ -14,7 +14,7 @@
 - Q: What should users see when first visiting the website? → A: Direct access to Diamond Sutra (V1.0 focuses on single sutra)
 - Q: How many sutras will V1.0 support? → A: Primarily Diamond Sutra with 33 chapters (0-32), focusing on quality over quantity
 - Q: How should the system handle corrupted YAML files? → A: Display error message, hide the chapter, allow browsing other chapters
-- Q: How complete should the content error reporting mechanism be? → A: Simple mailto link or external form link (minimal implementation)
+- Q: How complete should the content error reporting mechanism be? → A: GitHub Issues link (minimal implementation, privacy-preserving)
 
 ---
 
@@ -78,7 +78,7 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 
 15. **Given** a user has set a large or extra-large font size, **When** viewing the chapter navigation sidebar, **Then** the chapter list maintains a fixed medium font size (16px) to prevent text wrapping and maintain layout stability
 
-8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a mailto link or external form link to submit their report
+8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a GitHub Issues link to submit their report without exposing the maintainer's email address
 
 ### Edge Cases
 
@@ -147,7 +147,7 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-026**: System MUST display a clear, graceful error message when a requested sutra or chapter is not found
 - **FR-027**: When a chapter YAML file is corrupted or validation fails, system MUST display an under-construction page, preserve basic data (like chapter title) if available, and allow continued browsing of other chapters with functional navigation buttons
 - **FR-028**: System MUST NOT crash when encountering missing or malformed YAML files
-- **FR-029**: System MUST provide a mailto link or external form link allowing users to report content errors or missing information
+- **FR-029**: System MUST provide a GitHub Issues link allowing users to report content errors or missing information without exposing maintainer's email address
 
 #### Mobile Navigation
 - **FR-030**: System MUST provide a collapsible table of contents menu on mobile devices (screen width < 768px)
