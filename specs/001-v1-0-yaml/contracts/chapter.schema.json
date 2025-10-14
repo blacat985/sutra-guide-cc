@@ -35,6 +35,10 @@
       "description": "Chapter title",
       "examples": ["第一品", "觀自在菩薩品"]
     },
+    "gist": {
+      "type": "string",
+      "description": "Brief summary/essence of the chapter (1-2 sentences)"
+    },
     "originalText": {
       "type": "string",
       "minLength": 1,
@@ -126,6 +130,14 @@
           "caption": {
             "type": "string",
             "description": "Optional visible caption"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the illustration content and symbolism"
+          },
+          "style": {
+            "type": "string",
+            "description": "Art style description (e.g., '古印度插畫風格', '佛教細密畫風格')"
           }
         },
         "additionalProperties": false

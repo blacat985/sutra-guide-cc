@@ -69,6 +69,7 @@ Represents a single chapter/section of a sutra.
 | `sutraId` | string | Yes | Parent sutra identifier (matches Sutra.id) | Data integrity |
 | `number` | number | Yes | Chapter sequence number (0-indexed, where 0 can be preface/序) | FR-007: TOC ordering |
 | `title` | string | Yes | Chapter title (e.g., "第一品", "觀自在菩薩品", "金剛般若波羅蜜經序") | FR-008: TOC display |
+| `gist` | string | No | Brief summary/essence of the chapter (1-2 sentences) | FR-006: Chapter overview |
 | `originalText` | string | Yes | Classical Chinese text (multi-paragraph, `
 
 ` separated) | FR-003: Display original text |

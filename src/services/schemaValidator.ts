@@ -22,7 +22,7 @@ export function validateSutraMeta(data: unknown): data is Sutra {
 export function validateChapter(data: unknown): data is Chapter {
   const valid = validateChapterSchema(data);
   if (!valid && validateChapterSchema.errors) {
-    console.error('Chapter validation errors:', validateChapterSchema.errors);
+    console.error('Chapter validation errors:', JSON.stringify(validateChapterSchema.errors, null, 2));
   }
   return !!valid;
 }
