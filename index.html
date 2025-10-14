@@ -14,7 +14,10 @@
       (function() {
         const query = window.location.search;
         if (query && query.startsWith('/?/')) {
-          const path = '/' + query.slice(3).split('&')[0].replace(/~and~/g, '&');
+          const route = query.slice(3).split('&')[0].replace(/~and~/g, '&');
+          // Preserve the basename in the path
+          const basename = window.location.pathname.split('/').slice(0, 2).join('/');
+          const path = basename + '/' + route;
           window.history.replaceState(null, null, path);
         }
       })();
