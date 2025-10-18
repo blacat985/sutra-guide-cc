@@ -14,7 +14,10 @@ export interface Chapter {
   schemaVersion?: string;
   sutraId: string;
   number: number;
+  volume?: number;
+  volumeTitle?: string;
   title: string;
+  gist?: string;
   originalText: string;
   translation: string;
   annotations?: Annotation[];

@@ -80,6 +80,10 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 
 8. **Given** a user notices a content error, **When** they access the error reporting feature, **Then** they can click a GitHub Issues link to submit their report without exposing the maintainer's email address
 
+16. **Given** a user is viewing a multi-volume sutra (e.g., Samyukta Agama), **When** they open the table of contents, **Then** they see chapters grouped by volume with volume headers (e.g., "卷第一", "卷第二") and can expand/collapse each volume section
+
+17. **Given** a user is reading a chapter from a multi-volume sutra, **When** viewing the chapter header, **Then** they see both the volume information (e.g., "雜阿含經卷第一") and the chapter title displayed clearly
+
 ### Edge Cases
 
 - What happens when a chapter YAML file is missing or corrupted? → Display under-construction page, preserve basic data (like title) if possible, allow browsing other chapters
@@ -170,6 +174,12 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 #### Visual Consistency
 - **FR-042**: All chapter content sections (original text, commentary, practice insights, etc.) MUST use unified 1px border styling for visual consistency
 - **FR-043**: Dark mode MUST ensure all text blocks, especially commentary sections, have sufficient contrast ratios to meet readability standards
+
+#### Multi-Volume Sutra Navigation
+- **FR-049**: For multi-volume sutras (e.g., Samyukta Agama), system MUST support volume-based chapter organization with volume number, volume title, and chapter sequence within volume
+- **FR-050**: Table of contents MUST display chapters grouped by volume for multi-volume sutras, with clear volume headers and collapsible volume sections
+- **FR-051**: Each chapter in a multi-volume sutra MUST display its volume information (volume number and title) in addition to chapter title
+- **FR-052**: System MUST maintain backward compatibility with single-volume sutras (e.g., Heart Sutra, Diamond Sutra) that do not use volume grouping
 
 ### Key Entities
 

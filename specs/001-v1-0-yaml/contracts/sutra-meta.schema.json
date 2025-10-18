@@ -28,7 +28,7 @@
       "minLength": 2,
       "maxLength": 50,
       "description": "Unique sutra identifier (lowercase, numbers, hyphens only)",
-      "examples": ["heart-sutra", "diamond-sutra", "platform-sutra"]
+      "examples": ["heart-sutra", "diamond-sutra", "samyukta-agama", "platform-sutra"]
     },
     "title": {
       "type": "string",
@@ -46,7 +46,7 @@
     },
     "tradition": {
       "type": "string",
-      "enum": ["Mahayana", "Theravada", "Vajrayana", "Other"],
+      "enum": ["Mahayana", "Theravada", "Vajrayana", "Early Buddhism", "Other"],
       "description": "Buddhist tradition"
     },
     "translator": {
@@ -84,6 +84,12 @@
       "minimum": 1,
       "maximum": 1000,
       "description": "Total number of chapters in this sutra"
+    },
+    "startChapter": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Starting chapter number (optional, defaults to 0 or 1). For sutras with non-sequential numbering like Samyukta Agama (559-603), this specifies the first chapter number.",
+      "examples": [0, 1, 559]
     }
   },
   "additionalProperties": false

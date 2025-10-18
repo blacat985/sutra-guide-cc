@@ -26,7 +26,7 @@ Represents a complete Buddhist scripture collection.
 | `id` | string | Yes | Unique identifier (e.g., "heart-sutra", "diamond-sutra") | FR-001: Single-level ID |
 | `title` | string | Yes | Chinese title (e.g., "般若波羅蜜多心經") | FR-006: Display metadata |
 | `titleEn` | string | No | Optional English title (e.g., "Heart Sutra") | FR-006: Display metadata |
-| `tradition` | string | Yes | Buddhist tradition (e.g., "Mahayana", "Theravada", "Vajrayana") | FR-004: Source attribution |
+| `tradition` | string | Yes | Buddhist tradition (e.g., "Mahayana", "Theravada", "Vajrayana", "Early Buddhism") | FR-004: Source attribution |
 | `translator` | string | Yes | Translator name (e.g., "玄奘法師", "Xuanzang") | Principle I: Translator must be identified |
 | `translatorAttribution` | string | Yes | Full citation for translator (e.g., "唐三藏法師玄奘奉詔譯") | Principle I: Source attribution |
 | `source` | string | Yes | Original text source (e.g., "大正新修大藏經第8冊 No.251") | Principle I: Source must be verifiable |
@@ -69,6 +69,8 @@ Represents a single chapter/section of a sutra.
 | `sutraId` | string | Yes | Parent sutra identifier (matches Sutra.id) | Data integrity |
 | `number` | number | Yes | Chapter sequence number (0-indexed, where 0 can be preface/序) | FR-007: TOC ordering |
 | `title` | string | Yes | Chapter title (e.g., "第一品", "觀自在菩薩品", "金剛般若波羅蜜經序") | FR-008: TOC display |
+| `volume` | number | No | Volume number for multi-volume sutras (e.g., 1, 2, 3 for Samyukta Agama) | FR-049: Volume-based navigation |
+| `volumeTitle` | string | No | Volume title (e.g., "雜阿含經卷第一") | FR-049: Volume-based navigation |
 | `gist` | string | No | Brief summary/essence of the chapter (1-2 sentences) | FR-006: Chapter overview |
 | `originalText` | string | Yes | Classical Chinese text (multi-paragraph, `
 
@@ -92,7 +94,7 @@ Represents a single chapter/section of a sutra.
 - `podcastUrl` must be valid URL if provided (starts with `http://` or `https://`)
 - Paragraphs in text fields separated by double newline (`\n\n`)
 
-**Example YAML**:
+**Example YAML (Simple Sutra)**:
 ```yaml
 sutraId: heart-sutra
 number: 1
@@ -138,6 +140,33 @@ transcript: |
 
   當我們能夠照見這五蘊皆空時，就能度脫一切的苦厄。這裡的「空」不是什麼都沒有，而是指這些現象沒有固定不變的本質，都是因緣和合而生。
 sourceAttribution: 同經典來源
+```
+
+**Example YAML (Multi-Volume Sutra)**:
+```yaml
+sutraId: samyukta-agama
+number: 1
+volume: 1
+volumeTitle: 雜阿含經卷第一
+title: 無常經
+originalText: |
+  如是我聞：一時，佛住舍衛國祇樹給孤獨園。
+
+  爾時，世尊告諸比丘：「當觀色無常，如是觀者，則為正觀。正觀者，則生厭離；厭離者，喜貪盡；喜貪盡者，說心解脫。」
+
+translation: |
+  我曾親自聽聞佛陀這樣說：有一次，佛陀住在舍衛國的祇樹給孤獨園。
+
+  那時，世尊告訴諸位比丘說：「應當觀察色法的無常性，這樣觀察才是正確的觀法。正確觀察的人，就會生起厭離心；有厭離心的人，貪愛喜樂就會消盡；貪愛喜樂消盡的人，可以說是心得解脫了。」
+
+annotations:
+  - paragraph: 1
+    text: 「如是我聞」是佛經的開頭定式，表示此經為阿難等親聞佛陀教說後集結而成
+    source: 印順導師《雜阿含經論會編》
+
+  - paragraph: 2
+    text: 「觀色無常」指觀察物質現象的無常性，是四念處觀的重要內容
+    source: 《清淨道論》
 ```
 
 ---
@@ -275,6 +304,8 @@ public/content/
 - `heart-sutra/chapter-1.yml`
 - `diamond-sutra/meta.yml`
 - `diamond-sutra/chapter-32.yml`
+- `samyukta-agama/meta.yml`
+- `samyukta-agama/chapter-1.yml`
 - `platform-sutra/meta.yml`
 - `platform-sutra/chapter-10.yml`
 

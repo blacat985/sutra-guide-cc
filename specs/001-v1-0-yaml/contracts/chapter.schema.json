@@ -35,6 +35,17 @@
       "description": "Chapter title",
       "examples": ["第一品", "觀自在菩薩品"]
     },
+    "volume": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Volume number (for multi-volume sutras like Samyukta Agama)"
+    },
+    "volumeTitle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Volume title (e.g., '雜阿含經卷第一')"
+    },
     "gist": {
       "type": "string",
       "description": "Brief summary/essence of the chapter (1-2 sentences)"

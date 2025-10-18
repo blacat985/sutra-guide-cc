@@ -7,6 +7,16 @@ interface SutraCardProps {
 }
 
 export default function SutraCard({ sutra }: SutraCardProps) {
+  // Determine default chapter: use startChapter if provided, otherwise 0 for diamond-sutra, 1 for others
+  const getDefaultChapter = () => {
+    if (sutra.startChapter !== undefined) {
+      return sutra.startChapter;
+    }
+    return sutra.id === 'diamond-sutra' ? 0 : 1;
+  };
+
+  const defaultChapter = getDefaultChapter();
+
   return (
     <Box
       as="article"
@@ -32,7 +42,7 @@ export default function SutraCard({ sutra }: SutraCardProps) {
         )}
         <Button
           as={RouterLink}
-          to={sutra.id === 'diamond-sutra' ? `/${sutra.id}/0` : `/${sutra.id}`}
+          to={`/${sutra.id}/${defaultChapter}`}
           colorScheme="brand"
           fontSize="inherit"
           width="full"
