@@ -158,7 +158,7 @@ export default function TableOfContents({
         </Heading>
 
         <Accordion defaultIndex={[defaultVolumeIndex]} allowMultiple>
-          {volumeGroups.map((group, groupIndex) => (
+          {volumeGroups.map((group) => (
             <AccordionItem key={group.volume} border="none">
               <AccordionButton
                 px={3}
