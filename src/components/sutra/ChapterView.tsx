@@ -46,6 +46,14 @@ const markdownComponents: Components = {
   li: ({ children }) => <ListItem>{children}</ListItem>,
   code: ({ children }) => <Code>{children}</Code>,
   strong: ({ children }) => <Text as="strong" fontWeight="bold">{children}</Text>,
+  // Handle line breaks: convert single newlines to double newlines for proper paragraph spacing
+  br: () => <Box h="1em" />,
+};
+
+// Helper function to normalize markdown text: convert single newlines to double newlines
+const normalizeMarkdown = (text: string): string => {
+  // Replace single newlines (not preceded or followed by another newline) with double newlines
+  return text.replace(/(?<!\n)\n(?!\n)/g, '\n\n');
 };
 
 export default function ChapterView({ sutraId, chapterNum, onMenuClick }: ChapterViewProps) {
@@ -256,7 +264,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
           >
             <Box lineHeight="tall">
               <ReactMarkdown components={markdownComponents}>
-                {chapter.transcript}
+                {normalizeMarkdown(chapter.transcript)}
                     </ReactMarkdown>
                   </Box>
                 </Box>
@@ -287,7 +295,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             >
                     <Box lineHeight="tall">
                       <ReactMarkdown components={markdownComponents}>
-                        {extractTeaching(chapter.transcript)}
+                        {normalizeMarkdown(extractTeaching(chapter.transcript))}
                       </ReactMarkdown>
                     </Box>
                   </Box>
@@ -368,7 +376,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                   </Heading>
                   <Box mb={4}>
                     <ReactMarkdown components={markdownComponents}>
-                      {item.commentaryTranslation || item.translation || ''}
+                      {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
                     </ReactMarkdown>
                   </Box>
 
@@ -429,7 +437,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               </Heading>
               <Box lineHeight="tall">
                 <ReactMarkdown components={markdownComponents}>
-                  {chapter.practiceInsights}
+                  {normalizeMarkdown(chapter.practiceInsights)}
                 </ReactMarkdown>
               </Box>
             </Box>
