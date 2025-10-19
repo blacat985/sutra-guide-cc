@@ -86,7 +86,7 @@ Represents a single chapter/section of a sutra.
 | `videoUrl` | string | No | Video lecture/explanation URL (supports Google Vids, YouTube embed, or direct file path) | FR-053: Display video player |
 | `videoTitle` | string | No | Video episode display title (e.g., "雜阿含經563-565：阿難：經藏背後的聲音（影片解說）") | FR-053: Clear video context |
 | `audioUrl` | string | No | Audio lecture/explanation URL (supports direct file path, SoundCloud, or YouTube audio) | FR-054: Display audio player |
-| `audioTitle` | string | No | Audio episode display title (e.g., "雜阿含經563-565：阿難尊者的智慧與慈悲（音頻導讀）") | FR-054: Clear audio context |
+| `audioTitle` | string | No | Audio episode display title (e.g., "雜阿含經563-565：阿難尊者的智慧與慈悲（Podcast 導讀）") | FR-054: Clear audio context |
 | `sourceAttribution` | string | No | Chapter-specific source citation (if differs from sutra-level) | Principle I: Per-chapter attribution |
 
 **Validation Rules**:
