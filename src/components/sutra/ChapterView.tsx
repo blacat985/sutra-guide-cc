@@ -26,6 +26,8 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useChapterData } from '../../hooks/useChapterData';
 import { useSutraData } from '../../hooks/useSutraData';
 import ErrorMessage from '../common/ErrorMessage';
+import VideoPlayer from '../media/VideoPlayer';
+import AudioPlayer from '../media/AudioPlayer';
 
 interface ChapterViewProps {
   sutraId: string;
@@ -212,6 +214,22 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               )}
             </Link>
           </Box>
+        )}
+
+        {/* Video Player */}
+        {chapter.videoUrl && (
+          <>
+            <VideoPlayer url={chapter.videoUrl} title={chapter.videoTitle} />
+            <Divider />
+          </>
+        )}
+
+        {/* Audio Player */}
+        {chapter.audioUrl && (
+          <>
+            <AudioPlayer url={chapter.audioUrl} title={chapter.audioTitle} />
+            <Divider />
+          </>
         )}
 
         {/* Podcast Transcript */}

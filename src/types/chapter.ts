@@ -26,6 +26,10 @@ export interface Chapter {
   podcastTitle?: string;
   podcastUrl?: string;
   transcript?: string;
+  videoUrl?: string;
+  videoTitle?: string;
+  audioUrl?: string;
+  audioTitle?: string;
   sourceAttribution?: string;
   detailedExplanation?: DetailedExplanation[];
 }

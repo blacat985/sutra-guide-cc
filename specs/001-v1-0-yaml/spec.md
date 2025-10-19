@@ -181,6 +181,14 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-051**: Each chapter in a multi-volume sutra MUST display its volume information (volume number and title) in addition to chapter title
 - **FR-052**: System MUST maintain backward compatibility with single-volume sutras (e.g., Heart Sutra, Diamond Sutra) that do not use volume grouping
 
+#### Media Content (Video & Audio)
+- **FR-053**: System MUST support video lecture/explanation playback for chapters via `videoUrl` field (supports Google Vids, YouTube embed, or direct file paths), with optional `videoTitle` for clearer context
+- **FR-054**: System MUST support audio lecture/explanation playback for chapters via `audioUrl` field (supports HTML5 audio for local files, or external platforms like SoundCloud), with optional `audioTitle` for clearer context
+- **FR-055**: Video and audio players MUST be embedded directly in chapter pages without requiring navigation away from the reading experience
+- **FR-056**: Video players MUST support standard controls (play, pause, volume, fullscreen) and be responsive across mobile and desktop devices
+- **FR-057**: Audio players MUST use native browser controls for consistent user experience and accessibility
+- **FR-058**: Media content MUST NOT autoplay to preserve the "pure and undisturbed experience" principle (Principle II)
+
 ### Key Entities
 
 - **Sutra**: A complete Buddhist scripture collection containing:
@@ -205,8 +213,10 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
   - Annotations and commentary with sources (alternative format)
   - Practice insights and guidance (supports Markdown formatting)
   - Optional illustrations with descriptions
-  - Optional podcast episode URL
-  - Optional podcast title (`podcastTitle`) for clearer display
+  - Optional podcast episode URL and title (`podcastUrl`, `podcastTitle`)
+  - Optional video lecture URL and title (`videoUrl`, `videoTitle`) - supports Google Vids, YouTube, or direct files
+  - Optional audio lecture URL and title (`audioUrl`, `audioTitle`) - supports local files or external platforms
+  - Optional podcast transcript (`transcript`)
   - Optional source attribution (if differs from sutra-level attribution)
 
 - **Theme Preference**: User's selected visual theme (light or dark mode), stored persistently in browser local storage

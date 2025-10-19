@@ -169,6 +169,32 @@
       "type": "string",
       "description": "Podcast episode transcript (multi-paragraph, separated by double newlines)"
     },
+    "videoUrl": {
+      "type": "string",
+      "description": "Video lecture/explanation URL (supports Google Vids, YouTube embed, or relative file path)",
+      "examples": [
+        "https://www.youtube.com/embed/VIDEO_ID",
+        "https://docs.google.com/videos/d/VIDEO_ID/preview",
+        "/content/samyukta-agama/video-563.mp4"
+      ]
+    },
+    "videoTitle": {
+      "type": "string",
+      "description": "Optional video episode display title (clearer than chapter title)"
+    },
+    "audioUrl": {
+      "type": "string",
+      "description": "Audio lecture/explanation URL (supports direct file path, SoundCloud, or YouTube audio)",
+      "examples": [
+        "/content/samyukta-agama/audio-563.m4a",
+        "https://soundcloud.com/player/?url=...",
+        "https://www.youtube.com/embed/AUDIO_VIDEO_ID"
+      ]
+    },
+    "audioTitle": {
+      "type": "string",
+      "description": "Optional audio episode display title (clearer than chapter title)"
+    },
     "sourceAttribution": {
       "type": "string",
       "description": "Chapter-specific source citation (if differs from sutra-level)"

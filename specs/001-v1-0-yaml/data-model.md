@@ -83,6 +83,10 @@ Represents a single chapter/section of a sutra.
 | `podcastTitle` | string | No | Podcast episode display title (clearer than chapter title) | FR-039: Clear podcast context |
 | `podcastUrl` | string | No | External podcast episode URL | FR-012: Display podcast link |
 | `transcript` | string | No | Podcast episode transcript (multi-paragraph, `\n\n` separated) | FR-012: Display transcript with podcast |
+| `videoUrl` | string | No | Video lecture/explanation URL (supports Google Vids, YouTube embed, or direct file path) | FR-053: Display video player |
+| `videoTitle` | string | No | Video episode display title (e.g., "雜阿含經563-565：阿難：經藏背後的聲音（影片解說）") | FR-053: Clear video context |
+| `audioUrl` | string | No | Audio lecture/explanation URL (supports direct file path, SoundCloud, or YouTube audio) | FR-054: Display audio player |
+| `audioTitle` | string | No | Audio episode display title (e.g., "雜阿含經563-565：阿難尊者的智慧與慈悲（音頻導讀）") | FR-054: Clear audio context |
 | `sourceAttribution` | string | No | Chapter-specific source citation (if differs from sutra-level) | Principle I: Per-chapter attribution |
 
 **Validation Rules**:
@@ -92,6 +96,8 @@ Represents a single chapter/section of a sutra.
 - `originalText` is MANDATORY (core content)
 - Either `translation` OR `detailedExplanation` should be provided (at least one)
 - `podcastUrl` must be valid URL if provided (starts with `http://` or `https://`)
+- `videoUrl` must be valid URL or relative path if provided (supports `http://`, `https://`, or `/content/`)
+- `audioUrl` must be valid URL or relative path if provided (supports `http://`, `https://`, or `/content/`)
 - Paragraphs in text fields separated by double newline (`\n\n`)
 
 **Example YAML (Simple Sutra)**:
@@ -367,7 +373,12 @@ export interface Chapter {
   practiceInsights?: string;
   illustrations?: Illustration[];
   podcastUrl?: string;
+  podcastTitle?: string;
   transcript?: string;
+  videoUrl?: string;
+  videoTitle?: string;
+  audioUrl?: string;
+  audioTitle?: string;
   sourceAttribution?: string;
 }
 
