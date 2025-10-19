@@ -63,10 +63,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   };
 
   // Calculate chapter range
-  const startChapter = sutraId === 'diamond-sutra' ? 0 : 1;
+  const startChapter = sutra?.startChapter ?? 1;
   const totalChapters = sutra?.chapters ?? 0;
-  const lastChapter = startChapter === 0 ? totalChapters : totalChapters;
-  
+  const lastChapter = startChapter + totalChapters - 1;
+
   const hasPrevChapter = chapterNum > startChapter;
   const hasNextChapter = chapterNum < lastChapter;
 
