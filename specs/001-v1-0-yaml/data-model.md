@@ -33,6 +33,8 @@ Represents a complete Buddhist scripture collection.
 | `sourceAttribution` | string | Yes | Full bibliographic citation | Principle I: Source documentation |
 | `description` | string | No | Brief introduction to the sutra | FR-006: Display metadata |
 | `chapters` | number | Yes | Total number of chapters in this sutra | FR-007: TOC needs chapter count |
+| `startChapter` | number | No | Starting chapter number (optional, defaults to 0 or 1). For sutras with non-sequential numbering like Samyukta Agama (559-603), this specifies the first chapter number and defines the minimum boundary for backward navigation. | FR-007: TOC ordering, navigation boundaries |
+| `defaultChapter` | number | No | Default chapter to display when user clicks "閱讀經文" from homepage (optional). If not specified, uses `startChapter`. Useful for featuring content-rich chapters (e.g., chapter 576 with multimedia) while preserving navigation boundaries (startChapter 559). | FR-006: User entry point, content highlighting |
 
 **Validation Rules**:
 - `id` must match pattern `^[a-z0-9-]+$` (lowercase, numbers, hyphens only)
@@ -40,7 +42,7 @@ Represents a complete Buddhist scripture collection.
 - `chapters` must be > 0
 - `translator`, `translatorAttribution`, `source`, `sourceAttribution` are MANDATORY (constitutional requirement)
 
-**Example YAML**:
+**Example YAML (Simple Sutra)**:
 ```yaml
 id: heart-sutra
 title: 般若波羅蜜多心經
@@ -52,6 +54,23 @@ source: 大正新修大藏經第8冊 No.251
 sourceAttribution: "Taishō Tripitaka, Vol. 8, No. 251"
 description: 濃縮般若思想精華，闡述「色即是空，空即是色」之甚深般若智慧。
 chapters: 1
+```
+
+**Example YAML (Sutra with Non-Sequential Chapters)**:
+```yaml
+schemaVersion: "1.0"
+id: samyukta-agama
+title: 雜阿含經
+titleEn: Samyukta Agama
+tradition: Early Buddhism
+translator: 求那跋陀羅
+translatorAttribution: 劉宋天竺三藏求那跋陀羅譯
+source: 大正新修大藏經第2冊 No.99
+sourceAttribution: Taishō Tripitaka, Vol. 2, No. 99
+description: 雜阿含經為早期佛教根本經典之一，與巴利語《相應部》對應，收錄佛陀及弟子們的教說，按主題分類編排，內容涵蓋蘊、處、界、緣起、聖諦等核心教義，為南傳與北傳佛教共同依據的重要經典。本站目前收錄卷二十一（第559-575經，共17經）、卷二十二（第576-603經，共28經）。
+chapters: 45
+startChapter: 559          # First chapter number (navigation boundary minimum)
+defaultChapter: 576        # Homepage entry point (content-rich chapter with multimedia)
 ```
 
 ---
@@ -360,6 +379,8 @@ export interface Sutra {
   sourceAttribution: string;
   description?: string;
   chapters: number;
+  startChapter?: number;      // First chapter number (navigation boundary)
+  defaultChapter?: number;    // Homepage entry point
 }
 
 // src/types/chapter.ts

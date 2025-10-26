@@ -11,4 +11,5 @@ export interface Sutra {
   description?: string;
   chapters: number;
   startChapter?: number;
+  defaultChapter?: number;
 }

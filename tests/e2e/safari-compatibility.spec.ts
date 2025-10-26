@@ -18,7 +18,7 @@ test.describe('Safari Compatibility - Regex Features', () => {
     await page.addInitScript(() => {
       const OriginalRegExp = RegExp;
 
-      // @ts-ignore - 重写 RegExp 构造函数
+      // @ts-expect-error - 重写 RegExp 构造函数
       window.RegExp = function(pattern: string | RegExp, flags?: string) {
         const patternStr = typeof pattern === 'string' ? pattern : pattern.source;
 
@@ -34,7 +34,7 @@ test.describe('Safari Compatibility - Regex Features', () => {
       };
 
       // 保留原型链
-      // @ts-ignore
+      // @ts-expect-error - 保留原型链
       window.RegExp.prototype = OriginalRegExp.prototype;
     });
   });

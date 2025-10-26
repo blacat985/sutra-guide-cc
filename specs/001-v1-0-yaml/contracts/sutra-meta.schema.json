@@ -90,6 +90,12 @@
       "minimum": 0,
       "description": "Starting chapter number (optional, defaults to 0 or 1). For sutras with non-sequential numbering like Samyukta Agama (559-603), this specifies the first chapter number.",
       "examples": [0, 1, 559]
+    },
+    "defaultChapter": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Default chapter to display when user clicks 'Read Sutra' from homepage (optional). If not specified, uses startChapter. Useful for featuring content-rich chapters (e.g., chapter 576 with multimedia) while preserving navigation boundaries (startChapter 559).",
+      "examples": [0, 1, 576]
     }
   },
   "additionalProperties": false

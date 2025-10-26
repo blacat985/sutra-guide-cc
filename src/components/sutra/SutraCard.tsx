@@ -7,8 +7,11 @@ interface SutraCardProps {
 }
 
 export default function SutraCard({ sutra }: SutraCardProps) {
-  // Determine default chapter: use startChapter if provided, otherwise 0 for diamond-sutra, 1 for others
+  // Determine default chapter: use defaultChapter if provided, otherwise startChapter, otherwise 0 for diamond-sutra, 1 for others
   const getDefaultChapter = () => {
+    if (sutra.defaultChapter !== undefined) {
+      return sutra.defaultChapter;
+    }
     if (sutra.startChapter !== undefined) {
       return sutra.startChapter;
     }
