@@ -221,6 +221,8 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                       alt={illustration.alt}
                       borderRadius="md"
                       maxW="full"
+                      loading="lazy"
+                      fallback={<Center minH="200px"><Spinner /></Center>}
                     />
                     {illustration.caption && (
                       <Text color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
