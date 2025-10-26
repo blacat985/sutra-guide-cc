@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     legacy({
       targets: ['iOS >= 11', 'Safari >= 11'],
-      modernPolyfills: true,
+      modernPolyfills: false,  // Don't load polyfills in modern browsers
       renderLegacyChunks: true,
     })
   ],
