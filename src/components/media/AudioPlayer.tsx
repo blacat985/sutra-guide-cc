@@ -54,6 +54,7 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
           height={isSoundCloud ? "166px" : isGoogleDrive ? "80px" : "200px"}
           frameBorder="0"
           allow="autoplay; clipboard-write; encrypted-media"
+          loading="lazy"
           style={{ borderRadius: '8px' }}
         />
       </Box>

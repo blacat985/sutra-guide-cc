@@ -59,6 +59,7 @@ export default function VideoPlayer({ url, title }: VideoPlayerProps) {
             title={title || "Video player"}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            loading="lazy"
             style={{
               border: 'none',
               borderRadius: '8px',
