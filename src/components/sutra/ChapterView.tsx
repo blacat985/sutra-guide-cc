@@ -222,6 +222,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                       borderRadius="md"
                       maxW="full"
                       loading="lazy"
+                      decoding="async"
                       fallback={<Center minH="200px"><Spinner /></Center>}
                     />
                     {illustration.caption && (
