@@ -51,9 +51,23 @@ const markdownComponents: Components = {
 };
 
 // Helper function to normalize markdown text: convert single newlines to double newlines
+// Compatible with older Safari browsers (no lookbehind/lookahead regex)
 const normalizeMarkdown = (text: string): string => {
-  // Replace single newlines (not preceded or followed by another newline) with double newlines
-  return text.replace(/(?<!\n)\n(?!\n)/g, '\n\n');
+  // Split by newlines and process each line
+  const lines = text.split('\n');
+  const result: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    result.push(lines[i]);
+
+    // Add extra newline between non-empty lines
+    // (converting single newlines to double newlines)
+    if (i < lines.length - 1 && lines[i].trim() !== '' && lines[i + 1].trim() !== '') {
+      result.push('');
+    }
+  }
+
+  return result.join('\n');
 };
 
 export default function ChapterView({ sutraId, chapterNum, onMenuClick }: ChapterViewProps) {
@@ -126,9 +140,28 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   }
 
   // Extract teaching content from transcript
+  // Compatible with older Safari browsers (no lookahead regex)
   const extractTeaching = (transcript: string): string => {
-    const match = transcript.match(/### 弘源法師開示[\s\S]*?(?=\n### |\n##|$)/);
-    return match ? match[0] : '';
+    const startMarker = '### 弘源法師開示';
+    const startIdx = transcript.indexOf(startMarker);
+
+    if (startIdx === -1) return '';
+
+    // Find the next heading (### or ##) after the start marker
+    const afterStart = transcript.slice(startIdx + startMarker.length);
+    const lines = afterStart.split('\n');
+    let endIdx = afterStart.length;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('### ') || line.startsWith('## ')) {
+        // Calculate position up to (but not including) this line
+        endIdx = lines.slice(0, i).join('\n').length;
+        break;
+      }
+    }
+
+    return startMarker + afterStart.slice(0, endIdx);
   };
 
   return (

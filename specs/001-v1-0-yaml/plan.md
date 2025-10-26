@@ -33,7 +33,11 @@ Build a Buddhist sutra study website (V1.0) that displays 1-3 sutras with chapte
 **Primary Dependencies**: React 18, Chakra UI 2.x, React Router 6, js-yaml (YAML parser), Vite (build tool)
 **Storage**: Static YAML files (content), localStorage (theme preference), no database
 **Testing**: Vitest (unit), React Testing Library, Playwright (E2E), axe-core (accessibility)
-**Target Platform**: Modern browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
+**Target Platform**: Modern and legacy browsers (Chrome 90+, Firefox 88+, Safari 11+, Edge 90+, iOS 11+)
+**Browser Compatibility Strategy**:
+- ES2018+ features avoided in Safari-incompatible areas (no lookbehind/lookahead regex)
+- Vite Legacy Plugin generates dual builds (modern + legacy with polyfills)
+- Legacy bundle targets Safari 11+ with transpiled Optional Chaining (?.) and Nullish Coalescing (??)
 **Project Type**: single (frontend-only static site)
 **Performance Goals**:
 - Initial load < 2s on 3G (per FR-021)
