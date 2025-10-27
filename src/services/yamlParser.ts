@@ -32,3 +32,18 @@ export async function loadYamlFromFile(filePath: string): Promise<unknown> {
     throw new Error('Unknown file load error');
   }
 }
+
+
+export async function checkChapterExists(
+  sutraId: string,
+  chapterNum: number
+): Promise<boolean> {
+  try {
+    const response = await fetch(
+      `${import.meta.env.BASE_URL}content/${sutraId}/chapter-${chapterNum}.yml`
+    );
+    return response.ok;
+  } catch {
+    return false;
+  }
+}

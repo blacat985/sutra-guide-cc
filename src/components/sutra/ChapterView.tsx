@@ -24,6 +24,7 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useChapterData } from '../../hooks/useChapterData';
+import { checkChapterExists } from '../../services/yamlParser';
 import { useSutraData } from '../../hooks/useSutraData';
 import ErrorMessage from '../common/ErrorMessage';
 import VideoPlayer from '../media/VideoPlayer';
@@ -94,15 +95,48 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   const hasPrevChapter = chapterNum > startChapter;
   const hasNextChapter = chapterNum < lastChapter;
 
-  const goToPrevChapter = () => {
-    if (hasPrevChapter) {
-      navigate(`/${sutraId}/${chapterNum - 1}`);
+  // Find next valid chapter by checking if files exist
+  const findNextValidChapter = async (
+    direction: 'next' | 'prev',
+    maxAttempts: number = 5
+  ): Promise<number | null> => {
+    const step = direction === 'next' ? 1 : -1;
+    let targetChapter = chapterNum + step;
+    
+    for (let i = 0; i < maxAttempts; i++) {
+      // Check boundary
+      if (targetChapter < startChapter || targetChapter > lastChapter) {
+        return null;
+      }
+      
+      // Check if chapter file exists
+      const exists = await checkChapterExists(sutraId, targetChapter);
+      if (exists) {
+        return targetChapter;
+      }
+      
+      // Continue searching
+      targetChapter += step;
+    }
+    
+    return null;
+  };
+
+  const goToPrevChapter = async () => {
+    if (!hasPrevChapter) return;
+    
+    const prevChapter = await findNextValidChapter('prev');
+    if (prevChapter) {
+      navigate(`/${sutraId}/${prevChapter}`);
     }
   };
 
-  const goToNextChapter = () => {
-    if (hasNextChapter) {
-      navigate(`/${sutraId}/${chapterNum + 1}`);
+  const goToNextChapter = async () => {
+    if (!hasNextChapter) return;
+    
+    const nextChapter = await findNextValidChapter('next');
+    if (nextChapter) {
+      navigate(`/${sutraId}/${nextChapter}`);
     }
   };
 
