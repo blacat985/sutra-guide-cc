@@ -32,3 +32,32 @@ export async function loadYamlFromFile(filePath: string): Promise<unknown> {
     throw new Error('Unknown file load error');
   }
 }
+
+
+export async function checkChapterExists(
+  sutraId: string,
+  chapterNum: number
+): Promise<boolean> {
+  try {
+    const response = await fetch(
+      `${import.meta.env.BASE_URL}content/${sutraId}/chapter-${chapterNum}.yml`
+    );
+    
+    // Check both status code AND content type
+    // Vite dev server might return 200 with HTML for missing files
+    if (!response.ok) {
+      return false;
+    }
+    
+    const contentType = response.headers.get('content-type');
+    // YAML files should have text/yaml or text/plain content type
+    // Reject if it's HTML (which means Vite returned index.html)
+    if (contentType?.includes('text/html')) {
+      return false;
+    }
+    
+    return true;
+  } catch {
+    return false;
+  }
+}
