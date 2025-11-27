@@ -12,4 +12,5 @@ export interface Sutra {
   chapters: number;
   startChapter?: number;
   defaultChapter?: number;
+  coverImage?: string;
 }

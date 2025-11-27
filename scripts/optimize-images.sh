@@ -15,14 +15,16 @@ set -e
 
 IMAGE_PATH="$1"
 QUALITY="${2:-75}"  # Default quality 75% (range 0-100)
+MAX_WIDTH="${3:-1200}"  # Default max width 1200px (range: 800-2000)
 
 if [ -z "$IMAGE_PATH" ]; then
   echo "Error: No image path provided"
-  echo "Usage: $0 <image-path> [quality (0-100, default: 75)]"
+  echo "Usage: $0 <image-path> [quality (0-100, default: 75)] [max-width (800-2000, default: 1200)]"
   echo ""
   echo "Examples:"
   echo "  $0 public/content/samyukta-agama/chapter-577-2.png"
   echo "  $0 public/content/samyukta-agama/chapter-577-2.png 80"
+  echo "  $0 public/content/samyukta-agama/chapter-577-2.png 75 1000  # Resize to max 1000px width"
   exit 1
 fi
 
@@ -31,15 +33,35 @@ if [ ! -f "$IMAGE_PATH" ]; then
   exit 1
 fi
 
-# Get original file size
+# Get original file size and dimensions
 ORIGINAL_SIZE=$(stat -f%z "$IMAGE_PATH")
 ORIGINAL_SIZE_MB=$(echo "scale=2; $ORIGINAL_SIZE / 1048576" | bc)
-echo "Original file size: ${ORIGINAL_SIZE_MB}MB"
+ORIGINAL_WIDTH=$(sips -g pixelWidth "$IMAGE_PATH" | awk '/pixelWidth:/ {print $2}')
+ORIGINAL_HEIGHT=$(sips -g pixelHeight "$IMAGE_PATH" | awk '/pixelHeight:/ {print $2}')
+echo "Original: ${ORIGINAL_SIZE_MB}MB, ${ORIGINAL_WIDTH}x${ORIGINAL_HEIGHT}px"
 
 # Create backup
 BACKUP_PATH="${IMAGE_PATH}.backup"
 cp "$IMAGE_PATH" "$BACKUP_PATH"
 echo "✅ Backup created: $BACKUP_PATH"
+
+# Resize if width exceeds MAX_WIDTH
+if [ "$ORIGINAL_WIDTH" -gt "$MAX_WIDTH" ]; then
+  echo "Resizing from ${ORIGINAL_WIDTH}px to max ${MAX_WIDTH}px width..."
+  sips --resampleWidth "$MAX_WIDTH" "$IMAGE_PATH" > /dev/null 2>&1
+  RESIZED_SIZE=$(stat -f%z "$IMAGE_PATH")
+  RESIZED_SIZE_MB=$(echo "scale=2; $RESIZED_SIZE / 1048576" | bc)
+  RESIZE_SAVINGS=$(echo "scale=1; 100 - ($RESIZED_SIZE * 100 / $ORIGINAL_SIZE)" | bc)
+  NEW_WIDTH=$(sips -g pixelWidth "$IMAGE_PATH" | awk '/pixelWidth:/ {print $2}')
+  NEW_HEIGHT=$(sips -g pixelHeight "$IMAGE_PATH" | awk '/pixelHeight:/ {print $2}')
+  echo "✅ Resized: ${ORIGINAL_SIZE_MB}MB → ${RESIZED_SIZE_MB}MB (${RESIZE_SAVINGS}% reduction)"
+  echo "   Dimensions: ${ORIGINAL_WIDTH}x${ORIGINAL_HEIGHT}px → ${NEW_WIDTH}x${NEW_HEIGHT}px"
+  # Update ORIGINAL_SIZE for compression comparison
+  ORIGINAL_SIZE=$RESIZED_SIZE
+  ORIGINAL_SIZE_MB=$RESIZED_SIZE_MB
+else
+  echo "ℹ️  Width ${ORIGINAL_WIDTH}px ≤ ${MAX_WIDTH}px, no resize needed"
+fi
 
 # Try pngquant first (best compression)
 if command -v pngquant &> /dev/null; then

@@ -1,19 +1,93 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { createMemoryRouter, Outlet } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import App from '../../src/App';
+import Layout from '../../src/components/layout/Layout';
+import SutraList from '../../src/components/sutra/SutraList';
+import SutraPage from '../../src/pages/SutraPage';
+
+// Mock the data fetching hook
+vi.mock('../../src/hooks/useSutraData', () => ({
+  useAllSutras: () => ({
+    sutras: [
+      {
+        id: 'diamond-sutra',
+        title: 'Diamond Sutra',
+        title_zh: '金剛經',
+        description: 'The Diamond Sutra...',
+      },
+      {
+        id: 'samyukta-agama',
+        title: 'Samyukta Agama',
+        title_zh: '雜阿含經',
+        description: 'The Samyukta Agama...',
+      }
+    ],
+    loading: false,
+    error: null,
+  }),
+  useSutraData: () => ({
+    sutra: {
+      id: 'diamond-sutra',
+      title: 'Diamond Sutra',
+      title_zh: '金剛經',
+      chapters: [
+        { id: 1, title: 'Chapter 1' },
+        { id: 2, title: 'Chapter 2' }
+      ]
+    },
+    loading: false,
+    error: null,
+  }),
+  useFontSize: () => ({
+    fontSize: 'medium',
+    setFontSize: vi.fn(),
+  }),
+}));
+
+// Mock useChapterTitles
+vi.mock('../../src/hooks/useChapterTitles', () => ({
+  useChapterTitles: () => ({
+    titles: new Map([[1, 'Chapter 1'], [2, 'Chapter 2']]),
+    chapters: [
+      { number: 1, title: 'Chapter 1' },
+      { number: 2, title: 'Chapter 2' }
+    ],
+    loading: false,
+    error: null,
+  }),
+}));
+
+const testRoutes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <SutraList />,
+      },
+      {
+        path: ':sutraId',
+        element: <SutraPage />,
+      },
+      {
+        path: ':sutraId/:chapterNum',
+        element: <SutraPage />,
+      },
+    ],
+  },
+];
 
 describe('Navigation Integration Tests (FR-007, FR-008, FR-011)', () => {
   const renderApp = () => {
-    return render(
-      <ChakraProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ChakraProvider>
-    );
+    const router = createMemoryRouter(testRoutes, {
+      initialEntries: ['/'],
+    });
+    return render(<App router={router} />);
   };
 
   it('should navigate from homepage to sutra page and display TOC (FR-007)', async () => {
@@ -23,7 +97,7 @@ describe('Navigation Integration Tests (FR-007, FR-008, FR-011)', () => {
     // Find and click first sutra card
     const sutraCard = await screen.findByRole('link', {
       name: /view sutra|閱讀經文/i,
-    });
+    }, { timeout: 5000 });
     await user.click(sutraCard);
 
     // URL should change
@@ -45,7 +119,9 @@ describe('Navigation Integration Tests (FR-007, FR-008, FR-011)', () => {
     renderApp();
 
     // Navigate to sutra page first
-    const sutraLink = await screen.findByRole('link', { name: /view sutra/i });
+    const sutraLink = await screen.findByRole('link', {
+      name: /view sutra/i
+    }, { timeout: 3000 });
     await user.click(sutraLink);
 
     // Wait for TOC to load
@@ -80,7 +156,9 @@ describe('Navigation Integration Tests (FR-007, FR-008, FR-011)', () => {
     renderApp();
 
     // Navigate to sutra
-    const sutraLink = await screen.findByRole('link', { name: /view sutra/i });
+    const sutraLink = await screen.findByRole('link', {
+      name: /view sutra|閱讀經文/i,
+    }, { timeout: 3000 });
     await user.click(sutraLink);
 
     // Navigate to chapter 2

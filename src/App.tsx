@@ -3,9 +3,9 @@ import { RouterProvider } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import { FontSizeProvider } from './contexts/FontSizeContext';
 import theme from './theme';
-import router from './router';
+import defaultRouter from './router';
 
-function App() {
+function App({ router = defaultRouter }: { router?: any }) {
   return (
     <ChakraProvider theme={theme}>
       <FontSizeProvider>

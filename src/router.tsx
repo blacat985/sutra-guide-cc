@@ -15,7 +15,7 @@ const LoadingFallback = () => (
   </Center>
 );
 
-const router = createBrowserRouter([
+export const routes = [
   {
     path: '/',
     element: <Layout />,
@@ -54,7 +54,9 @@ const router = createBrowserRouter([
       },
     ],
   },
-], {
+];
+
+const router = createBrowserRouter(routes, {
   basename: import.meta.env.BASE_URL,
 });
 

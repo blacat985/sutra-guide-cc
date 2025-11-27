@@ -18,7 +18,7 @@ export default function Layout() {
       }}
     >
       <Header />
-      <Box flex="1">
+      <Box flex="1" position="relative">
         <Outlet />
       </Box>
       <Footer />
