@@ -24,7 +24,7 @@ export default function HomePage() {
       <Box
         as="header"
         position="relative"
-        h={{ base: "80vh", md: "90vh" }}
+        h={{ base: "50vh", md: "60vh" }}
         display="flex"
         alignItems="center"
         justifyContent="flex-end"
@@ -47,7 +47,7 @@ export default function HomePage() {
           alignItems="flex-start"
           justifyContent="center"
           gap={6}
-          pt={12}
+          pt={32}
           p={8}
           bg="rgba(253, 252, 248, 0.6)" // Rice paper backing
           borderRadius="sm"
@@ -57,7 +57,7 @@ export default function HomePage() {
           {/* Title - Reduced size for elegance */}
           <Heading
             as="h1"
-            fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
+            fontSize={{ base: "3xl", md: "4xl" }}
             fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
             fontWeight="bold"
             letterSpacing="0.2em"
@@ -69,27 +69,29 @@ export default function HomePage() {
           {/* Subtitle - Smaller and delicate */}
           <Box
             display="flex"
-            gap={3}
+            flexDirection="column"
+            gap={6}
             pt={4}
           >
             <Text
-              fontSize={{ base: "lg", md: "xl" }}
+              fontSize={{ base: "xl", md: "2xl" }}
               fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
               letterSpacing="0.3em"
-              fontWeight="medium"
+              fontWeight="normal"
               lineHeight="1.5"
-              color="stone.900" // Darker for better contrast
+              color="stone.900"
+              whiteSpace="nowrap"
             >
               以虛懷容萬境
             </Text>
             <Text
-              fontSize={{ base: "lg", md: "xl" }}
+              fontSize={{ base: "xl", md: "2xl" }}
               fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
               letterSpacing="0.3em"
-              fontWeight="medium"
+              fontWeight="normal"
               lineHeight="1.5"
-              mt={8} // Stagger effect
               color="stone.900"
+              whiteSpace="nowrap"
             >
               以廣心納須彌
             </Text>
@@ -97,20 +99,22 @@ export default function HomePage() {
 
           {/* Seal (Chop) - Adds authenticity */}
           <Box
-            mt={6}
-            w="32px"
-            h="32px"
-            bg="red.700"
+            mt={0}
+            ml={4}
+            w="48px"
+            h="48px"
+            bg="red.800"
             color="white"
             display="flex"
             alignItems="center"
             justifyContent="center"
             borderRadius="sm"
             opacity={0.9}
+            alignSelf="flex-end"
             sx={{ writingMode: "horizontal-tb" }} // Reset for seal text
           >
             <Text
-              fontSize="xs"
+              fontSize="lg"
               fontFamily="'Kaiti TC', serif"
               fontWeight="bold"
               lineHeight="1"

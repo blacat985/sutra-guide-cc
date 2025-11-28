@@ -382,7 +382,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                             rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                             color="stone.500"
                           >
-                            文字稿
+                            Podcast 文字稿
                           </Button>
                           {extractTeaching(chapter.transcript) && (
                             <Button

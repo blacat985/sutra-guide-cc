@@ -1,5 +1,4 @@
-import { Box, Spinner, Center } from '@chakra-ui/react';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import { Box, Spinner, Center, Flex } from '@chakra-ui/react';
 import { useAllSutras } from '../../hooks/useSutraData';
 import SutraCard from './SutraCard';
 import ErrorMessage from '../common/ErrorMessage';
@@ -21,13 +20,13 @@ export default function SutraList() {
 
   return (
     <Box as="main" role="main" aria-label="Sutra List" pb={20}>
-      <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 1024: 3 }}>
-        <Masonry gutter="2rem">
-          {sutras.map((sutra) => (
-            <SutraCard key={sutra.id} sutra={sutra} />
-          ))}
-        </Masonry>
-      </ResponsiveMasonry>
+      <Flex wrap="wrap" justify="center" gap={8}>
+        {sutras.map((sutra) => (
+          <Box key={sutra.id} w={{ base: "100%", md: "45%", lg: "30%" }} maxW="400px">
+            <SutraCard sutra={sutra} />
+          </Box>
+        ))}
+      </Flex>
     </Box>
   );
 }
