@@ -6,8 +6,6 @@ import type { FontSize } from '../../types/fontSize';
 
 export default function FontSizeControl() {
   const { fontSize, setFontSize } = useFontSize();
-  const iconColor = useColorModeValue('brand.700', 'brand.100');
-  const hoverBg = useColorModeValue('brand.100', 'brand.700');
 
   const fontSizeOptions: FontSize[] = ['small', 'medium', 'large', 'x-large'];
 
@@ -18,9 +16,9 @@ export default function FontSizeControl() {
         aria-label="調整字體大小"
         icon={<Icon as={MdTextFields} fontSize="1.5em" />}
         variant="ghost"
-        color={iconColor}
-        _hover={{ bg: hoverBg }}
-        _active={{ bg: hoverBg }}
+        color={useColorModeValue('stone.600', 'white')}
+        _hover={{ bg: useColorModeValue('stone.100', 'whiteAlpha.200') }}
+        _active={{ bg: 'whiteAlpha.300' }}
       />
       <MenuList>
         {fontSizeOptions.map((size) => (

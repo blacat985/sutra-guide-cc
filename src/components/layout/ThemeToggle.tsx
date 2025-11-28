@@ -4,8 +4,6 @@ import { useTheme } from '../../hooks/useTheme';
 
 export default function ThemeToggle() {
   const { mode, toggleTheme } = useTheme();
-  const iconColor = useColorModeValue('brand.700', 'brand.100');
-  const hoverBg = useColorModeValue('brand.100', 'brand.700');
 
   return (
     <IconButton
@@ -13,8 +11,8 @@ export default function ThemeToggle() {
       icon={mode === 'light' ? <MoonIcon fontSize="1.2em" /> : <SunIcon fontSize="1.2em" />}
       onClick={toggleTheme}
       variant="ghost"
-      color={iconColor}
-      _hover={{ bg: hoverBg }}
+      color={useColorModeValue('stone.600', 'white')}
+      _hover={{ bg: useColorModeValue('stone.100', 'whiteAlpha.200') }}
     />
   );
 }

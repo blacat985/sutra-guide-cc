@@ -3,32 +3,38 @@ import {
   VStack,
   Heading,
   Text,
-  Image,
-  Link,
-  Divider,
   Spinner,
   Center,
-  ListItem,
-  OrderedList,
-  UnorderedList,
-  Code,
+  Image,
   Collapse,
   Button,
   HStack,
+  Container,
+  useColorModeValue,
+  Icon,
+  Flex,
   IconButton,
+  UnorderedList,
+  OrderedList,
+  ListItem,
+  Code,
+  Divider,
+  Link,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useChapterData } from '../../hooks/useChapterData';
 import { checkChapterExists } from '../../services/yamlParser';
 import { useSutraData } from '../../hooks/useSutraData';
 import ErrorMessage from '../common/ErrorMessage';
 import VideoPlayer from '../media/VideoPlayer';
 import AudioPlayer from '../media/AudioPlayer';
+import { ConstructionPlaceholder } from '../common/ConstructionPlaceholder';
+import { useFontSize } from '../../hooks/useFontSize';
 
 interface ChapterViewProps {
   sutraId: string;
@@ -37,9 +43,9 @@ interface ChapterViewProps {
 }
 
 const markdownComponents: Components = {
-  h1: ({ children }) => <Heading as="h1" fontSize="1.5em" mt={5} mb={3} color="brand.600">{children}</Heading>,
-  h2: ({ children }) => <Heading as="h2" fontSize="1.3em" mt={4} mb={2} color="brand.600">{children}</Heading>,
-  h3: ({ children }) => <Heading as="h3" fontSize="1.15em" mt={3} mb={2} color="brand.600">{children}</Heading>,
+  h1: ({ children }) => <Heading as="h1" fontSize="1.5em" mt={5} mb={3} fontFamily="heading" color="amber.700">{children}</Heading>,
+  h2: ({ children }) => <Heading as="h2" fontSize="1.3em" mt={4} mb={2} fontFamily="heading" color="amber.700">{children}</Heading>,
+  h3: ({ children }) => <Heading as="h3" fontSize="1.15em" mt={3} mb={2} fontFamily="heading" color="amber.600">{children}</Heading>,
   h4: ({ children }) => <Heading as="h4" fontSize="1em" fontWeight="semibold" mt={2} mb={1}>{children}</Heading>,
   p: ({ children }) => <Text mb={4} lineHeight="tall">{children}</Text>,
   ul: ({ children }) => <UnorderedList mb={4} spacing={2}>{children}</UnorderedList>,
@@ -47,508 +53,497 @@ const markdownComponents: Components = {
   li: ({ children }) => <ListItem>{children}</ListItem>,
   code: ({ children }) => <Code>{children}</Code>,
   strong: ({ children }) => <Text as="strong" fontWeight="bold">{children}</Text>,
-  // Handle line breaks: convert single newlines to double newlines for proper paragraph spacing
   br: () => <Box h="1em" />,
 };
 
-// Helper function to normalize markdown text: convert single newlines to double newlines
-// Compatible with older Safari browsers (no lookbehind/lookahead regex)
 const normalizeMarkdown = (text: string): string => {
-  // Split by newlines and process each line
   const lines = text.split('\n');
   const result: string[] = [];
-
   for (let i = 0; i < lines.length; i++) {
     result.push(lines[i]);
-
-    // Add extra newline between non-empty lines
-    // (converting single newlines to double newlines)
     if (i < lines.length - 1 && lines[i].trim() !== '' && lines[i + 1].trim() !== '') {
       result.push('');
     }
   }
-
   return result.join('\n');
 };
 
 export default function ChapterView({ sutraId, chapterNum, onMenuClick }: ChapterViewProps) {
-  const { chapter, loading, error } = useChapterData(sutraId, chapterNum);
-  const { sutra } = useSutraData(sutraId);
+  const { chapter, loading: chapterLoading, error } = useChapterData(sutraId, chapterNum);
+  const { sutra, loading: sutraLoading } = useSutraData(sutraId);
+  const { fontSize } = useFontSize();
   const navigate = useNavigate();
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const [isTeachingOpen, setIsTeachingOpen] = useState(false);
   const [openExplanations, setOpenExplanations] = useState<Record<number, boolean>>({});
   const baseUrl = import.meta.env.BASE_URL;
 
-  const toggleExplanation = (index: number) => {
-    setOpenExplanations(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+  // Theme colors
+  const heroBg = useColorModeValue('stone.100', 'stone.900');
+  const contentBg = useColorModeValue('white', 'stone.800');
+  const translationBg = useColorModeValue('stone.50', 'stone.900');
+  const insightBg = useColorModeValue('linear(to-br, amber.50, orange.50)', 'linear(to-br, stone.800, stone.700)');
+  const insightBorder = useColorModeValue('amber.100', 'stone.600');
+
+  // Font size mapping
+  const fontSizes = {
+    small: { original: 'lg', translation: 'md', explanation: 'md' },
+    medium: { original: 'xl', translation: 'lg', explanation: 'lg' },
+    large: { original: '2xl', translation: 'xl', explanation: 'xl' },
+    'x-large': { original: '3xl', translation: '2xl', explanation: '2xl' },
   };
 
-  // Calculate chapter range
+  const currentFontSize = fontSizes[fontSize];
+
+  const toggleExplanation = (index: number) => {
+    setOpenExplanations(prev => ({ ...prev, [index]: !prev[index] }));
+  };
+
   const startChapter = sutra?.startChapter ?? 1;
   const totalChapters = sutra?.chapters ?? 0;
   const lastChapter = startChapter + totalChapters - 1;
 
-  const hasPrevChapter = chapterNum > startChapter;
-  const hasNextChapter = chapterNum < lastChapter;
+  // Only enable navigation if sutra data is loaded
+  const hasPrevChapter = sutra ? chapterNum > startChapter : false;
+  const hasNextChapter = sutra ? chapterNum < lastChapter : false;
 
-  // Find next valid chapter by checking if files exist
-  const findNextValidChapter = async (
-    direction: 'next' | 'prev',
-    maxAttempts: number = 5
-  ): Promise<number | null> => {
+  const findNextValidChapter = async (direction: 'next' | 'prev', maxAttempts: number = 5): Promise<number | null> => {
     const step = direction === 'next' ? 1 : -1;
     let targetChapter = chapterNum + step;
-    
     for (let i = 0; i < maxAttempts; i++) {
-      // Check boundary
-      if (targetChapter < startChapter || targetChapter > lastChapter) {
-        return null;
-      }
-      
-      // Check if chapter file exists
+      if (targetChapter < startChapter || targetChapter > lastChapter) return null;
       const exists = await checkChapterExists(sutraId, targetChapter);
-      if (exists) {
-        return targetChapter;
-      }
-      
-      // Continue searching
+      if (exists) return targetChapter;
       targetChapter += step;
     }
-    
     return null;
   };
 
   const goToPrevChapter = async () => {
     if (!hasPrevChapter) return;
-    
     const prevChapter = await findNextValidChapter('prev');
-    if (prevChapter) {
+    if (prevChapter !== null) {
       navigate(`/${sutraId}/${prevChapter}`);
+    } else if (chapterNum - 1 >= startChapter) {
+      // Fallback: if check fails but logically valid, try navigating anyway
+      navigate(`/${sutraId}/${chapterNum - 1}`);
     }
   };
 
   const goToNextChapter = async () => {
     if (!hasNextChapter) return;
-    
     const nextChapter = await findNextValidChapter('next');
-    if (nextChapter) {
+    if (nextChapter !== null) {
       navigate(`/${sutraId}/${nextChapter}`);
+    } else if (chapterNum + 1 <= lastChapter) {
+      navigate(`/${sutraId}/${chapterNum + 1}`);
     }
   };
 
-  if (loading) {
-    return (
-      <Center minH="400px">
-        <Spinner size="xl" color="brand.500" />
-      </Center>
-    );
-  }
-
-  if (error) {
-    return <ErrorMessage 
-      message={error.message}
-      chapterNum={chapterNum}
-      chapterTitle={chapter?.title}
-      hasPrevChapter={hasPrevChapter}
-      hasNextChapter={hasNextChapter}
-      onPrevChapter={goToPrevChapter}
-      onNextChapter={goToNextChapter}
-      onMenuClick={onMenuClick}
-    />;
-  }
-
-  if (!chapter) {
-    return <ErrorMessage 
-      message="Chapter not found"
-      chapterNum={chapterNum}
-      hasPrevChapter={hasPrevChapter}
-      hasNextChapter={hasNextChapter}
-      onPrevChapter={goToPrevChapter}
-      onNextChapter={goToNextChapter}
-      onMenuClick={onMenuClick}
-    />;
-  }
-
-  // Extract teaching content from transcript
-  // Compatible with older Safari browsers (no lookahead regex)
   const extractTeaching = (transcript: string): string => {
     const startMarker = '### 弘源法師開示';
     const startIdx = transcript.indexOf(startMarker);
-
     if (startIdx === -1) return '';
-
-    // Find the next heading (### or ##) after the start marker
     const afterStart = transcript.slice(startIdx + startMarker.length);
     const lines = afterStart.split('\n');
     let endIdx = afterStart.length;
-
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line.startsWith('### ') || line.startsWith('## ')) {
-        // Calculate position up to (but not including) this line
         endIdx = lines.slice(0, i).join('\n').length;
         break;
       }
     }
-
+    // Remove blockquote markers for cleaner rendering if needed, 
+    // but react-markdown handles them. We'll just return the content.
     return startMarker + afterStart.slice(0, endIdx);
   };
 
+  if (chapterLoading || sutraLoading) return <Center minH="400px"><Spinner size="xl" color="amber.500" /></Center>;
+
+  // If we have a critical error (like network failure) and NO chapter data, show error
+  if (error && !chapter) return <ErrorMessage message={error.message} />;
+
+  // If no chapter data at all, show not found
+  if (!chapter) return <ErrorMessage message="Chapter not found" />;
+
+  // Check if content is effectively empty or a placeholder
+  const isUnderConstruction =
+    !chapter.originalText ||
+    chapter.originalText.includes('[待填入') ||
+    (chapter.originalText.trim() === '' && !chapter.translation);
+
+  const heroImage = chapter.illustrations?.[0];
+
   return (
-    <Box as="main" role="main" p={8} maxW="800px" mx="auto">
-      <VStack align="stretch" spacing={8}>
-        {/* Chapter Navigation */}
-        <HStack justify="space-between" w="full">
-          <HStack spacing={2}>
-            {/* Menu button - mobile only */}
-            {onMenuClick && (
-              <IconButton
-                aria-label="開啟章節選單"
-                icon={<HamburgerIcon />}
-                onClick={onMenuClick}
-                variant="ghost"
-                display={{ base: 'flex', md: 'none' }}
-              />
-            )}
-            <IconButton
-              aria-label="上一章"
-              icon={<ChevronLeftIcon />}
-              onClick={goToPrevChapter}
-              isDisabled={!hasPrevChapter}
-              variant="outline"
-              colorScheme="brand"
-              fontSize="inherit"
-            />
-          </HStack>
-          <Text color="gray.600" _dark={{ color: "gray.400" }}>
-            {chapter.title}
-          </Text>
-          <IconButton
-            aria-label="下一章"
-            icon={<ChevronRightIcon />}
-            onClick={goToNextChapter}
-            isDisabled={!hasNextChapter}
-            variant="outline"
-            colorScheme="brand"
-            fontSize="inherit"
+    <Box as="main" role="main" pb={20}>
+      {/* Hero Section */}
+      <Box
+        position="relative"
+        w="full"
+        h={heroImage ? { base: "40vh", md: "60vh" } : "30vh"}
+        bg={heroBg}
+        mt="-80px" // Go under fixed header
+        pt="80px"
+        overflow="hidden"
+      >
+        {heroImage ? (
+          <Image
+            src={`${baseUrl}${heroImage.url.replace(/^\//, '')}`}
+            alt={heroImage.alt}
+            objectFit="cover"
+            w="full"
+            h="full"
+            opacity={0.9}
           />
-        </HStack>
-
-        {/* Chapter Title */}
-        <Heading as="h1" fontSize="2em" textAlign="center">
-          {chapter.title}
-        </Heading>
-
-        {/* Illustrations */}
-        {chapter.illustrations && chapter.illustrations.length > 0 && (
-          <>
-            <Box as="section" role="region" aria-label="Illustrations">
-              <VStack align="stretch" spacing={4}>
-                {chapter.illustrations.map((illustration, index) => (
-                  <Box key={index}>
-                    <Image
-                      src={`${baseUrl}${illustration.url.replace(/^\//, '')}`}
-                      alt={illustration.alt}
-                      borderRadius="md"
-                      maxW="full"
-                      loading="lazy"
-                      decoding="async"
-                      fallback={<Center minH="200px"><Spinner /></Center>}
-                    />
-                    {illustration.caption && (
-                      <Text color="gray.600" _dark={{ color: "gray.400" }} mt={2} textAlign="center">
-                        {illustration.caption}
-                      </Text>
-                    )}
-                  </Box>
-                ))}
-              </VStack>
-            </Box>
-            <Divider />
-          </>
+        ) : (
+          <Center h="full" bgGradient="linear(to-b, stone.200, stone.50)">
+            <Icon as={BookOpen} boxSize={20} color="stone.300" />
+          </Center>
         )}
 
-        {/* Podcast Link */}
-        {chapter.podcastUrl && (
-          <Box as="section">
-            <Link
-              href={chapter.podcastUrl}
-              isExternal
-              color="brand.600"
-              fontWeight="bold"
-            >
-              {chapter.podcastTitle ? (
-                <>
-                  📻 Podcast｜{chapter.podcastTitle} <ExternalLinkIcon mx="2px" />
-                </>
-              ) : (
-                <>
-                  📻 收聽 Podcast <ExternalLinkIcon mx="2px" />
-                </>
-              )}
-            </Link>
-          </Box>
-        )}
-
-        {/* Video Player */}
-        {chapter.videoUrl && (
-          <>
-            <VideoPlayer url={chapter.videoUrl} title={chapter.videoTitle} />
-            <Divider />
-          </>
-        )}
-
-        {/* Audio Player */}
-        {chapter.audioUrl && (
-          <>
-            <AudioPlayer url={chapter.audioUrl} title={chapter.audioTitle} />
-            <Divider />
-          </>
-        )}
-
-        {/* Podcast Transcript */}
-        {chapter.transcript && (
-          <>
-            <Box as="section" role="region" aria-label="Transcript">
-              <Button
-                onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
-                variant="ghost"
-                colorScheme="brand"
-                fontSize="inherit"
-                rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                mb={3}
-              >
-                Podcast 文字稿
-              </Button>
-              <Collapse in={isTranscriptOpen} animateOpacity>
-                <Box
-            p={6}
-            borderRadius="lg"
-            borderWidth="1px"
-            borderColor="gray.300"
-            _dark={{ borderColor: "gray.500" }}
-          >
-            <Box lineHeight="tall">
-              <ReactMarkdown components={markdownComponents}>
-                {normalizeMarkdown(chapter.transcript)}
-                    </ReactMarkdown>
-                  </Box>
-                </Box>
-              </Collapse>
-            </Box>
-
-            {/* Extract 弘源法師開示 if exists */}
-            {chapter.transcript.includes('弘源法師') && (
-              <Box as="section" role="region" aria-label="Teaching">
-                <Button
-                  onClick={() => setIsTeachingOpen(!isTeachingOpen)}
-                  variant="ghost"
-                  colorScheme="brand"
-                  fontSize="inherit"
-                  rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                  mb={3}
-                >
-                  弘源法師開示
-                </Button>
-                <Collapse in={isTeachingOpen} animateOpacity>
-            <Box
-              p={4}
-              borderRadius="md"
-              bg="orange.50"
-              borderWidth="1px"
-              borderColor="gray.300"
-              _dark={{ borderColor: "gray.500", bg: "gray.700" }}
-            >
-                    <Box lineHeight="tall">
-                      <ReactMarkdown components={markdownComponents}>
-                        {normalizeMarkdown(extractTeaching(chapter.transcript))}
-                      </ReactMarkdown>
-                    </Box>
-                  </Box>
-                </Collapse>
-              </Box>
-            )}
-
-            <Divider />
-          </>
-        )}
-
-        {/* Original Text */}
+        {/* Gradient Overlay for Text Readability */}
         <Box
-          as="section"
-          role="region"
-          aria-label="Original Text"
-          p={6}
-          borderRadius="lg"
-          borderWidth="1px"
-          borderColor="gray.300"
-          _dark={{ borderColor: "gray.500" }}
-        >
-          <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600" _dark={{ color: "brand.200" }}>
-            原文
-          </Heading>
-          <Text 
-            lineHeight="2" 
-            whiteSpace="pre-line"
-            color="gray.800"
-            _dark={{ color: "whiteAlpha.900" }}
-            sx={{
-              '& > *:not(:last-child)': {
-                marginBottom: '1em'
-              }
-            }}
-          >
-            {chapter.originalText}
-          </Text>
-        </Box>
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          h="150px"
+          bgGradient="linear(to-t, stone.50, transparent)"
+          _dark={{ bgGradient: "linear(to-t, stone.900, transparent)" }}
+        />
+      </Box>
 
-        {/* Translation */}
-        {chapter.translation && !chapter.detailedExplanation && (
-          <>
-            <Divider />
-            <Box as="section" role="region" aria-label="Translation">
-              <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600">
-                白話翻譯
-              </Heading>
-              <Text lineHeight="tall" whiteSpace="pre-line">
-                {chapter.translation}
-              </Text>
-            </Box>
-          </>
-        )}
+      <Container maxW="container.lg" mt={-10} position="relative" zIndex={1}>
+        <VStack align="stretch" spacing={12}>
 
-        {/* Detailed Explanation */}
-        {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
-          <>
-            <Divider />
-            <Box as="section" role="region" aria-label="Detailed Explanation">
-              <Heading as="h2" fontSize="1.5em" mb={6} color="brand.600">
-                逐段解釋
-              </Heading>
-              <VStack align="stretch" spacing={10}>
-              {chapter.detailedExplanation.map((item, index) => (
-                <Box key={index} p={5} borderRadius="md" shadow="sm" borderWidth="1px">
-                  <Heading as="h3" fontSize="1.3em" mb={4} color="brand.600">
-                    原文段落 {index + 1}
-                  </Heading>
-                  <Text lineHeight="tall" whiteSpace="pre-line" fontStyle="italic" color="gray.600" _dark={{ color: "gray.300" }} mb={6}>
-                    {item.original}
-                  </Text>
+          {/* Title Section */}
+          <Box textAlign="center" mb={8}>
+            <Flex justify="center" align="center" gap={4} mb={2}>
+              <IconButton
+                aria-label="Previous Chapter"
+                icon={<ChevronLeftIcon />}
+                onClick={goToPrevChapter}
+                isDisabled={!hasPrevChapter}
+                variant="ghost"
+                size="sm"
+                color="stone.400"
+                _hover={{ bg: 'stone.100', color: 'stone.600' }}
+              />
+              <Flex align="center" gap={2}>
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                  letterSpacing="widest"
+                  color="stone.500"
+                  textTransform="uppercase"
+                >
+                  Chapter {chapterNum}
+                </Text>
+                {onMenuClick && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={onMenuClick}
+                    leftIcon={<Icon as={List} />}
+                    color="stone.500"
+                    borderColor="stone.300"
+                    _hover={{ bg: 'stone.100' }}
+                  >
+                    目錄
+                  </Button>
+                )}
+              </Flex>
+              <IconButton
+                aria-label="Next Chapter"
+                icon={<ChevronRightIcon />}
+                onClick={goToNextChapter}
+                isDisabled={!hasNextChapter}
+                variant="ghost"
+                size="sm"
+                color="stone.400"
+                _hover={{ bg: 'stone.100', color: 'stone.600' }}
+              />
+            </Flex>
+            <Heading
+              as="h1"
+              fontSize={{ base: "3xl", md: "4xl" }}
+              fontFamily="heading"
+              color="stone.800"
+              _dark={{ color: "stone.100" }}
+              lineHeight="tight"
+            >
+              {chapter.title}
+            </Heading>
+          </Box>
 
-                  <Divider mb={4} />
+          {isUnderConstruction ? (
+            <ConstructionPlaceholder />
+          ) : (
+            <>
+              {/* Media Section */}
+              <Box mb={12}>
+                <VStack spacing={6} align="stretch">
+                  {/* Podcast Link */}
+                  {chapter.podcastUrl && (
+                    <Link
+                      href={chapter.podcastUrl}
+                      isExternal
+                      color="amber.600"
+                      fontWeight="bold"
+                      display="inline-flex"
+                      alignItems="center"
+                      _hover={{ textDecoration: 'none', color: 'amber.700' }}
+                    >
+                      {chapter.podcastTitle ? (
+                        <>
+                          📻 Podcast｜{chapter.podcastTitle} <Icon as={ExternalLink} ml={2} boxSize={4} />
+                        </>
+                      ) : (
+                        <>
+                          📻 收聽 Podcast <Icon as={ExternalLink} ml={2} boxSize={4} />
+                        </>
+                      )}
+                    </Link>
+                  )}
 
-                  <Heading as="h4" fontSize="1.1em" mb={3} color="brand.800" _dark={{ color: "brand.200" }}>
-                    {item.commentaryTranslation ? '註解白話翻譯' : '白話翻譯'}
-                  </Heading>
-                  <Box mb={4}>
-                    <ReactMarkdown components={markdownComponents}>
-                      {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
-                    </ReactMarkdown>
-                  </Box>
+                  {/* Video Player */}
+                  {chapter.videoUrl && (
+                    <Box
+                      borderRadius="2xl"
+                      overflow="hidden"
+                      shadow="lg"
+                      bg="black"
+                      borderWidth="1px"
+                      borderColor="stone.200"
+                      _dark={{ borderColor: "stone.700" }}
+                    >
+                      <VideoPlayer url={chapter.videoUrl} title={chapter.title} />
+                    </Box>
+                  )}
 
-                  {item.commentary && (
-                    <>
-                      <Button
-                        onClick={() => toggleExplanation(index)}
-                        variant="ghost"
-                        colorScheme="brand"
-                        fontSize="inherit"
-                        rightIcon={openExplanations[index] ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                        mb={3}
-                      >
-                        六祖慧能註解原文
-                      </Button>
-                      
-                      <Collapse in={openExplanations[index]} animateOpacity>
-                        <Box
-                          p={4}
-                          borderRadius="md"
-                          bg="gray.50"
-                          _dark={{ bg: "gray.700" }}
+                  {/* Audio Player */}
+                  {chapter.audioUrl && (
+                    <Box
+                      p={6}
+                      bg={contentBg}
+                      borderRadius="2xl"
+                      shadow="sm"
+                      borderWidth="1px"
+                      borderColor="stone.100"
+                      _dark={{ borderColor: "stone.700" }}
+                    >
+                      <AudioPlayer url={chapter.audioUrl} title={chapter.title} />
+                    </Box>
+                  )}
+
+                  {/* Transcript & Teaching Toggles */}
+                  {chapter.transcript && (
+                    <Box>
+                      <HStack spacing={4} justify="center" pt={2} mb={4}>
+                        <Button
+                          onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
+                          variant="ghost"
+                          size="sm"
+                          leftIcon={<Icon as={MessageCircle} />}
+                          rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                          color="stone.500"
                         >
-                          <Text lineHeight="tall" whiteSpace="pre-line" color="gray.600" _dark={{ color: "gray.300" }}>
-                            {item.commentary}
-                          </Text>
+                          文字稿
+                        </Button>
+                        {extractTeaching(chapter.transcript) && (
+                          <Button
+                            onClick={() => setIsTeachingOpen(!isTeachingOpen)}
+                            variant="ghost"
+                            size="sm"
+                            leftIcon={<Icon as={Sun} />}
+                            rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                            color="amber.600"
+                          >
+                            法師開示
+                          </Button>
+                        )}
+                      </HStack>
+
+                      <Collapse in={isTranscriptOpen} animateOpacity>
+                        <Box p={6} bg={contentBg} borderRadius="xl" shadow="inner" mb={4}>
+                          <ReactMarkdown components={markdownComponents}>
+                            {normalizeMarkdown(chapter.transcript)}
+                          </ReactMarkdown>
                         </Box>
                       </Collapse>
-                    </>
+
+                      <Collapse in={isTeachingOpen} animateOpacity>
+                        <Box p={6} bg="orange.50" _dark={{ bg: "stone.800" }} borderRadius="xl" borderLeftWidth="4px" borderLeftColor="orange.400" mb={4}>
+                          <ReactMarkdown components={markdownComponents}>
+                            {normalizeMarkdown(extractTeaching(chapter.transcript))}
+                          </ReactMarkdown>
+                        </Box>
+                      </Collapse>
+                    </Box>
                   )}
-                </Box>
-              ))}
-              </VStack>
-            </Box>
-          </>
-        )}
-
-        {/* Annotations */}
-
-        {/* Practice Insights */}
-        {chapter.practiceInsights && (
-          <>
-            <Divider />
-            <Box 
-              as="section" 
-              role="region" 
-              aria-label="Practice Insights"
-              p={6}
-              borderRadius="md"
-              bg="brand.50"
-              shadow="sm"
-              borderWidth="1px"
-              borderColor="gray.300"
-              _dark={{ borderColor: "gray.500", bg: "gray.700" }}
-            >
-              <Heading as="h2" fontSize="1.5em" mb={4} color="brand.600">
-                修行心得
-              </Heading>
-              <Box lineHeight="tall">
-                <ReactMarkdown components={markdownComponents}>
-                  {normalizeMarkdown(chapter.practiceInsights)}
-                </ReactMarkdown>
+                </VStack>
               </Box>
-            </Box>
-          </>
-        )}
 
-        {/* Source Attribution */}
-        {chapter.sourceAttribution && (
-          <>
-            <Divider />
-            <Text color="gray.500" textAlign="center">
-              來源：{chapter.sourceAttribution}
-            </Text>
-          </>
-        )}
+              {/* Original Text */}
+              <Box position="relative" pl={{ base: 4, md: 8 }} mb={12}>
+                <Box
+                  position="absolute"
+                  left={0}
+                  top={0}
+                  bottom={0}
+                  w="4px"
+                  bg="stone.300"
+                  borderRadius="full"
+                />
+                <Text
+                  fontSize="xs"
+                  fontWeight="bold"
+                  color="stone.400"
+                  mb={4}
+                  letterSpacing="widest"
+                  textTransform="uppercase"
+                >
+                  Original Text
+                </Text>
+                <Text
+                  fontSize={{ base: currentFontSize.original, md: currentFontSize.original }}
+                  fontFamily="heading"
+                  lineHeight="1.8"
+                  color="stone.800"
+                  _dark={{ color: "stone.100" }}
+                  whiteSpace="pre-line"
+                >
+                  {chapter.originalText}
+                </Text>
+              </Box>
 
-        {/* Bottom Chapter Navigation */}
-        <Divider />
-        <HStack justify="space-between" w="full">
-          <Button
-            leftIcon={<ChevronLeftIcon />}
-            onClick={goToPrevChapter}
-            isDisabled={!hasPrevChapter}
-            variant="outline"
-            colorScheme="brand"
-            fontSize="inherit"
-          >
-            上一章
-          </Button>
-          <Button
-            rightIcon={<ChevronRightIcon />}
-            onClick={goToNextChapter}
-            isDisabled={!hasNextChapter}
-            variant="outline"
-            colorScheme="brand"
-            fontSize="inherit"
-          >
-            下一章
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
+              {/* Translation */}
+              {chapter.translation && !chapter.detailedExplanation && (
+                <Box
+                  bg={translationBg}
+                  p={{ base: 6, md: 8 }}
+                  borderRadius="2xl"
+                  mb={12}
+                >
+                  <HStack mb={4} color="stone.500">
+                    <Icon as={Sun} size={18} />
+                    <Text fontSize="sm" fontWeight="bold" letterSpacing="wide">TRANSLATION</Text>
+                  </HStack>
+                  <Text fontSize={currentFontSize.translation} lineHeight="relaxed" color="stone.600" _dark={{ color: "stone.300" }} whiteSpace="pre-line">
+                    {chapter.translation}
+                  </Text>
+                </Box>
+              )}
+
+              {/* Detailed Explanation */}
+              {chapter.detailedExplanation && chapter.detailedExplanation.length > 0 && (
+                <VStack align="stretch" spacing={8} mb={12}>
+                  {chapter.detailedExplanation.map((item, index) => (
+                    <Box key={index} bg={contentBg} p={6} borderRadius="xl" shadow="sm" borderWidth="1px" borderColor="stone.100" _dark={{ borderColor: "stone.700" }}>
+                      <Text fontSize="lg" fontFamily="heading" color="stone.800" _dark={{ color: "stone.200" }} mb={4} whiteSpace="pre-line">
+                        {item.original}
+                      </Text>
+                      <Divider mb={4} borderColor="stone.200" />
+                      <ReactMarkdown components={markdownComponents}>
+                        {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
+                      </ReactMarkdown>
+
+                      {item.commentary && (
+                        <Box mt={4}>
+                          <Button
+                            onClick={() => toggleExplanation(index)}
+                            variant="link"
+                            colorScheme="stone"
+                            size="sm"
+                            rightIcon={openExplanations[index] ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                          >
+                            查看註解原文
+                          </Button>
+                          <Collapse in={openExplanations[index]} animateOpacity>
+                            <Box mt={3} p={4} bg="stone.50" _dark={{ bg: "stone.900" }} borderRadius="md" fontSize="sm">
+                              {item.commentary}
+                            </Box>
+                          </Collapse>
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
+                </VStack>
+              )}
+
+              {/* Practice Insights */}
+              {chapter.practiceInsights && (
+                <Box
+                  bg={insightBg}
+                  p={{ base: 6, md: 10 }}
+                  borderRadius="3xl"
+                  borderWidth="1px"
+                  borderColor={insightBorder}
+                  position="relative"
+                  overflow="hidden"
+                  mb={12}
+                >
+                  <Box position="absolute" top={-10} right={-10} opacity={0.1} transform="rotate(15deg)">
+                    <Icon as={Sparkles} boxSize={60} color="amber.500" />
+                  </Box>
+
+                  <VStack align="stretch" spacing={6} position="relative">
+                    <HStack spacing={3} mb={2}>
+                      <Box p={2} bg="white" _dark={{ bg: "stone.800" }} borderRadius="full" shadow="sm">
+                        <Icon as={Heart} color="rose.400" boxSize={5} />
+                      </Box>
+                      <Heading as="h3" fontSize="xl" fontFamily="heading" color="stone.700" _dark={{ color: "stone.200" }}>
+                        Practice Insights
+                      </Heading>
+                    </HStack>
+
+                    <Box
+                      fontSize={currentFontSize.explanation}
+                      color="stone.700"
+                      _dark={{ color: "stone.300" }}
+                      sx={{ '& p': { mb: 4 } }}
+                    >
+                      <ReactMarkdown components={markdownComponents}>
+                        {normalizeMarkdown(chapter.practiceInsights)}
+                      </ReactMarkdown>
+                    </Box>
+                  </VStack>
+                </Box>
+              )}
+            </>
+          )}
+
+          {/* Bottom Navigation */}
+          <Flex justify="space-between" pt={8} borderTopWidth="1px" borderColor="stone.200" _dark={{ borderColor: "stone.700" }}>
+            <Button
+              leftIcon={<ChevronLeftIcon />}
+              onClick={goToPrevChapter}
+              isDisabled={!hasPrevChapter}
+              variant="ghost"
+              size="lg"
+              colorScheme="stone"
+              _hover={{ bg: 'stone.100' }}
+            >
+              上一章
+            </Button>
+            <Button
+              rightIcon={<ChevronRightIcon />}
+              onClick={goToNextChapter}
+              isDisabled={!hasNextChapter}
+              variant="solid"
+              size="lg"
+              colorScheme="stone"
+              bg="stone.800"
+              color="white"
+              _hover={{ bg: 'stone.700' }}
+              _dark={{ bg: "stone.200", color: "stone.900", _hover: { bg: "stone.300" } }}
+            >
+              下一章
+            </Button>
+          </Flex>
+        </VStack>
+      </Container >
+    </Box >
   );
 }
