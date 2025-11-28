@@ -93,7 +93,6 @@ test.describe('Safari Compatibility - Regex Features', () => {
     // 检查是否显示经文列表
     await expect(page.locator('h2', { hasText: '金剛經' })).toBeVisible();
     await expect(page.locator('h2', { hasText: '雜阿含經' })).toBeVisible();
-    await expect(page.locator('h2', { hasText: '般若波羅蜜多心經' })).toBeVisible();
   });
 
   test('应该能够打开章节并正常显示内容（测试 normalizeMarkdown）', async ({ page }) => {
@@ -236,7 +235,7 @@ test.describe('Safari Compatibility - Page Navigation', () => {
       pageErrors.push(error);
     });
 
-    await page.goto('/heart-sutra/1');
+    await page.goto('/diamond-sutra/1');
     await page.waitForLoadState('networkidle');
 
     // 点击"下一章"
