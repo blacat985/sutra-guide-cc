@@ -1,4 +1,4 @@
-import { Container, Box, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import { Container, Box, Heading, Text } from '@chakra-ui/react';
 import SutraList from '../components/sutra/SutraList';
 export default function HomePage() {
 
