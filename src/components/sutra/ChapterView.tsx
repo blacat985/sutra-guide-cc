@@ -87,10 +87,10 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
 
   // Font size mapping
   const fontSizes = {
-    small: { original: 'lg', translation: 'md', explanation: 'md' },
-    medium: { original: 'xl', translation: 'lg', explanation: 'lg' },
-    large: { original: '2xl', translation: 'xl', explanation: 'xl' },
-    'x-large': { original: '3xl', translation: '2xl', explanation: '2xl' },
+    small: { original: 'lg', translation: 'md', explanation: 'md', title: '2xl' },
+    medium: { original: 'xl', translation: 'lg', explanation: 'lg', title: '3xl' },
+    large: { original: '2xl', translation: 'xl', explanation: 'xl', title: '4xl' },
+    'x-large': { original: '3xl', translation: '2xl', explanation: '2xl', title: '5xl' },
   };
 
   const currentFontSize = fontSizes[fontSize];
@@ -174,6 +174,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
     (chapter.originalText.trim() === '' && !chapter.translation);
 
   const heroImage = chapter.illustrations?.[0];
+  const hasMedia = Boolean(chapter.podcastUrl || chapter.videoUrl || chapter.audioUrl || chapter.transcript);
 
   return (
     <Box as="main" role="main" pb={20}>
@@ -181,21 +182,47 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
       <Box
         position="relative"
         w="full"
-        h={heroImage ? { base: "40vh", md: "60vh" } : "30vh"}
+        h={heroImage ? { base: "65vh", md: "75vh" } : "30vh"}
         bg={heroBg}
         mt="-80px" // Go under fixed header
         pt="80px"
         overflow="hidden"
       >
         {heroImage ? (
-          <Image
-            src={`${baseUrl}${heroImage.url.replace(/^\//, '')}`}
-            alt={heroImage.alt}
-            objectFit="cover"
-            w="full"
-            h="full"
-            opacity={0.9}
-          />
+          <>
+            {/* Background Layer (Blurred) */}
+            <Image
+              src={`${baseUrl}${heroImage.url.replace(/^\//, '')}`}
+              alt={heroImage.alt}
+              objectFit="cover"
+              w="full"
+              h="full"
+              filter="blur(20px) brightness(0.6)"
+              transform="scale(1.1)" // Scale up slightly to avoid blur edges
+            />
+            {/* Foreground Layer (Contained) */}
+            <Box
+              position="absolute"
+              top="80px" // Start below the header
+              left={0}
+              right={0}
+              bottom={0}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              p={4}
+            >
+              <Image
+                src={`${baseUrl}${heroImage.url.replace(/^\//, '')}`}
+                alt={heroImage.alt}
+                objectFit="contain"
+                maxH="100%"
+                maxW="100%"
+                shadow="2xl"
+                borderRadius="md"
+              />
+            </Box>
+          </>
         ) : (
           <Center h="full" bgGradient="linear(to-b, stone.200, stone.50)">
             <Icon as={BookOpen} boxSize={20} color="stone.300" />
@@ -267,7 +294,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             </Flex>
             <Heading
               as="h1"
-              fontSize={{ base: "3xl", md: "4xl" }}
+              fontSize={{ base: currentFontSize.title, md: currentFontSize.title }}
               fontFamily="heading"
               color="stone.800"
               _dark={{ color: "stone.100" }}
@@ -282,108 +309,110 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
           ) : (
             <>
               {/* Media Section */}
-              <Box mb={12}>
-                <VStack spacing={6} align="stretch">
-                  {/* Podcast Link */}
-                  {chapter.podcastUrl && (
-                    <Link
-                      href={chapter.podcastUrl}
-                      isExternal
-                      color="amber.600"
-                      fontWeight="bold"
-                      display="inline-flex"
-                      alignItems="center"
-                      _hover={{ textDecoration: 'none', color: 'amber.700' }}
-                    >
-                      {chapter.podcastTitle ? (
-                        <>
-                          📻 Podcast｜{chapter.podcastTitle} <Icon as={ExternalLink} ml={2} boxSize={4} />
-                        </>
-                      ) : (
-                        <>
-                          📻 收聽 Podcast <Icon as={ExternalLink} ml={2} boxSize={4} />
-                        </>
-                      )}
-                    </Link>
-                  )}
+              {hasMedia && (
+                <Box mb={12}>
+                  <VStack spacing={6} align="stretch">
+                    {/* Podcast Link */}
+                    {chapter.podcastUrl && (
+                      <Link
+                        href={chapter.podcastUrl}
+                        isExternal
+                        color="amber.600"
+                        fontWeight="bold"
+                        display="inline-flex"
+                        alignItems="center"
+                        _hover={{ textDecoration: 'none', color: 'amber.700' }}
+                      >
+                        {chapter.podcastTitle ? (
+                          <>
+                            📻 Podcast｜{chapter.podcastTitle} <Icon as={ExternalLink} ml={2} boxSize={4} />
+                          </>
+                        ) : (
+                          <>
+                            📻 收聽 Podcast <Icon as={ExternalLink} ml={2} boxSize={4} />
+                          </>
+                        )}
+                      </Link>
+                    )}
 
-                  {/* Video Player */}
-                  {chapter.videoUrl && (
-                    <Box
-                      borderRadius="2xl"
-                      overflow="hidden"
-                      shadow="lg"
-                      bg="black"
-                      borderWidth="1px"
-                      borderColor="stone.200"
-                      _dark={{ borderColor: "stone.700" }}
-                    >
-                      <VideoPlayer url={chapter.videoUrl} title={chapter.title} />
-                    </Box>
-                  )}
+                    {/* Video Player */}
+                    {chapter.videoUrl && (
+                      <Box
+                        borderRadius="2xl"
+                        overflow="hidden"
+                        shadow="lg"
+                        bg="black"
+                        borderWidth="1px"
+                        borderColor="stone.200"
+                        _dark={{ borderColor: "stone.700" }}
+                      >
+                        <VideoPlayer url={chapter.videoUrl} title={chapter.title} />
+                      </Box>
+                    )}
 
-                  {/* Audio Player */}
-                  {chapter.audioUrl && (
-                    <Box
-                      p={6}
-                      bg={contentBg}
-                      borderRadius="2xl"
-                      shadow="sm"
-                      borderWidth="1px"
-                      borderColor="stone.100"
-                      _dark={{ borderColor: "stone.700" }}
-                    >
-                      <AudioPlayer url={chapter.audioUrl} title={chapter.title} />
-                    </Box>
-                  )}
+                    {/* Audio Player */}
+                    {chapter.audioUrl && (
+                      <Box
+                        p={6}
+                        bg={contentBg}
+                        borderRadius="2xl"
+                        shadow="sm"
+                        borderWidth="1px"
+                        borderColor="stone.100"
+                        _dark={{ borderColor: "stone.700" }}
+                      >
+                        <AudioPlayer url={chapter.audioUrl} title={chapter.title} />
+                      </Box>
+                    )}
 
-                  {/* Transcript & Teaching Toggles */}
-                  {chapter.transcript && (
-                    <Box>
-                      <HStack spacing={4} justify="center" pt={2} mb={4}>
-                        <Button
-                          onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
-                          variant="ghost"
-                          size="sm"
-                          leftIcon={<Icon as={MessageCircle} />}
-                          rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                          color="stone.500"
-                        >
-                          文字稿
-                        </Button>
-                        {extractTeaching(chapter.transcript) && (
+                    {/* Transcript & Teaching Toggles */}
+                    {chapter.transcript && (
+                      <Box>
+                        <HStack spacing={4} justify="center" pt={2} mb={4}>
                           <Button
-                            onClick={() => setIsTeachingOpen(!isTeachingOpen)}
+                            onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}
                             variant="ghost"
                             size="sm"
-                            leftIcon={<Icon as={Sun} />}
-                            rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                            color="amber.600"
+                            leftIcon={<Icon as={MessageCircle} />}
+                            rightIcon={isTranscriptOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                            color="stone.500"
                           >
-                            法師開示
+                            文字稿
                           </Button>
-                        )}
-                      </HStack>
+                          {extractTeaching(chapter.transcript) && (
+                            <Button
+                              onClick={() => setIsTeachingOpen(!isTeachingOpen)}
+                              variant="ghost"
+                              size="sm"
+                              leftIcon={<Icon as={Sun} />}
+                              rightIcon={isTeachingOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                              color="amber.600"
+                            >
+                              法師開示
+                            </Button>
+                          )}
+                        </HStack>
 
-                      <Collapse in={isTranscriptOpen} animateOpacity>
-                        <Box p={6} bg={contentBg} borderRadius="xl" shadow="inner" mb={4}>
-                          <ReactMarkdown components={markdownComponents}>
-                            {normalizeMarkdown(chapter.transcript)}
-                          </ReactMarkdown>
-                        </Box>
-                      </Collapse>
+                        <Collapse in={isTranscriptOpen} animateOpacity>
+                          <Box p={6} bg={contentBg} borderRadius="xl" shadow="inner" mb={4}>
+                            <ReactMarkdown components={markdownComponents}>
+                              {normalizeMarkdown(chapter.transcript)}
+                            </ReactMarkdown>
+                          </Box>
+                        </Collapse>
 
-                      <Collapse in={isTeachingOpen} animateOpacity>
-                        <Box p={6} bg="orange.50" _dark={{ bg: "stone.800" }} borderRadius="xl" borderLeftWidth="4px" borderLeftColor="orange.400" mb={4}>
-                          <ReactMarkdown components={markdownComponents}>
-                            {normalizeMarkdown(extractTeaching(chapter.transcript))}
-                          </ReactMarkdown>
-                        </Box>
-                      </Collapse>
-                    </Box>
-                  )}
-                </VStack>
-              </Box>
+                        <Collapse in={isTeachingOpen} animateOpacity>
+                          <Box p={6} bg="orange.50" _dark={{ bg: "stone.800" }} borderRadius="xl" borderLeftWidth="4px" borderLeftColor="orange.400" mb={4}>
+                            <ReactMarkdown components={markdownComponents}>
+                              {normalizeMarkdown(extractTeaching(chapter.transcript))}
+                            </ReactMarkdown>
+                          </Box>
+                        </Collapse>
+                      </Box>
+                    )}
+                  </VStack>
+                </Box>
+              )}
 
               {/* Original Text */}
               <Box position="relative" pl={{ base: 4, md: 8 }} mb={12}>
@@ -441,13 +470,15 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                 <VStack align="stretch" spacing={8} mb={12}>
                   {chapter.detailedExplanation.map((item, index) => (
                     <Box key={index} bg={contentBg} p={6} borderRadius="xl" shadow="sm" borderWidth="1px" borderColor="stone.100" _dark={{ borderColor: "stone.700" }}>
-                      <Text fontSize="lg" fontFamily="heading" color="stone.800" _dark={{ color: "stone.200" }} mb={4} whiteSpace="pre-line">
+                      <Text fontSize={currentFontSize.explanation} fontFamily="heading" color="stone.800" _dark={{ color: "stone.200" }} mb={4} whiteSpace="pre-line">
                         {item.original}
                       </Text>
                       <Divider mb={4} borderColor="stone.200" />
-                      <ReactMarkdown components={markdownComponents}>
-                        {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
-                      </ReactMarkdown>
+                      <Box fontSize={currentFontSize.explanation} lineHeight="relaxed">
+                        <ReactMarkdown components={markdownComponents}>
+                          {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
+                        </ReactMarkdown>
+                      </Box>
 
                       {item.commentary && (
                         <Box mt={4}>
