@@ -13,7 +13,7 @@ export default function HomePage() {
         bottom={0}
         zIndex={-1}
         sx={{
-          backgroundImage: "url('/images/home-bg.png')",
+          backgroundImage: `url('${import.meta.env.BASE_URL}images/home-bg.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "brightness(0.98)",
