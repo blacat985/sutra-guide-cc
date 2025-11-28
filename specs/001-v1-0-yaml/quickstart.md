@@ -376,6 +376,32 @@ Before starting manual tests:
 
 ---
 
+## Test Scenario 14: Visual Refinements (Museum Mode & Placeholders)
+
+**User Story**: "Given a user views a chapter with a hero image or missing content, When the page loads, Then the visual presentation is aesthetic and immersive"
+
+### Steps:
+1. Navigate to a chapter with a hero image (e.g., Chapter 576)
+2. Observe the hero image display
+3. Resize browser window
+4. Navigate to an under-construction chapter
+5. Observe the placeholder display
+
+### Expected Results:
+- [ ] **Hero Image (Museum Mode)**:
+  - [ ] Main image is fully visible (not cropped)
+  - [ ] Background is a blurred version of the same image
+  - [ ] No overlap with the header
+  - [ ] Responsive height (65vh mobile, 75vh desktop)
+- [ ] **Construction Placeholder**:
+  - [ ] Displays aesthetic icon and typography
+  - [ ] "Under Construction" message is clear but polite
+  - [ ] Navigation buttons remain functional
+  - [ ] Font size adjustments apply to placeholder text
+
+---
+
+
 ## Performance Validation (FR-021-FR-022)
 
 ### Lighthouse Audit

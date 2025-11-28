@@ -23,7 +23,7 @@
 
 ## Summary
 
-Build a Buddhist sutra study website (V1.0) that displays 1-3 sutras with chapter-by-chapter content stored in YAML files. Each chapter presents classical Chinese text, vernacular translation, annotations, practice insights, and optional illustrations/podcast links. Features include a sutra list homepage, chapter navigation with table of contents, light/dark theme toggle with persistence, and graceful error handling for corrupted files. Must meet WCAG 2.1 AA accessibility standards and load under 2 seconds on 3G connections.
+Build a Buddhist sutra study website (V1.0) that displays 1-3 sutras with chapter-by-chapter content stored in YAML files. Each chapter presents classical Chinese text, vernacular translation, annotations, practice insights, and optional illustrations/podcast links. Features include a sutra list homepage, chapter navigation with table of contents, light/dark theme toggle with persistence, and graceful error handling for corrupted files. Includes UI refinements like "Museum Mode" for hero images and aesthetic placeholders for missing content. Must meet WCAG 2.1 AA accessibility standards and load under 2 seconds on 3G connections.
 
 **Technical Approach**: Static site using React + Chakra UI (per constitution), client-side YAML parsing, localStorage for theme, no backend required.
 

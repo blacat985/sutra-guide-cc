@@ -35,6 +35,7 @@ Represents a complete Buddhist scripture collection.
 | `chapters` | number | Yes | Total number of chapters in this sutra | FR-007: TOC needs chapter count |
 | `startChapter` | number | No | Starting chapter number (optional, defaults to 0 or 1). For sutras with non-sequential numbering like Samyukta Agama (559-603), this specifies the first chapter number and defines the minimum boundary for backward navigation. | FR-007: TOC ordering, navigation boundaries |
 | `defaultChapter` | number | No | Default chapter to display when user clicks "閱讀經文" from homepage (optional). If not specified, uses `startChapter`. Useful for featuring content-rich chapters (e.g., chapter 576 with multimedia) while preserving navigation boundaries (startChapter 559). | FR-006: User entry point, content highlighting |
+| `coverImage` | string | No | Optional cover image URL for the sutra card on homepage | FR-006: Visual enhancement |
 
 **Validation Rules**:
 - `id` must match pattern `^[a-z0-9-]+$` (lowercase, numbers, hyphens only)
@@ -207,7 +208,8 @@ Represents a paragraph-by-paragraph detailed explanation with original text, mas
 |-------|------|----------|-------------|
 | `original` | string | Yes | Original text segment for this paragraph |
 | `commentary` | string | No | Master's commentary (e.g., 六祖慧能註解) |
-| `translation` | string | Yes | Vernacular translation of the commentary or original text |
+| `translation` | string | Yes | Vernacular translation of the original text |
+| `commentaryTranslation` | string | No | Vernacular translation of the master's commentary |
 
 **Validation Rules**:
 - At least `original` and `translation` must be provided

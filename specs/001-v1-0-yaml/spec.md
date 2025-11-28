@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-v1-0-yaml`
 **Created**: 2025-10-05
-**Status**: Updated (reflects implemented features as of 2025-10-11)
+**Status**: Updated (reflects implemented features as of 2025-11-28)
 **Input**: User description: "為佛經導讀網站建立 V1.0 的完整規格。此版本需包含的核心功能有：一、一個支援多部經典獨立呈現的核心內容架構，其中每部經典的每一章節都應作為一份獨立的 YAML 檔案進行管理，系統能讀取檔案並清晰展示經文、註釋、白話翻譯、修行啟發及插圖；二、一個能根據當前所選經典顯示章節並方便跳轉的導覽目錄；三、在各章節提供前往對應 Podcast 頁面的外部連結；四、一個提供淺色與深色模式切換的使用者體驗優化。"
 
 ---
@@ -53,6 +53,7 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
    - Related illustrations (if available)
    - Link to corresponding podcast episode with clear title (if available)
    - Previous/Next chapter navigation buttons
+   - **Hero Image**: Displayed in "Museum Mode" (blurred background + contained foreground) to ensure full visibility without cropping
 
 4. **Given** a user is reading in bright sunlight, **When** they toggle the theme switch, **Then** the website switches between light mode and dark mode, and the preference is preserved across sessions
 
@@ -68,13 +69,15 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 
 10. **Given** a user is reading a chapter with detailed commentary, **When** the page loads, **Then** commentary original text is collapsed by default while translations are visible for better reading flow
 
-11. **Given** a user is viewing an under-construction chapter, **When** the page loads, **Then** they can still see the chapter title and use previous/next navigation buttons
+11. **Given** a user is viewing an under-construction chapter, **When** the page loads, **Then** they see a dedicated "Construction Placeholder" with an aesthetically pleasing design, while navigation buttons remain functional
+
 
 12. **Given** a user finds the default text size difficult to read, **When** they access the font size control, **Then** they can select from small, medium, large, or extra-large options
 
 13. **Given** a user has adjusted the font size to large, **When** they refresh the page or return later, **Then** the large font size preference is preserved
 
-14. **Given** a user changes font size, **When** the change is applied, **Then** all text content (original text, translations, annotations, practice insights) updates immediately to the new size
+14. **Given** a user changes font size, **When** the change is applied, **Then** all text content (Chapter Title, Original Text, Translations, Annotations, Practice Insights, Detailed Explanations, Construction Placeholder) updates immediately to the new size
+
 
 15. **Given** a user has set a large or extra-large font size, **When** viewing the chapter navigation sidebar, **Then** the chapter list maintains a fixed medium font size (16px) to prevent text wrapping and maintain layout stability
 
@@ -137,8 +140,17 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-044**: System MUST provide font size adjustment controls with at least 3 size options (small, medium, large)
 - **FR-045**: Users MUST be able to adjust font size via a visible control (e.g., dropdown menu or buttons)
 - **FR-046**: System MUST persist the user's font size preference across browser sessions using localStorage
-- **FR-047**: Font size changes MUST apply to all text content (sutra text, translations, annotations, practice insights)
+- **FR-047**: Font size changes MUST apply to all text content including Chapter Title, Original Text, Translations, Annotations, Practice Insights, Detailed Explanations, and Construction Placeholder
 - **FR-048**: Default font size MUST be medium (18px base) for optimal readability
+
+#### Visual Design & Layout
+- **FR-059**: Hero images MUST be displayed in "Museum Mode", using a blurred background of the same image to fill the container while the main image is centered and fully visible (object-fit: contain) to prevent cropping
+- **FR-060**: Hero image container height MUST be responsive (e.g., 65vh on mobile, 75vh on desktop) to ensure optimal viewing experience
+- **FR-061**: Media Section (Podcast, Video, Audio) MUST be conditionally rendered and only appear when content exists to avoid unnecessary whitespace
+- **FR-062**: Top navigation buttons (e.g., Theme Toggle, Font Size) MUST use intuitive icons or translated text (e.g., Chinese) for better accessibility
+- **FR-063**: "Under Construction" state MUST use a dedicated `ConstructionPlaceholder` component with aesthetic typography and icons, replacing the generic text
+- **FR-064**: Header MUST NOT overlap with the Hero Image content; Hero Image container MUST have appropriate top spacing or positioning
+
 
 #### Performance & Accessibility
 - **FR-021**: Initial page load MUST complete within 2 seconds on a standard 3G connection (Principle II: Pure and Undisturbed Experience)

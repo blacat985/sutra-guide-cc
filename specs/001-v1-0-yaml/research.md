@@ -262,6 +262,32 @@ const theme = extendTheme({
 
 ---
 
+### 7. UI/UX Refinements
+
+**Question**: How to enhance the visual experience while maintaining the "Pure and Undisturbed" principle?
+
+**Decision**: Implement "Museum Mode" for hero images and Masonry layout for galleries.
+
+**Rationale**:
+- **Museum Mode**: Displays hero images with a blurred background of the same image, ensuring the main image is fully visible (contained) without cropping, regardless of aspect ratio. This respects the artwork while providing an immersive background.
+- **Masonry Layout**: Uses `react-responsive-masonry` to display illustrations in a gallery format. This handles images of varying aspect ratios gracefully, creating a balanced and aesthetic layout similar to a museum exhibition.
+- **Construction Placeholder**: Replaces generic "Under Construction" text with a dedicated, aesthetically pleasing component using iconography and typography to maintain immersion even when content is missing.
+
+**Implementation Notes**:
+- Hero Image:
+  - Background: `object-fit: cover`, `filter: blur(20px)`, `opacity: 0.5`
+  - Foreground: `object-fit: contain`, centered
+  - Responsive height: 65vh (mobile) / 75vh (desktop)
+- Gallery:
+  - Use `ResponsiveMasonry` wrapper
+  - Columns: 1 (mobile), 2 (tablet), 3 (desktop)
+- Placeholder:
+  - Use `ConstructionPlaceholder` component
+  - Consistent styling with the rest of the application
+
+---
+
+
 ## Research Conclusions
 
 All technical decisions documented above are ready for Phase 1 implementation. No NEEDS CLARIFICATION markers remain.

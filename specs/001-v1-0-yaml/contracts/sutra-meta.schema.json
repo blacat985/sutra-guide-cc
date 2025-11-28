@@ -20,7 +20,10 @@
       "type": "string",
       "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
       "description": "Schema version (semver format)",
-      "examples": ["1.0", "1.0.0"]
+      "examples": [
+        "1.0",
+        "1.0.0"
+      ]
     },
     "id": {
       "type": "string",
@@ -28,25 +31,42 @@
       "minLength": 2,
       "maxLength": 50,
       "description": "Unique sutra identifier (lowercase, numbers, hyphens only)",
-      "examples": ["heart-sutra", "diamond-sutra", "samyukta-agama", "platform-sutra"]
+      "examples": [
+        "heart-sutra",
+        "diamond-sutra",
+        "samyukta-agama",
+        "platform-sutra"
+      ]
     },
     "title": {
       "type": "string",
       "minLength": 1,
       "maxLength": 200,
       "description": "Chinese title of the sutra",
-      "examples": ["般若波羅蜜多心經", "金剛般若波羅蜜經"]
+      "examples": [
+        "般若波羅蜜多心經",
+        "金剛般若波羅蜜經"
+      ]
     },
     "titleEn": {
       "type": "string",
       "minLength": 1,
       "maxLength": 200,
       "description": "Optional English title",
-      "examples": ["Heart Sutra", "Diamond Sutra"]
+      "examples": [
+        "Heart Sutra",
+        "Diamond Sutra"
+      ]
     },
     "tradition": {
       "type": "string",
-      "enum": ["Mahayana", "Theravada", "Vajrayana", "Early Buddhism", "Other"],
+      "enum": [
+        "Mahayana",
+        "Theravada",
+        "Vajrayana",
+        "Early Buddhism",
+        "Other"
+      ],
       "description": "Buddhist tradition"
     },
     "translator": {
@@ -54,25 +74,34 @@
       "minLength": 1,
       "maxLength": 100,
       "description": "Name of the translator (REQUIRED per constitution)",
-      "examples": ["玄奘法師", "鳩摩羅什"]
+      "examples": [
+        "玄奘法師",
+        "鳩摩羅什"
+      ]
     },
     "translatorAttribution": {
       "type": "string",
       "minLength": 1,
       "description": "Full citation for translator (REQUIRED per constitution)",
-      "examples": ["唐三藏法師玄奘奉詔譯"]
+      "examples": [
+        "唐三藏法師玄奘奉詔譯"
+      ]
     },
     "source": {
       "type": "string",
       "minLength": 1,
       "description": "Original text source (REQUIRED per constitution)",
-      "examples": ["大正新修大藏經第8冊 No.251"]
+      "examples": [
+        "大正新修大藏經第8冊 No.251"
+      ]
     },
     "sourceAttribution": {
       "type": "string",
       "minLength": 1,
       "description": "Full bibliographic citation (REQUIRED per constitution)",
-      "examples": ["Taishō Tripitaka, Vol. 8, No. 251"]
+      "examples": [
+        "Taishō Tripitaka, Vol. 8, No. 251"
+      ]
     },
     "description": {
       "type": "string",
@@ -89,13 +118,28 @@
       "type": "integer",
       "minimum": 0,
       "description": "Starting chapter number (optional, defaults to 0 or 1). For sutras with non-sequential numbering like Samyukta Agama (559-603), this specifies the first chapter number.",
-      "examples": [0, 1, 559]
+      "examples": [
+        0,
+        1,
+        559
+      ]
     },
     "defaultChapter": {
       "type": "integer",
       "minimum": 0,
       "description": "Default chapter to display when user clicks 'Read Sutra' from homepage (optional). If not specified, uses startChapter. Useful for featuring content-rich chapters (e.g., chapter 576 with multimedia) while preserving navigation boundaries (startChapter 559).",
-      "examples": [0, 1, 576]
+      "examples": [
+        0,
+        1,
+        576
+      ]
+    },
+    "coverImage": {
+      "type": "string",
+      "description": "Optional cover image URL for the sutra card on homepage",
+      "examples": [
+        "/images/samyukta-agama/cover.jpg"
+      ]
     }
   },
   "additionalProperties": false
