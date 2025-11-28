@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
@@ -77,6 +77,11 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   const [isTeachingOpen, setIsTeachingOpen] = useState(false);
   const [openExplanations, setOpenExplanations] = useState<Record<number, boolean>>({});
   const baseUrl = import.meta.env.BASE_URL;
+
+  // Scroll to top when chapter changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [sutraId, chapterNum]);
 
   // Theme colors
   const heroBg = useColorModeValue('stone.100', 'stone.900');
@@ -346,7 +351,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                         borderColor="stone.200"
                         _dark={{ borderColor: "stone.700" }}
                       >
-                        <VideoPlayer url={chapter.videoUrl} title={chapter.title} />
+                        <VideoPlayer url={chapter.videoUrl} title={chapter.videoTitle || chapter.title} />
                       </Box>
                     )}
 
@@ -361,7 +366,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                         borderColor="stone.100"
                         _dark={{ borderColor: "stone.700" }}
                       >
-                        <AudioPlayer url={chapter.audioUrl} title={chapter.title} />
+                        <AudioPlayer url={chapter.audioUrl} title={chapter.audioTitle || chapter.title} />
                       </Box>
                     )}
 
@@ -425,16 +430,17 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                   bg="stone.300"
                   borderRadius="full"
                 />
-                <Text
-                  fontSize="xs"
-                  fontWeight="bold"
-                  color="stone.400"
-                  mb={4}
-                  letterSpacing="widest"
-                  textTransform="uppercase"
-                >
-                  Original Text
-                </Text>
+                <HStack spacing={2} mb={4} color="stone.400">
+                  <Icon as={BookOpen} boxSize={4} />
+                  <Text
+                    fontSize="xs"
+                    fontWeight="bold"
+                    letterSpacing="widest"
+                    textTransform="uppercase"
+                  >
+                    經文原文
+                  </Text>
+                </HStack>
                 <Text
                   fontSize={{ base: currentFontSize.original, md: currentFontSize.original }}
                   fontFamily="heading"
@@ -470,10 +476,20 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                 <VStack align="stretch" spacing={8} mb={12}>
                   {chapter.detailedExplanation.map((item, index) => (
                     <Box key={index} bg={contentBg} p={6} borderRadius="xl" shadow="sm" borderWidth="1px" borderColor="stone.100" _dark={{ borderColor: "stone.700" }}>
-                      <Text fontSize={currentFontSize.explanation} fontFamily="heading" color="stone.800" _dark={{ color: "stone.200" }} mb={4} whiteSpace="pre-line">
+                      <HStack mb={3} color="stone.500">
+                        <Icon as={BookOpen} size={16} />
+                        <Text fontSize="xs" fontWeight="bold" letterSpacing="wide">原文段落</Text>
+                      </HStack>
+                      <Text fontSize={currentFontSize.explanation} fontFamily="heading" color="stone.800" _dark={{ color: "stone.200" }} mb={6} whiteSpace="pre-line">
                         {item.original}
                       </Text>
-                      <Divider mb={4} borderColor="stone.200" />
+
+                      <Divider mb={6} borderColor="stone.200" />
+
+                      <HStack mb={3} color="stone.500">
+                        <Icon as={MessageCircle} size={16} />
+                        <Text fontSize="xs" fontWeight="bold" letterSpacing="wide">白話翻譯</Text>
+                      </HStack>
                       <Box fontSize={currentFontSize.explanation} lineHeight="relaxed">
                         <ReactMarkdown components={markdownComponents}>
                           {normalizeMarkdown(item.commentaryTranslation || item.translation || '')}
@@ -525,7 +541,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                         <Icon as={Heart} color="rose.400" boxSize={5} />
                       </Box>
                       <Heading as="h3" fontSize="xl" fontFamily="heading" color="stone.700" _dark={{ color: "stone.200" }}>
-                        Practice Insights
+                        修行心得
                       </Heading>
                     </HStack>
 
