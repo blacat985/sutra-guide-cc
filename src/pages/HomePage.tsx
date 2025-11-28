@@ -1,62 +1,124 @@
-import { Container, Box, Heading, Text, Icon, useColorModeValue } from '@chakra-ui/react';
-import { Leaf } from 'lucide-react';
+import { Container, Box, Heading, Text, useColorModeValue } from '@chakra-ui/react';
 import SutraList from '../components/sutra/SutraList';
-import { useFontSize } from '../hooks/useFontSize';
-
 export default function HomePage() {
-  const bgGradient = useColorModeValue(
-    'linear(to-b, stone.100, #FDFCF8)',
-    'linear(to-b, stone.900, stone.900)'
-  );
-  const { fontSize } = useFontSize();
-
-  const fontSizes = {
-    small: { title: '4xl', subtitle: 'lg' },
-    medium: { title: '5xl', subtitle: 'xl' },
-    large: { title: '6xl', subtitle: '2xl' },
-    'x-large': { title: '7xl', subtitle: '3xl' },
-  };
-
-  const currentFontSize = fontSizes[fontSize];
 
   return (
-    <Box minH="100vh" bgGradient={bgGradient} pt={24}>
+    <Box minH="100vh" position="relative">
+      {/* Full Page Background */}
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        zIndex={-1}
+        sx={{
+          backgroundImage: "url('/images/home-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "brightness(0.98)",
+        }}
+      />
+
       {/* Hero Header */}
-      <Box as="header" py={12} px={6} textAlign="center">
+      <Box
+        as="header"
+        position="relative"
+        h={{ base: "80vh", md: "90vh" }}
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        overflow="hidden"
+        pb={{ base: 12, md: 16 }}
+        pr={{ base: 8, md: 24, lg: 32 }}
+      >
+        {/* Content Overlay - Vertical Layout (Inscription Style) */}
         <Box
-          display="inline-flex"
-          p={3}
-          borderRadius="full"
-          bg="stone.200"
-          _dark={{ bg: 'stone.800' }}
-          mb={4}
-          opacity={0.8}
-        >
-          <Icon as={Leaf} boxSize={8} color="stone.600" _dark={{ color: 'stone.400' }} />
-        </Box>
-        <Heading
-          as="h1"
-          fontSize={{ base: currentFontSize.title, md: currentFontSize.title }}
-          fontFamily="heading"
-          fontWeight="bold"
+          position="relative"
+          zIndex={1}
           color="stone.800"
-          _dark={{ color: 'stone.100' }}
-          mb={4}
-          letterSpacing="wider"
+          sx={{
+            writingMode: "vertical-rl",
+            textOrientation: "upright",
+          }}
+          h="auto"
+          display="flex"
+          flexDirection="column"
+          alignItems="flex-start"
+          justifyContent="center"
+          gap={6}
+          pt={12}
+          p={8}
+          bg="rgba(253, 252, 248, 0.6)" // Rice paper backing
+          borderRadius="sm"
+          backdropFilter="blur(2px)"
+          boxShadow="0 4px 6px rgba(0,0,0,0.05)"
         >
-          禪悅
-        </Heading>
-        <Text
-          color="stone.500"
-          _dark={{ color: 'stone.400' }}
-          maxW="lg"
-          mx="auto"
-          fontSize={currentFontSize.subtitle}
-          lineHeight="relaxed"
-        >
-          在數位時代找回內心的平靜。<br />
-          透過現代化的介面，重新領悟古老的智慧。
-        </Text>
+          {/* Title - Reduced size for elegance */}
+          <Heading
+            as="h1"
+            fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
+            fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
+            fontWeight="bold"
+            letterSpacing="0.2em"
+            lineHeight="1.2"
+          >
+            虛廣
+          </Heading>
+
+          {/* Subtitle - Smaller and delicate */}
+          <Box
+            display="flex"
+            gap={3}
+            pt={4}
+          >
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
+              letterSpacing="0.3em"
+              fontWeight="medium"
+              lineHeight="1.5"
+              color="stone.900" // Darker for better contrast
+            >
+              以虛懷容萬境
+            </Text>
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              fontFamily="'Kaiti TC', '楷體', 'STKaiti', '华文楷体', serif"
+              letterSpacing="0.3em"
+              fontWeight="medium"
+              lineHeight="1.5"
+              mt={8} // Stagger effect
+              color="stone.900"
+            >
+              以廣心納須彌
+            </Text>
+          </Box>
+
+          {/* Seal (Chop) - Adds authenticity */}
+          <Box
+            mt={6}
+            w="32px"
+            h="32px"
+            bg="red.700"
+            color="white"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="sm"
+            opacity={0.9}
+            sx={{ writingMode: "horizontal-tb" }} // Reset for seal text
+          >
+            <Text
+              fontSize="xs"
+              fontFamily="'Kaiti TC', serif"
+              fontWeight="bold"
+              lineHeight="1"
+            >
+              禪
+            </Text>
+          </Box>
+        </Box>
       </Box>
 
       {/* Main Content */}
