@@ -46,9 +46,10 @@ export default function HomePage() {
           flexDirection="column"
           alignItems="flex-start"
           justifyContent="center"
-          gap={6}
-          pt={32}
-          p={8}
+          gap={{ base: 4, md: 6 }}
+          pt={{ base: 8, md: 32 }}
+          mt={{ base: 16, md: 0 }}
+          p={{ base: 6, md: 8 }}
           bg="rgba(253, 252, 248, 0.6)" // Rice paper backing
           borderRadius="sm"
           backdropFilter="blur(2px)"
@@ -70,8 +71,8 @@ export default function HomePage() {
           <Box
             display="flex"
             flexDirection="column"
-            gap={6}
-            pt={4}
+            gap={{ base: 4, md: 6 }}
+            pt={{ base: 2, md: 4 }}
           >
             <Text
               fontSize={{ base: "xl", md: "2xl" }}
