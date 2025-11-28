@@ -57,7 +57,7 @@ export function useAllSutras(): UseSutraDataResult & { sutras: Sutra[] } {
 
         // For V1.0, we'll hardcode the list of sutras
         // In V2.0, this could be dynamically discovered
-        const sutraIds = ['diamond-sutra', 'samyukta-agama']; // Expand as needed
+        const sutraIds = ['diamond-sutra', 'heart-sutra', 'samyukta-agama']; // Expand as needed
 
         const sutraPromises = sutraIds.map(async (id) => {
           const data = await loadYamlFromFile(`${import.meta.env.BASE_URL}content/${id}/meta.yml`);

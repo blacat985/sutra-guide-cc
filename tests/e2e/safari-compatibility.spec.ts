@@ -19,14 +19,14 @@ test.describe('Safari Compatibility - Regex Features', () => {
       const OriginalRegExp = RegExp;
 
       // @ts-expect-error - 重写 RegExp 构造函数
-      window.RegExp = function(pattern: string | RegExp, flags?: string) {
+      window.RegExp = function (pattern: string | RegExp, flags?: string) {
         const patternStr = typeof pattern === 'string' ? pattern : pattern.source;
 
         // 检测 ES2018 正则表达式特性：
         // - Lookbehind: (?<!...) 或 (?<=...)
         // - Lookahead: (?!...) 或 (?=...)
         if (patternStr.includes('(?<!') || patternStr.includes('(?<=') ||
-            patternStr.includes('(?!') || patternStr.includes('(?=')) {
+          patternStr.includes('(?!') || patternStr.includes('(?=')) {
           throw new SyntaxError('Invalid regular expression: invalid group specifier name');
         }
 
@@ -51,6 +51,14 @@ test.describe('Safari Compatibility - Regex Features', () => {
     });
 
     page.on('pageerror', error => {
+      // Ignore errors from external scripts (e.g. Google Drive embed)
+      if (error.stack && (
+        error.stack.includes('gstatic.com') ||
+        error.stack.includes('google.com') ||
+        error.stack.includes('youtube.com')
+      )) {
+        return;
+      }
       pageErrors.push(error);
     });
 
@@ -83,14 +91,26 @@ test.describe('Safari Compatibility - Regex Features', () => {
     expect(hasErrorMessage).toBe(false);
 
     // 检查是否显示经文列表
-    await expect(page.locator('text=心經')).toBeVisible();
+    await expect(page.locator('h2', { hasText: '金剛經' })).toBeVisible();
+    await expect(page.locator('h2', { hasText: '雜阿含經' })).toBeVisible();
+    await expect(page.locator('h2', { hasText: '般若波羅蜜多心經' })).toBeVisible();
   });
 
   test('应该能够打开章节并正常显示内容（测试 normalizeMarkdown）', async ({ page }) => {
     const pageErrors: Error[] = [];
     const consoleErrors: string[] = [];
 
-    page.on('pageerror', error => pageErrors.push(error));
+    page.on('pageerror', error => {
+      // Ignore errors from external scripts (e.g. Google Drive embed)
+      if (error.stack && (
+        error.stack.includes('gstatic.com') ||
+        error.stack.includes('google.com') ||
+        error.stack.includes('youtube.com')
+      )) {
+        return;
+      }
+      pageErrors.push(error);
+    });
     page.on('console', msg => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
@@ -116,7 +136,7 @@ test.describe('Safari Compatibility - Regex Features', () => {
     expect(pageErrors.length).toBe(0);
 
     // 检查章节内容是否正常显示
-    await expect(page.locator('text=原文')).toBeVisible();
+    await expect(page.locator('text=Original Text')).toBeVisible();
 
     // 检查是否显示错误页面
     const hasErrorMessage = await page.locator('text=Unexpected Application Error').isVisible().catch(() => false);
@@ -126,7 +146,17 @@ test.describe('Safari Compatibility - Regex Features', () => {
   test('应该能够展开 Podcast 文字稿（测试 normalizeMarkdown 和 extractTeaching）', async ({ page }) => {
     const pageErrors: Error[] = [];
 
-    page.on('pageerror', error => pageErrors.push(error));
+    page.on('pageerror', error => {
+      // Ignore errors from external scripts (e.g. Google Drive embed)
+      if (error.stack && (
+        error.stack.includes('gstatic.com') ||
+        error.stack.includes('google.com') ||
+        error.stack.includes('youtube.com')
+      )) {
+        return;
+      }
+      pageErrors.push(error);
+    });
 
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -138,7 +168,7 @@ test.describe('Safari Compatibility - Regex Features', () => {
     await page.waitForLoadState('networkidle');
 
     // 检查是否有 Podcast 文字稿按钮
-    const transcriptButton = page.locator('button:has-text("Podcast 文字稿")');
+    const transcriptButton = page.locator('button:has-text("文字稿")');
 
     if (await transcriptButton.isVisible()) {
       // 展开文字稿
@@ -150,8 +180,8 @@ test.describe('Safari Compatibility - Regex Features', () => {
       const transcriptContent = page.locator('text=/主持人|弘源法師|經文|對談/').first();
       await expect(transcriptContent).toBeVisible();
 
-      // 检查是否有"弘源法師開示"按钮
-      const teachingButton = page.locator('button:has-text("弘源法師開示")');
+      // 检查是否有"法師開示"按钮
+      const teachingButton = page.locator('button:has-text("法師開示")');
 
       if (await teachingButton.isVisible()) {
         // 展开弘源法師開示
@@ -174,7 +204,7 @@ test.describe('Safari Compatibility - Regex Features', () => {
     await page.waitForLoadState('networkidle');
 
     // 展开 Podcast 文字稿
-    const transcriptButton = page.locator('button:has-text("Podcast 文字稿")');
+    const transcriptButton = page.locator('button:has-text("文字稿")');
 
     if (await transcriptButton.isVisible()) {
       await transcriptButton.click();
@@ -194,20 +224,30 @@ test.describe('Safari Compatibility - Regex Features', () => {
 test.describe('Safari Compatibility - Page Navigation', () => {
   test('应该能够在章节间导航而不出错', async ({ page }) => {
     const pageErrors: Error[] = [];
-    page.on('pageerror', error => pageErrors.push(error));
+    page.on('pageerror', error => {
+      // Ignore errors from external scripts (e.g. Google Drive embed)
+      if (error.stack && (
+        error.stack.includes('gstatic.com') ||
+        error.stack.includes('google.com') ||
+        error.stack.includes('youtube.com')
+      )) {
+        return;
+      }
+      pageErrors.push(error);
+    });
 
     await page.goto('/heart-sutra/1');
     await page.waitForLoadState('networkidle');
 
     // 点击"下一章"
-    await page.click('button[aria-label="下一章"]');
+    await page.click('button:has-text("下一章")');
     await page.waitForLoadState('networkidle');
 
     // 检查是否正常导航
-    await expect(page.locator('text=原文')).toBeVisible();
+    await expect(page.locator('text=Original Text')).toBeVisible();
 
     // 点击"上一章"
-    await page.click('button[aria-label="上一章"]');
+    await page.click('button:has-text("上一章")');
     await page.waitForLoadState('networkidle');
 
     expect(pageErrors.length).toBe(0);
