@@ -20,9 +20,9 @@ export default function SutraPage() {
     <>
 
       {/* Mobile Drawer */}
-      <Drawer 
-        isOpen={isOpen} 
-        placement="left" 
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
         onClose={onClose}
         closeOnOverlayClick={true}
         closeOnEsc={true}
@@ -38,8 +38,8 @@ export default function SutraPage() {
       </Drawer>
 
       {/* Desktop & Mobile Layout */}
-      <Grid templateColumns={{ base: '1fr', md: '250px 1fr' }} gap={0}>
-        <GridItem display={{ base: 'none', md: 'block' }}>
+      <Grid templateColumns={{ base: '1fr', xl: '250px 1fr' }} gap={0}>
+        <GridItem display={{ base: 'none', xl: 'block' }}>
           <TableOfContents sutraId={sutraId} currentChapter={currentChapter} />
         </GridItem>
         <GridItem>

@@ -94,9 +94,9 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - What happens when a chapter has no illustrations? → Display text content only
 - How does the system handle very long chapters (performance)? → Must still meet 500ms chapter navigation target
 - What happens when a user accesses a non-existent sutra or chapter? → Display graceful error message
-- How does the system handle different screen sizes (mobile, tablet, desktop)? → Responsive design with hamburger menu on mobile (<768px), sidebar on desktop (≥768px)
+- How does the system handle different screen sizes (mobile, tablet, desktop)? → Responsive design with hamburger menu on mobile/tablet (<1280px), sidebar on widescreen desktop (≥1280px)
 - What happens if the user's browser doesn't support theme preference storage? → Default to light mode, allow session-only switching
-- How does the mobile menu behave at different screen sizes? → Drawer menu shows below 768px, persistent sidebar shows at 768px and above
+- How does the mobile menu behave at different screen sizes? → Drawer menu shows below 1280px, persistent sidebar shows at 1280px and above
 - Does the system support swipe gesture navigation? → No, to avoid conflicts with browser native forward/back gestures
 - How are commentary sections displayed? → Original text collapsed by default, translations visible by default for better reading flow
 - What font sizes are available? → Small (14px), Medium (18px, default), Large (22px), Extra-Large (26px)
@@ -166,7 +166,7 @@ A Buddhist practitioner visits the Sutra Guide website to study the Diamond Sutr
 - **FR-029**: System MUST provide a GitHub Issues link allowing users to report content errors or missing information without exposing maintainer's email address
 
 #### Mobile Navigation
-- **FR-030**: System MUST provide a collapsible table of contents menu on mobile devices (screen width < 768px)
+- **FR-030**: System MUST provide a collapsible table of contents menu on mobile and tablet devices (screen width < 1280px)
 - **FR-031**: Mobile menu MUST be accessible via a hamburger icon button positioned alongside chapter navigation controls
 - **FR-032**: Mobile menu MUST automatically close after user navigates to a chapter
 - **FR-033**: Mobile menu MUST be closable by clicking the overlay, clicking the close button, or pressing ESC key
