@@ -17,6 +17,8 @@ const getThemeColor = (id: string) => {
       return 'emerald';
     case 'medicine-sutra':
       return 'cyan';
+    case 'buddhist-anthology':
+      return 'blue';
     default:
       return 'stone'; // Default for Samyukta Agama and others
   }
