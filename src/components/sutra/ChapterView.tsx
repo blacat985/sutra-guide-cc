@@ -22,7 +22,8 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
+import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List, FileText } from 'lucide-react';
+import PdfSlidePlayer from '../media/PdfSlidePlayer';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -173,10 +174,11 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   if (!chapter) return <ErrorMessage message="Chapter not found" />;
 
   // Check if content is effectively empty or a placeholder
-  const isUnderConstruction =
-    !chapter.originalText ||
-    chapter.originalText.includes('[待填入') ||
-    (chapter.originalText.trim() === '' && !chapter.translation);
+  const hasValidOriginalText = chapter.originalText && !chapter.originalText.includes('[待填入') && chapter.originalText.trim() !== '';
+  const hasDetailedExplanation = chapter.detailedExplanation && chapter.detailedExplanation.length > 0;
+  const hasTranslation = chapter.translation && chapter.translation.trim() !== '';
+
+  const isUnderConstruction = !hasValidOriginalText && !hasDetailedExplanation && !hasTranslation;
 
   const heroImage = chapter.illustrations?.[0];
   const hasMedia = Boolean(chapter.podcastUrl || chapter.videoUrl || chapter.audioUrl || chapter.transcript);
@@ -340,6 +342,9 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                       </Link>
                     )}
 
+
+
+
                     {/* Video Player */}
                     {chapter.videoUrl && (
                       <Box
@@ -415,43 +420,61 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                         </Collapse>
                       </Box>
                     )}
+
+                    {/* PDF Slide Player */}
+                    {chapter.pdfUrl && (
+                      <Box mt={4} mb={6}>
+                        <PdfSlidePlayer
+                          url={`${baseUrl}${chapter.pdfUrl.replace(/^\//, '')}`}
+                          title={chapter.pdfTitle || "相關文件"}
+                        />
+                      </Box>
+                    )}
                   </VStack>
                 </Box>
               )}
 
               {/* Original Text */}
-              <Box position="relative" pl={{ base: 4, md: 8 }} mb={12}>
-                <Box
-                  position="absolute"
-                  left={0}
-                  top={0}
-                  bottom={0}
-                  w="4px"
-                  bg="stone.300"
-                  borderRadius="full"
-                />
-                <HStack spacing={2} mb={4} color="stone.400">
-                  <Icon as={BookOpen} boxSize={4} />
-                  <Text
-                    fontSize="xs"
-                    fontWeight="bold"
-                    letterSpacing="widest"
-                    textTransform="uppercase"
+              {chapter.originalText && (
+                <Box position="relative" pl={{ base: 4, md: 8 }} mb={12}>
+                  <Box
+                    position="absolute"
+                    left={0}
+                    top={0}
+                    bottom={0}
+                    w="4px"
+                    bg="stone.300"
+                    borderRadius="full"
+                  />
+                  <HStack spacing={2} mb={4} color="stone.400">
+                    <Icon as={BookOpen} boxSize={4} />
+                    <Text
+                      fontSize="xs"
+                      fontWeight="bold"
+                      letterSpacing="widest"
+                      textTransform="uppercase"
+                    >
+                      經文原文
+                    </Text>
+                  </HStack>
+                  <Box
+                    fontSize={{ base: currentFontSize.original, md: currentFontSize.original }}
+                    fontFamily="heading"
+                    lineHeight="1.8"
+                    color="stone.800"
+                    _dark={{ color: "stone.100" }}
+                    sx={{
+                      '& p': { mb: 4 },
+                      '& h1, & h2, & h3': { mt: 6, mb: 4, fontWeight: 'bold' },
+                      '& strong': { fontWeight: 'bold', color: 'amber.700', _dark: { color: 'amber.400' } }
+                    }}
                   >
-                    經文原文
-                  </Text>
-                </HStack>
-                <Text
-                  fontSize={{ base: currentFontSize.original, md: currentFontSize.original }}
-                  fontFamily="heading"
-                  lineHeight="1.8"
-                  color="stone.800"
-                  _dark={{ color: "stone.100" }}
-                  whiteSpace="pre-line"
-                >
-                  {chapter.originalText}
-                </Text>
-              </Box>
+                    <ReactMarkdown components={markdownComponents}>
+                      {normalizeMarkdown(chapter.originalText)}
+                    </ReactMarkdown>
+                  </Box>
+                </Box>
+              )}
 
               {/* Translation */}
               {chapter.translation && !chapter.detailedExplanation && (
