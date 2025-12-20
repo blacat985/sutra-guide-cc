@@ -55,12 +55,14 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
         <Box
             id="pdf-container"
             bg={isFullscreen ? "stone.900" : "stone.100"}
-            _dark={{ bg: "stone.900" }}
             borderRadius={isFullscreen ? "0" : "xl"}
             overflow="hidden"
             borderWidth={isFullscreen ? "0" : "1px"}
             borderColor="stone.200"
-            _dark={{ borderColor: "stone.700" }}
+            _dark={{
+                bg: "stone.900",
+                borderColor: "stone.700"
+            }}
             p={isFullscreen ? 0 : 4}
             h={isFullscreen ? "100vh" : "auto"}
             display="flex"

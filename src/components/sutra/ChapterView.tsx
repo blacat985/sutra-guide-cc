@@ -22,7 +22,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List, FileText } from 'lucide-react';
+import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
 import PdfSlidePlayer from '../media/PdfSlidePlayer';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
