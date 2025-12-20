@@ -7,21 +7,26 @@
   "required": [
     "schemaVersion",
     "sutraId",
-    "title",
-    "originalText"
+    "title"
   ],
   "properties": {
     "schemaVersion": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
       "description": "Schema version (semver format)",
-      "examples": ["1.0", "1.0.0"]
+      "examples": [
+        "1.0",
+        "1.0.0"
+      ]
     },
     "sutraId": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
       "description": "Parent sutra identifier (must match a sutra meta.yml id)",
-      "examples": ["heart-sutra", "diamond-sutra"]
+      "examples": [
+        "heart-sutra",
+        "diamond-sutra"
+      ]
     },
     "number": {
       "type": "integer",
@@ -33,7 +38,10 @@
       "minLength": 1,
       "maxLength": 200,
       "description": "Chapter title",
-      "examples": ["第一品", "觀自在菩薩品"]
+      "examples": [
+        "第一品",
+        "觀自在菩薩品"
+      ]
     },
     "volume": {
       "type": "integer",
@@ -64,7 +72,9 @@
       "description": "Paragraph-by-paragraph explanation",
       "items": {
         "type": "object",
-        "required": ["original"],
+        "required": [
+          "original"
+        ],
         "properties": {
           "original": {
             "type": "string",
@@ -95,7 +105,11 @@
       "description": "Optional commentary array",
       "items": {
         "type": "object",
-        "required": ["paragraph", "text", "source"],
+        "required": [
+          "paragraph",
+          "text",
+          "source"
+        ],
         "properties": {
           "paragraph": {
             "type": "integer",
@@ -125,13 +139,18 @@
       "description": "Optional images array",
       "items": {
         "type": "object",
-        "required": ["url", "alt"],
+        "required": [
+          "url",
+          "alt"
+        ],
         "properties": {
           "url": {
             "type": "string",
             "pattern": "^/",
             "description": "Relative path to image (must start with /)",
-            "examples": ["/images/heart-sutra/image1.jpg"]
+            "examples": [
+              "/images/heart-sutra/image1.jpg"
+            ]
           },
           "alt": {
             "type": "string",
@@ -163,7 +182,21 @@
       "format": "uri",
       "pattern": "^https?://",
       "description": "External podcast episode URL (must be http:// or https://)",
-      "examples": ["https://example.com/podcast/heart-sutra-ep1"]
+      "examples": [
+        "https://example.com/podcast/heart-sutra-ep1"
+      ]
+    },
+    "pdfUrl": {
+      "type": "string",
+      "description": "Optional PDF attachment URL (relative path starting with /)",
+      "examples": [
+        "/content/buddhist-anthology/article.pdf"
+      ]
+    },
+    "pdfTitle": {
+      "type": "string",
+      "description": "Display title for the PDF attachment",
+      "default": "相關文件"
     },
     "transcript": {
       "type": "string",

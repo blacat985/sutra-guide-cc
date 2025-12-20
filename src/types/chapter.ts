@@ -25,6 +25,8 @@ export interface Chapter {
   illustrations?: Illustration[];
   podcastTitle?: string;
   podcastUrl?: string;
+  pdfUrl?: string;
+  pdfTitle?: string;
   transcript?: string;
   videoUrl?: string;
   videoTitle?: string;
