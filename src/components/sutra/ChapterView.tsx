@@ -545,24 +545,13 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
               {/* Practice Insights */}
               {chapter.practiceInsights && (
                 <Box
-                  bg={insightBg}
-                  p={{ base: 6, md: 10 }}
-                  borderRadius="3xl"
-                  borderWidth="1px"
-                  borderColor={insightBorder}
-                  position="relative"
-                  overflow="hidden"
                   mb={12}
                 >
-                  <Box position="absolute" top={-10} right={-10} opacity={0.1} transform="rotate(15deg)">
-                    <Icon as={Sparkles} boxSize={60} color="amber.500" />
-                  </Box>
-
                   <VStack align="stretch" spacing={6} position="relative">
-                    <HStack spacing={3} mb={2}>
-                      <Box p={2} bg="white" _dark={{ bg: "stone.800" }} borderRadius="full" shadow="sm">
+                    <HStack spacing={4} mb={2} align="center">
+                      <Center boxSize="40px" bg="white" _dark={{ bg: "stone.800" }} borderRadius="full" shadow="md">
                         <Icon as={Heart} color="rose.400" boxSize={5} />
-                      </Box>
+                      </Center>
                       <Heading as="h3" fontSize="xl" fontFamily="heading" color="stone.700" _dark={{ color: "stone.200" }}>
                         修行心得
                       </Heading>
@@ -572,7 +561,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                       fontSize={currentFontSize.explanation}
                       color="stone.700"
                       _dark={{ color: "stone.300" }}
-                      sx={{ '& p': { mb: 4 } }}
+                      pl={{ base: 0, md: 2 }}
                     >
                       <ReactMarkdown components={markdownComponents}>
                         {normalizeMarkdown(chapter.practiceInsights)}
