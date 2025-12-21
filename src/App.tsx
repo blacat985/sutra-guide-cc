@@ -5,6 +5,7 @@ import { FontSizeProvider } from './contexts/FontSizeContext';
 import theme from './theme';
 import defaultRouter from './router';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function App({ router = defaultRouter }: { router?: any }) {
   return (
     <ChakraProvider theme={theme}>

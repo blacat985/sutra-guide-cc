@@ -29,10 +29,12 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock framer-motion to render synchronously without animations
 vi.mock('framer-motion', () => ({
   motion: new Proxy({}, {
-    get: (target, prop) => {
+    get: () => {
       // Return a component that renders its children synchronously
-      return ({ children, ...props }: any) => children;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return ({ children }: any) => children;
     },
   }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   AnimatePresence: ({ children }: any) => children,
 }));

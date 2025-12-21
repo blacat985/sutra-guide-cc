@@ -22,7 +22,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Heart, Sparkles, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
+import { Heart, Sun, BookOpen, MessageCircle, ExternalLink, List } from 'lucide-react';
 import PdfSlidePlayer from '../media/PdfSlidePlayer';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -88,8 +88,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   const heroBg = useColorModeValue('stone.100', 'stone.900');
   const contentBg = useColorModeValue('white', 'stone.800');
   const translationBg = useColorModeValue('stone.50', 'stone.900');
-  const insightBg = useColorModeValue('linear(to-br, amber.50, orange.50)', 'linear(to-br, stone.800, stone.700)');
-  const insightBorder = useColorModeValue('amber.100', 'stone.600');
+
 
   // Font size mapping
   const fontSizes = {
