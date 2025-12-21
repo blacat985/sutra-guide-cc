@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Button, HStack, Text, Spinner, Center, Icon, AspectRatio } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -18,7 +18,23 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [scale, setScale] = useState(1.0);
+    const [containerWidth, setContainerWidth] = useState<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+            if (entry) {
+                setContainerWidth(entry.contentRect.width);
+            }
+        });
+
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     // Reset page number when URL changes
     useEffect(() => {
@@ -93,6 +109,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                 bg={isFullscreen ? "black" : "stone.200"}
                 _dark={{ bg: isFullscreen ? "black" : "stone.800" }}
                 width="100%"
+                ref={containerRef}
             >
                 {isFullscreen ? (
                     <Document
@@ -111,7 +128,8 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                     >
                         <Page
                             pageNumber={pageNumber}
-                            scale={scale}
+                            width={containerWidth ? containerWidth * scale : undefined}
+                            scale={containerWidth ? undefined : scale}
                             renderTextLayer={false}
                             renderAnnotationLayer={false}
                             className="pdf-page-shadow"
@@ -136,11 +154,12 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                             >
                                 <Page
                                     pageNumber={pageNumber}
-                                    scale={scale}
+                                    width={containerWidth ? containerWidth * scale : undefined}
+                                    scale={containerWidth ? undefined : scale}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                     className="pdf-page-shadow"
-                                    height={500} // Set a base height for aspect ratio ref, though scale overrides
+                                // height removed to let width drive aspect ratio
                                 />
                             </Document>
                         </Box>
