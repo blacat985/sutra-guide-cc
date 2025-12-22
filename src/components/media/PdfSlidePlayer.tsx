@@ -112,7 +112,11 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                 bg: "stone.900",
                 borderColor: "stone.700"
             }}
-            p={isFullscreen ? 0 : 4}
+            p={isFullscreen ? undefined : 4} // Let specific paddings handle fullscreen
+            pt={isFullscreen ? "env(safe-area-inset-top)" : 4}
+            pb={isFullscreen ? "env(safe-area-inset-bottom)" : 4}
+            pl={isFullscreen ? "env(safe-area-inset-left)" : 4}
+            pr={isFullscreen ? "env(safe-area-inset-right)" : 4}
             // CSS Fullscreen Overlay Styles
             position={isFullscreen ? "fixed" : "relative"}
             top={isFullscreen ? 0 : "auto"}
