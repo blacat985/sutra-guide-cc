@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Box, Button, HStack, Text, Spinner, Center, Icon, AspectRatio } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -100,7 +101,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
     // Adjust width based on container, but currently we let Page handle it or use scale
     // For responsiveness, 'width' prop on Page can be used, but let's start with scale
 
-    return (
+    const playerContent = (
         <Box
             id="pdf-container"
             bg={isFullscreen ? "stone.900" : "stone.100"}
@@ -123,7 +124,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
             left={isFullscreen ? 0 : "auto"}
             w={isFullscreen ? "100vw" : "auto"}
             h={isFullscreen ? "100vh" : "auto"}
-            zIndex={isFullscreen ? 9999 : "auto"}
+            zIndex={isFullscreen ? 99999 : "auto"} // High z-index with portal ensures top layer
             display="flex"
             flexDirection="column"
         >
@@ -145,7 +146,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
             {/* PDF Canvas Area */}
             <Box
                 flex={1}
-                overflow="auto"
+                overflow="hidden" // Changed from auto to hidden for iframe handling
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -153,6 +154,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                 _dark={{ bg: isFullscreen ? "black" : "stone.800" }}
                 width="100%"
                 ref={containerRef}
+                position="relative"
             >
                 {isFullscreen ? (
                     <Document
@@ -236,4 +238,10 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
             </HStack>
         </Box>
     );
+
+    if (isFullscreen) {
+        return createPortal(playerContent, document.body);
+    }
+
+    return playerContent;
 }
