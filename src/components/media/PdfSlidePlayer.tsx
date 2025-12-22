@@ -28,12 +28,28 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
         const observer = new ResizeObserver((entries) => {
             const entry = entries[0];
             if (entry) {
+                // If in fullscreen, use window width to ensure we fill screen even if ResizeObserver lags
+                // or if we want to be absolutely sure. But contentRect is usually fine.
                 setContainerWidth(entry.contentRect.width);
             }
         });
 
         observer.observe(containerRef.current);
-        return () => observer.disconnect();
+
+        // Listen for native escape key or browser exit fullscreen
+        const handleFullscreenChange = () => {
+            if (!document.fullscreenElement) {
+                setIsFullscreen(false);
+            }
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
+
+        return () => {
+            observer.disconnect();
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
+        };
     }, []);
 
     // Reset page number when URL changes
@@ -54,13 +70,30 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
         setPageNumber(prev => Math.min(prev + 1, numPages || prev));
     };
 
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement) {
-            document.getElementById('pdf-container')?.requestFullscreen();
+    const toggleFullscreen = async () => {
+        const container = document.getElementById('pdf-container');
+        if (!isFullscreen) {
+            // Enter fullscreen
             setIsFullscreen(true);
+            // Try native fullscreen if available (for desktop experience)
+            try {
+                if (container?.requestFullscreen) {
+                    await container.requestFullscreen();
+                }
+            } catch (e) {
+                // Ignore error, fallback to CSS fullscreen
+                console.log('Native fullscreen not supported, using CSS fallback');
+            }
         } else {
-            document.exitFullscreen();
+            // Exit fullscreen
             setIsFullscreen(false);
+            if (document.fullscreenElement) {
+                try {
+                    await document.exitFullscreen();
+                } catch (e) {
+                    // Ignore
+                }
+            }
         }
     };
 
@@ -80,7 +113,13 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
                 borderColor: "stone.700"
             }}
             p={isFullscreen ? 0 : 4}
+            // CSS Fullscreen Overlay Styles
+            position={isFullscreen ? "fixed" : "relative"}
+            top={isFullscreen ? 0 : "auto"}
+            left={isFullscreen ? 0 : "auto"}
+            w={isFullscreen ? "100vw" : "auto"}
             h={isFullscreen ? "100vh" : "auto"}
+            zIndex={isFullscreen ? 9999 : "auto"}
             display="flex"
             flexDirection="column"
         >
