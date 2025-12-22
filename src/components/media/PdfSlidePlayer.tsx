@@ -20,23 +20,24 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
     const [pageNumber, setPageNumber] = useState(1);
     const [scale, setScale] = useState(1.0);
     const [containerWidth, setContainerWidth] = useState<number | null>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const observerRef = useRef<ResizeObserver | null>(null);
+
+    const onContainerRefWithResize = (node: HTMLDivElement | null) => {
+        if (observerRef.current) observerRef.current.disconnect();
+        if (node) {
+            observerRef.current = new ResizeObserver((entries) => {
+                const entry = entries[0];
+                if (entry) {
+                    setContainerWidth(entry.contentRect.width);
+                }
+            });
+            observerRef.current.observe(node);
+        }
+    };
+
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
-        if (!containerRef.current) return;
-
-        const observer = new ResizeObserver((entries) => {
-            const entry = entries[0];
-            if (entry) {
-                // If in fullscreen, use window width to ensure we fill screen even if ResizeObserver lags
-                // or if we want to be absolutely sure. But contentRect is usually fine.
-                setContainerWidth(entry.contentRect.width);
-            }
-        });
-
-        observer.observe(containerRef.current);
-
         // Listen for native escape key or browser exit fullscreen
         const handleFullscreenChange = () => {
             if (!document.fullscreenElement) {
@@ -47,7 +48,7 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
         document.addEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
 
         return () => {
-            observer.disconnect();
+            if (observerRef.current) observerRef.current.disconnect();
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
             document.removeEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
         };
@@ -146,14 +147,13 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
             {/* PDF Canvas Area */}
             <Box
                 flex={1}
-                overflow="hidden" // Changed from auto to hidden for iframe handling
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
+                overflow="auto"
+                display="grid"
+                placeItems="center"
                 bg={isFullscreen ? "black" : "stone.200"}
                 _dark={{ bg: isFullscreen ? "black" : "stone.800" }}
                 width="100%"
-                ref={containerRef}
+                ref={onContainerRefWithResize}
                 position="relative"
             >
                 {isFullscreen ? (
