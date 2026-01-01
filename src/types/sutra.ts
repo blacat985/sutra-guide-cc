@@ -10,6 +10,7 @@ export interface Sutra {
   sourceAttribution: string;
   description?: string;
   chapters: number;
+  chapterList?: (string | number)[];
   startChapter?: number;
   defaultChapter?: number;
   coverImage?: string;

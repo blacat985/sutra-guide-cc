@@ -11,7 +11,7 @@ interface UseChapterDataResult {
 
 export function useChapterData(
   sutraId: string,
-  chapterNum: number
+  chapterNum: number | string
 ): UseChapterDataResult {
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ export function useChapterData(
       }
     }
 
-    if (sutraId && chapterNum >= 0) {
+    if (sutraId && (typeof chapterNum === 'string' || chapterNum >= 0)) {
       fetchChapter();
     }
   }, [sutraId, chapterNum]);

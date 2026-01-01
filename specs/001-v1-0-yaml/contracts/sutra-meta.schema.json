@@ -114,6 +114,16 @@
       "maximum": 1000,
       "description": "Total number of chapters in this sutra"
     },
+    "chapterList": {
+      "type": "array",
+      "description": "Optional explicit list of chapter IDs. Use this for non-sequential chapters or split chapters (e.g., ['559', '604-1', '604-2']). If provided, this takes precedence over the startChapter/count logic.",
+      "items": {
+        "type": [
+          "string",
+          "integer"
+        ]
+      }
+    },
     "startChapter": {
       "type": "integer",
       "minimum": 0,

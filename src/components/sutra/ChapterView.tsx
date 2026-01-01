@@ -29,7 +29,6 @@ import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { useChapterData } from '../../hooks/useChapterData';
-import { checkChapterExists } from '../../services/yamlParser';
 import { useSutraData } from '../../hooks/useSutraData';
 import ErrorMessage from '../common/ErrorMessage';
 import VideoPlayer from '../media/VideoPlayer';
@@ -39,9 +38,11 @@ import { useFontSize } from '../../hooks/useFontSize';
 
 interface ChapterViewProps {
   sutraId: string;
-  chapterNum: number;
+  chapterNum: number | string;
   onMenuClick?: () => void;
 }
+
+// ... (imports)
 
 const markdownComponents: Components = {
   h1: ({ children }) => <Heading as="h1" fontSize="1.5em" mt={5} mb={3} fontFamily="heading" color="amber.700">{children}</Heading>,
@@ -89,8 +90,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   const contentBg = useColorModeValue('white', 'stone.800');
   const translationBg = useColorModeValue('stone.50', 'stone.900');
 
-
-  // Font size mapping
+  // Font size mapping (unchanged)
   const fontSizes = {
     small: { original: 'lg', translation: 'md', explanation: 'md', title: '2xl' },
     medium: { original: 'xl', translation: 'lg', explanation: 'lg', title: '3xl' },
@@ -104,45 +104,54 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
     setOpenExplanations(prev => ({ ...prev, [index]: !prev[index] }));
   };
 
-  const startChapter = sutra?.startChapter ?? 1;
-  const totalChapters = sutra?.chapters ?? 0;
-  const lastChapter = startChapter + totalChapters - 1;
+  // Navigation Logic
 
-  // Only enable navigation if sutra data is loaded
-  const hasPrevChapter = sutra ? chapterNum > startChapter : false;
-  const hasNextChapter = sutra ? chapterNum < lastChapter : false;
+  // Helper to normalize chapter ID to string for string-based comparison
+  const normalizedChapterNum = String(chapterNum);
 
-  const findNextValidChapter = async (direction: 'next' | 'prev', maxAttempts: number = 5): Promise<number | null> => {
-    const step = direction === 'next' ? 1 : -1;
-    let targetChapter = chapterNum + step;
-    for (let i = 0; i < maxAttempts; i++) {
-      if (targetChapter < startChapter || targetChapter > lastChapter) return null;
-      const exists = await checkChapterExists(sutraId, targetChapter);
-      if (exists) return targetChapter;
-      targetChapter += step;
+  let prevChapterId: string | number | null = null;
+  let nextChapterId: string | number | null = null;
+
+  if (sutra) {
+    if (sutra.chapterList && sutra.chapterList.length > 0) {
+      // Use explicit chapter list
+      const normalizedList = sutra.chapterList.map(String);
+      const currentIndex = normalizedList.indexOf(normalizedChapterNum);
+
+      if (currentIndex !== -1) {
+        if (currentIndex > 0) {
+          prevChapterId = sutra.chapterList[currentIndex - 1];
+        }
+        if (currentIndex < sutra.chapterList.length - 1) {
+          nextChapterId = sutra.chapterList[currentIndex + 1];
+        }
+      }
+    } else {
+      // Fallback to numeric logic
+      const currentNum = typeof chapterNum === 'number' ? chapterNum : parseInt(chapterNum, 10);
+      if (!isNaN(currentNum)) {
+        const startChapter = sutra.startChapter ?? 1;
+        const totalChapters = sutra.chapters ?? 0;
+        const lastChapter = startChapter + totalChapters - 1;
+
+        if (currentNum > startChapter) {
+          prevChapterId = currentNum - 1;
+        }
+        if (currentNum < lastChapter) {
+          nextChapterId = currentNum + 1;
+        }
+      }
     }
-    return null;
+  }
+
+  const goToPrevChapter = () => {
+    if (!prevChapterId) return;
+    navigate(`/${sutraId}/${prevChapterId}`);
   };
 
-  const goToPrevChapter = async () => {
-    if (!hasPrevChapter) return;
-    const prevChapter = await findNextValidChapter('prev');
-    if (prevChapter !== null) {
-      navigate(`/${sutraId}/${prevChapter}`);
-    } else if (chapterNum - 1 >= startChapter) {
-      // Fallback: if check fails but logically valid, try navigating anyway
-      navigate(`/${sutraId}/${chapterNum - 1}`);
-    }
-  };
-
-  const goToNextChapter = async () => {
-    if (!hasNextChapter) return;
-    const nextChapter = await findNextValidChapter('next');
-    if (nextChapter !== null) {
-      navigate(`/${sutraId}/${nextChapter}`);
-    } else if (chapterNum + 1 <= lastChapter) {
-      navigate(`/${sutraId}/${chapterNum + 1}`);
-    }
+  const goToNextChapter = () => {
+    if (!nextChapterId) return;
+    navigate(`/${sutraId}/${nextChapterId}`);
   };
 
   const extractTeaching = (transcript: string): string => {
@@ -257,7 +266,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                 aria-label="Previous Chapter"
                 icon={<ChevronLeftIcon />}
                 onClick={goToPrevChapter}
-                isDisabled={!hasPrevChapter}
+                isDisabled={!prevChapterId}
                 variant="ghost"
                 size="sm"
                 color="stone.400"
@@ -291,7 +300,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
                 aria-label="Next Chapter"
                 icon={<ChevronRightIcon />}
                 onClick={goToNextChapter}
-                isDisabled={!hasNextChapter}
+                isDisabled={!nextChapterId}
                 variant="ghost"
                 size="sm"
                 color="stone.400"
@@ -577,7 +586,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             <Button
               leftIcon={<ChevronLeftIcon />}
               onClick={goToPrevChapter}
-              isDisabled={!hasPrevChapter}
+              isDisabled={!prevChapterId}
               variant="ghost"
               size="lg"
               colorScheme="stone"
@@ -588,7 +597,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
             <Button
               rightIcon={<ChevronRightIcon />}
               onClick={goToNextChapter}
-              isDisabled={!hasNextChapter}
+              isDisabled={!nextChapterId}
               variant="solid"
               size="lg"
               colorScheme="stone"

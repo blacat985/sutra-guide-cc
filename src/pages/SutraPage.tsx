@@ -10,7 +10,12 @@ export default function SutraPage() {
   }>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const currentChapter = chapterNum ? parseInt(chapterNum, 10) : 1;
+  /* 
+     If chapterNum contains non-digits (like '604-1'), we keep it as string.
+     If it's undefined, we default to 1. 
+     Note that '1' as string vs 1 as number is handled by components now.
+  */
+  const currentChapter = chapterNum || 1;
 
   if (!sutraId) {
     return <div>Invalid sutra ID</div>;

@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 interface TableOfContentsProps {
   sutraId: string;
-  currentChapter: number;
+  currentChapter: number | string;
   onNavigate?: () => void;
 }
 
@@ -14,7 +14,7 @@ interface VolumeGroup {
   volume: number;
   volumeTitle: string;
   chapters: Array<{
-    number: number;
+    number: number | string;
     title: string;
   }>;
 }
@@ -32,7 +32,8 @@ export default function TableOfContents({
   const { titles, chapters, loading: titlesLoading } = useChapterTitles(
     sutraId,
     sutra?.chapters || 0,
-    startChapter
+    startChapter,
+    sutra?.chapterList
   );
 
   // Group chapters by volume
@@ -82,7 +83,11 @@ export default function TableOfContents({
 
   // If no volume grouping, show simple list
   if (volumeGroups.length === 0) {
-    const simpleChapters = Array.from({ length: sutra.chapters }, (_, i) => i + startChapter);
+    // If we have explicit chapters from useChapterTitles, use them.
+    // Otherwise fallback to generating a range (though useChapterTitles should cover this)
+    const chapterListToRender = chapters.length > 0
+      ? chapters.map(c => c.number)
+      : Array.from({ length: sutra.chapters }, (_, i) => i + startChapter);
 
     return (
       <Box
@@ -101,7 +106,7 @@ export default function TableOfContents({
             {sutra.title}
           </Heading>
           <VStack as="ul" align="stretch" spacing={2} listStyleType="none">
-            {simpleChapters.map((num) => (
+            {chapterListToRender.map((num) => (
               <Box
                 as="li"
                 key={num}
@@ -116,14 +121,14 @@ export default function TableOfContents({
                   display="block"
                   p={2}
                   borderRadius="md"
-                  bg={currentChapter === num ? 'brand.50' : 'transparent'}
+                  bg={String(currentChapter) === String(num) ? 'brand.50' : 'transparent'}
                   _hover={{ bg: 'gray.100' }}
-                  aria-current={currentChapter === num ? 'page' : undefined}
-                  fontWeight={currentChapter === num ? 'bold' : 'normal'}
-                  color={currentChapter === num ? 'brand.700' : 'gray.700'}
+                  aria-current={String(currentChapter) === String(num) ? 'page' : undefined}
+                  fontWeight={String(currentChapter) === String(num) ? 'bold' : 'normal'}
+                  color={String(currentChapter) === String(num) ? 'brand.700' : 'gray.700'}
                   _dark={{
-                    bg: currentChapter === num ? 'brand.800' : 'transparent',
-                    color: currentChapter === num ? 'brand.200' : 'gray.300',
+                    bg: String(currentChapter) === String(num) ? 'brand.800' : 'transparent',
+                    color: String(currentChapter) === String(num) ? 'brand.200' : 'gray.300',
                     _hover: { bg: 'gray.700' }
                   }}
                 >
@@ -191,14 +196,14 @@ export default function TableOfContents({
                         pl={3}
                         borderRadius="md"
                         fontSize="0.9em"
-                        bg={currentChapter === chapter.number ? 'brand.50' : 'transparent'}
+                        bg={String(currentChapter) === String(chapter.number) ? 'brand.50' : 'transparent'}
                         _hover={{ bg: 'gray.100' }}
-                        aria-current={currentChapter === chapter.number ? 'page' : undefined}
-                        fontWeight={currentChapter === chapter.number ? 'bold' : 'normal'}
-                        color={currentChapter === chapter.number ? 'brand.700' : 'gray.700'}
+                        aria-current={String(currentChapter) === String(chapter.number) ? 'page' : undefined}
+                        fontWeight={String(currentChapter) === String(chapter.number) ? 'bold' : 'normal'}
+                        color={String(currentChapter) === String(chapter.number) ? 'brand.700' : 'gray.700'}
                         _dark={{
-                          bg: currentChapter === chapter.number ? 'brand.800' : 'transparent',
-                          color: currentChapter === chapter.number ? 'brand.200' : 'gray.300',
+                          bg: String(currentChapter) === String(chapter.number) ? 'brand.800' : 'transparent',
+                          color: String(currentChapter) === String(chapter.number) ? 'brand.200' : 'gray.300',
                           _hover: { bg: 'gray.700' }
                         }}
                       >
