@@ -19,6 +19,8 @@ const getThemeColor = (id: string) => {
       return 'cyan';
     case 'buddhist-anthology':
       return 'blue';
+    case 'spiritual-study':
+      return 'emerald';
     default:
       return 'stone'; // Default for Samyukta Agama and others
   }

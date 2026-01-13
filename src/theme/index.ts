@@ -78,6 +78,7 @@ const theme = extendTheme({
       800: '#155e75',
       900: '#164e63',
     },
+
     // Brand (Legacy support, mapped to Stone/Amber)
     brand: {
       50: '#fffbeb',

@@ -45,11 +45,13 @@ export default function PdfSlidePlayer({ url, title }: PdfSlidePlayerProps) {
             }
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         document.addEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
 
         return () => {
             if (observerRef.current) observerRef.current.disconnect();
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             document.removeEventListener('webkitfullscreenchange' as any, handleFullscreenChange);
         };
     }, []);
