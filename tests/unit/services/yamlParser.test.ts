@@ -54,7 +54,7 @@ originalText: |
   Line 2
 translation: Line 1 translation
 `;
-    const result = await loadYaml(yamlWithMultiline);
+    const result = await loadYaml(yamlWithMultiline) as any;
     expect(result.originalText).toContain('Line 1');
     expect(result.originalText).toContain('Line 2');
   });

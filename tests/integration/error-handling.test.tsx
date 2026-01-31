@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +8,7 @@ import SutraPage from '../../src/pages/SutraPage';
 describe('Error Handling Integration Test (FR-027-FR-028)', () => {
   it('should display user-friendly error message for corrupted YAML', async () => {
     // Mock fetch to return invalid YAML
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce({
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
       ok: true,
       text: async () => 'invalid: yaml: {{{',
     } as Response);
@@ -30,7 +30,7 @@ describe('Error Handling Integration Test (FR-027-FR-028)', () => {
     const user = userEvent.setup();
 
     // Mock fetch to fail for chapter 2
-    vi.spyOn(global, 'fetch').mockImplementation(async (url) => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
       if (url.toString().includes('chapter-2')) {
         return {
           ok: true,
@@ -63,10 +63,10 @@ describe('Error Handling Integration Test (FR-027-FR-028)', () => {
   });
 
   it('should not crash application on error', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
     // Trigger error
-    vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce(new Error('Network error'));
 
     render(
       <ChakraProvider>
@@ -84,9 +84,9 @@ describe('Error Handling Integration Test (FR-027-FR-028)', () => {
   });
 
   it('should log error to console for debugging', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
-    vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('YAML parse error'));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce(new Error('YAML parse error'));
 
     render(
       <ChakraProvider>
