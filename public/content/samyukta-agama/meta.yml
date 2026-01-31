@@ -10,7 +10,7 @@ sourceAttribution: Taishō Tripitaka, Vol. 2, No. 99
 description: 雜阿含經為早期佛教根本經典之一，收錄佛陀及弟子們的教說，內容涵蓋蘊、處、界、緣起、聖諦等核心教義。
 chapters: 49
 startChapter: 559
-defaultChapter: 576
+defaultChapter: 605
 
 chapterList:
   - 559
@@ -62,3 +62,9 @@ chapterList:
   - "604-2"
   - "604-3"
   - "604-4"
+  - 605
+  - 607
+  - 609
+  - 610
+  - 611
+  

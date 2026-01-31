@@ -2,7 +2,7 @@ import { Box, VStack, Link, Heading, Text, Accordion, AccordionItem, AccordionBu
 import { Link as RouterLink } from 'react-router-dom';
 import { useSutraData } from '../../hooks/useSutraData';
 import { useChapterTitles } from '../../hooks/useChapterTitles';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 interface TableOfContentsProps {
   sutraId: string;
@@ -24,6 +24,10 @@ export default function TableOfContents({
   currentChapter,
   onNavigate,
 }: TableOfContentsProps) {
+  // Controlled state for Accordion
+  // MOVED: Must be at top level
+  const [expandedIndices, setExpandedIndices] = useState<number[]>([]);
+
   const { sutra, loading } = useSutraData(sutraId);
 
   // Determine start chapter: use sutra.startChapter if provided, otherwise use 0 for diamond-sutra, 1 for others
@@ -68,10 +72,30 @@ export default function TableOfContents({
   // Find which volume index contains the current chapter
   const defaultVolumeIndex = useMemo(() => {
     const index = volumeGroups.findIndex(group =>
-      group.chapters.some(ch => ch.number === currentChapter)
+      group.chapters.some(ch => String(ch.number) === String(currentChapter))
     );
     return index >= 0 ? index : 0;
   }, [volumeGroups, currentChapter]);
+
+  // Update expanded section when defaultVolumeIndex changes (i.e. when currentChapter changes volume)
+  useEffect(() => {
+    // Only update if the new index is not already expanded
+    if (!expandedIndices.includes(defaultVolumeIndex)) {
+      setExpandedIndices([defaultVolumeIndex]);
+    }
+  }, [defaultVolumeIndex, expandedIndices]);
+
+  // Handle manual interaction
+  const handleAccordionChange = (expandedIndex: number | number[]) => {
+    // Chakra UI's Accordion onChange returns number or number[] depending on allowMultiple.
+    // Since we use allowMultiple, it should return number[].
+    // However, to be safe and consistent with our state type, we cast or ensure array.
+    if (Array.isArray(expandedIndex)) {
+      setExpandedIndices(expandedIndex);
+    } else {
+      setExpandedIndices([expandedIndex]);
+    }
+  };
 
   if (loading || titlesLoading || !sutra) {
     return (
@@ -110,9 +134,9 @@ export default function TableOfContents({
               <Box
                 as="li"
                 key={num}
-                borderLeft={currentChapter === num ? '3px solid' : 'none'}
+                borderLeft={String(currentChapter) === String(num) ? '3px solid' : 'none'}
                 borderColor="brand.500"
-                pl={currentChapter === num ? 3 : 0}
+                pl={String(currentChapter) === String(num) ? 3 : 0}
               >
                 <Link
                   as={RouterLink}
@@ -162,7 +186,11 @@ export default function TableOfContents({
           {sutra.title}
         </Heading>
 
-        <Accordion defaultIndex={[defaultVolumeIndex]} allowMultiple>
+        <Accordion
+          index={expandedIndices}
+          onChange={handleAccordionChange}
+          allowMultiple
+        >
           {volumeGroups.map((group) => (
             <AccordionItem key={group.volume} border="none">
               <AccordionButton
@@ -183,9 +211,9 @@ export default function TableOfContents({
                     <Box
                       as="li"
                       key={chapter.number}
-                      borderLeft={currentChapter === chapter.number ? '3px solid' : 'none'}
+                      borderLeft={String(currentChapter) === String(chapter.number) ? '3px solid' : 'none'}
                       borderColor="brand.500"
-                      pl={currentChapter === chapter.number ? 3 : 0}
+                      pl={String(currentChapter) === String(chapter.number) ? 3 : 0}
                     >
                       <Link
                         as={RouterLink}
