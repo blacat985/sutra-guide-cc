@@ -6,6 +6,7 @@ interface ChapterInfo {
   title: string;
   volume?: number;
   volumeTitle?: string;
+  hasMedia?: boolean;
 }
 
 interface UseChapterTitlesResult {
@@ -52,14 +53,28 @@ export function useChapterTitles(
               number?: number | string;
               volume?: number;
               volumeTitle?: string;
+              podcastUrl?: string;
+              videoUrl?: string;
+              audioUrl?: string;
+              transcript?: string;
+              pdfUrl?: string;
             };
             if (chapterData && chapterData.title) {
+              const hasMedia = Boolean(
+                chapterData.podcastUrl || 
+                chapterData.videoUrl || 
+                chapterData.audioUrl || 
+                chapterData.transcript || 
+                chapterData.pdfUrl
+              );
+              
               titleMap.set(chapterId, chapterData.title);
               chapterInfos.push({
                 number: chapterData.number || chapterId, // Use explicitly provided number or the ID
                 title: chapterData.title,
                 volume: chapterData.volume,
                 volumeTitle: chapterData.volumeTitle,
+                hasMedia,
               });
             }
           }).catch(() => {

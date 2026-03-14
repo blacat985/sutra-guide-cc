@@ -1,4 +1,5 @@
-import { Box, VStack, Link, Heading, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
+import { Box, VStack, Link, Heading, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, HStack, Icon } from '@chakra-ui/react';
+import { Headphones } from 'lucide-react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSutraData } from '../../hooks/useSutraData';
 import { useChapterTitles } from '../../hooks/useChapterTitles';
@@ -16,6 +17,7 @@ interface VolumeGroup {
   chapters: Array<{
     number: number | string;
     title: string;
+    hasMedia?: boolean;
   }>;
 }
 
@@ -62,6 +64,7 @@ export default function TableOfContents({
         groups.get(chapter.volume)!.chapters.push({
           number: chapter.number,
           title: chapter.title,
+          hasMedia: chapter.hasMedia,
         });
       }
     });
@@ -156,7 +159,14 @@ export default function TableOfContents({
                     _hover: { bg: 'gray.700' }
                   }}
                 >
-                  {titles.get(num) || (sutraId === 'samyukta-agama' ? `第${num}經` : `第 ${num} 章`)}
+                  <HStack spacing={2} justify="space-between">
+                    <Text as="span">
+                      {titles.get(num) || (sutraId === 'samyukta-agama' ? `第${num}經` : `第 ${num} 章`)}
+                    </Text>
+                    {chapters.find(c => c.number === num)?.hasMedia && (
+                      <Icon as={Headphones} boxSize={3} color="amber.500" />
+                    )}
+                  </HStack>
                 </Link>
               </Box>
             ))}
@@ -235,7 +245,14 @@ export default function TableOfContents({
                           _hover: { bg: 'gray.700' }
                         }}
                       >
-                        {chapter.title || (sutraId === 'samyukta-agama' ? `第${chapter.number}經` : `第 ${chapter.number} 章`)}
+                        <HStack spacing={2} justify="space-between">
+                          <Text as="span">
+                            {chapter.title || (sutraId === 'samyukta-agama' ? `第${chapter.number}經` : `第 ${chapter.number} 章`)}
+                          </Text>
+                          {chapter.hasMedia && (
+                            <Icon as={Headphones} boxSize={3} color="amber.500" />
+                          )}
+                        </HStack>
                       </Link>
                     </Box>
                   ))}

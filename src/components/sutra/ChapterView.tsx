@@ -189,7 +189,7 @@ export default function ChapterView({ sutraId, chapterNum, onMenuClick }: Chapte
   const isUnderConstruction = !hasValidOriginalText && !hasDetailedExplanation && !hasTranslation;
 
   const heroImage = chapter.illustrations?.[0];
-  const hasMedia = Boolean(chapter.podcastUrl || chapter.videoUrl || chapter.audioUrl || chapter.transcript);
+  const hasMedia = Boolean(chapter.podcastUrl || chapter.videoUrl || chapter.audioUrl || chapter.transcript || chapter.pdfUrl);
 
   return (
     <Box as="main" role="main" pb={20}>
